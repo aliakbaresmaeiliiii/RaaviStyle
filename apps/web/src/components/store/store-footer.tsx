@@ -78,7 +78,7 @@ export function StoreFooter() {
 
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:px-8 lg:grid-cols-[1.35fr_repeat(3,minmax(0,1fr))] lg:gap-12">
           <div>
-            <BrandLogo className="h-14" />
+            <BrandLogo className="h-20" onDark />
             <p className="mt-5 max-w-sm text-sm leading-8 text-oat/80">
               {messages.shop.footerAbout}
             </p>

@@ -1,5 +1,5 @@
-import { CatalogHome } from "@/components/store/catalog-home";
+import { StoreHome } from "@/components/store/store-home";
 
 export default function Home() {
-  return <CatalogHome />;
+  return <StoreHome />;
 }

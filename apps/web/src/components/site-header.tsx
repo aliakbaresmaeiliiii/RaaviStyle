@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand-logo";
 import { FaIcon } from "@/components/fa-icon";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getCustomer } from "@/lib/auth";
 import { messages } from "@/lib/i18n";
 
@@ -8,10 +9,11 @@ export async function SiteHeader() {
   const customer = await getCustomer();
 
   return (
-    <header className="border-b border-line/70 bg-bone/85 backdrop-blur">
-      <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-6">
-        <BrandLogo className="h-16" priority />
-        <nav className="flex items-center gap-6 text-sm">
+    <header className="border-b border-line/70 bg-surface/85 backdrop-blur">
+      <div className="mx-auto flex h-24 w-full max-w-6xl items-center justify-between px-6">
+        <BrandLogo className="h-20" priority />
+        <nav className="flex items-center gap-3 text-sm">
+          <ThemeToggle />
           {customer ? (
             <Link
               href="/account"

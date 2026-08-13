@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaIcon } from "@/components/fa-icon";
 import { messages } from "@/lib/i18n";
-import { formatNationalMobile, isValidMobile } from "@/lib/phone";
+import { formatNationalMobile, isValidMobile, normalizePhone } from "@/lib/phone";
 
 export function PhoneForm() {
   const router = useRouter();
@@ -20,9 +20,22 @@ export function PhoneForm() {
     phoneRef.current?.focus();
   }, []);
 
+  function showError(message: string) {
+    setError(message);
+    setShake(true);
+    window.setTimeout(() => setShake(false), 400);
+  }
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/");
+    const normalized = normalizePhone(phone);
+
+    if (!normalized) {
+      showError(messages.errors.invalidPhone);
+      return;
+    }
+
+    router.push(`/login/otp?phone=${encodeURIComponent(normalized)}`);
   }
 
   return (
@@ -50,7 +63,7 @@ export function PhoneForm() {
               : "border-line focus-within:border-mocha focus-within:shadow-[0_0_0_4px_rgba(164,120,100,0.16)]"
         } ${shake ? "login-shake" : ""}`}
       >
-        <span className="flex items-center bg-oat/70 px-4 text-sm text-cocoa">
+        <span className="flex items-center bg-soft px-4 text-sm text-cocoa">
           +۹۸
         </span>
         <input
@@ -69,7 +82,7 @@ export function PhoneForm() {
             setPhone(formatNationalMobile(event.target.value));
             setError("");
           }}
-          className="h-16 min-w-0 flex-1 bg-transparent px-4 text-left text-lg font-normal outline-none"
+          className="h-14 min-w-0 flex-1 bg-transparent px-4 text-left text-lg font-normal outline-none sm:h-16"
         />
         {phoneValid ? (
           <span className="flex items-center px-4 text-mocha">

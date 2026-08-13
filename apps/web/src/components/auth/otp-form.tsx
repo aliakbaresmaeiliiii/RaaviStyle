@@ -184,14 +184,23 @@ export function OtpForm({ phone }: OtpFormProps) {
       </p>
       <Link
         href="/login"
-        className="mt-3 inline-flex items-center gap-2 text-sm text-mocha hover:text-espresso"
+        className="mt-3 inline-flex h-10 items-center gap-2 rounded-full px-1 text-sm text-mocha hover:text-ink"
       >
         <FaIcon icon="fa-pen" />
         {messages.login.changeNumber}
       </Link>
 
       <div className={`mt-8 ${shake ? "login-shake" : ""}`}>
-        <div dir="ltr" className="flex gap-2.5">
+        <p id="otp-label" className="sr-only">
+          {messages.login.otpLabel}
+        </p>
+        <div
+          dir="ltr"
+          role="group"
+          aria-labelledby="otp-label"
+          aria-describedby={error ? errorId : "otp-hint"}
+          className="flex gap-1.5 sm:gap-2.5"
+        >
           {digits.map((digit, index) => {
             const active = index === (code.length === OTP_LENGTH ? OTP_LENGTH - 1 : code.length);
 
@@ -215,8 +224,7 @@ export function OtpForm({ phone }: OtpFormProps) {
                 disabled={isVerifying}
                 aria-label={`${messages.login.otpLabel} ${index + 1}`}
                 aria-invalid={Boolean(error)}
-                aria-describedby={error ? errorId : undefined}
-                className={`h-16 w-full rounded-2xl border bg-surface text-center text-xl font-medium outline-none transition ${
+                className={`h-12 w-full rounded-xl border bg-surface text-center text-lg font-medium outline-none transition sm:h-16 sm:rounded-2xl sm:text-xl ${
                   error
                     ? "border-error bg-error/5"
                     : active
@@ -229,6 +237,11 @@ export function OtpForm({ phone }: OtpFormProps) {
             );
           })}
         </div>
+        {!error ? (
+          <p id="otp-hint" className="mt-3 text-xs leading-6 text-taupe">
+            {messages.login.otpHint}
+          </p>
+        ) : null}
       </div>
 
       {error ? (
@@ -245,7 +258,7 @@ export function OtpForm({ phone }: OtpFormProps) {
       ) : null}
 
       {devOtp ? (
-        <p className="mt-4 rounded-xl bg-oat px-4 py-3 text-center text-lg tracking-[0.4em] text-espresso">
+        <p className="mt-4 rounded-xl bg-soft px-4 py-3 text-center text-lg tracking-[0.4em] text-ink">
           {devOtp}
         </p>
       ) : null}
@@ -256,16 +269,19 @@ export function OtpForm({ phone }: OtpFormProps) {
         </p>
       ) : null}
 
-      <button
-        type="button"
-        disabled={(sent && countdown > 0) || isSending}
-        onClick={sendCode}
-        className="mt-8 text-sm text-cocoa hover:text-mocha disabled:cursor-not-allowed disabled:text-taupe"
-      >
-        {sent && countdown > 0
-          ? messages.login.resendIn(countdown)
-          : messages.login.resend}
-      </button>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted">
+          {sent && countdown > 0 ? messages.login.resendIn(countdown) : null}
+        </p>
+        <button
+          type="button"
+          disabled={(sent && countdown > 0) || isSending}
+          onClick={sendCode}
+          className="inline-flex h-11 items-center rounded-full bg-soft px-4 text-sm text-mocha hover:text-ink disabled:cursor-not-allowed disabled:bg-transparent disabled:text-taupe"
+        >
+          {messages.login.resend}
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaIcon } from "@/components/fa-icon";
+import { useCart } from "@/components/store/cart-provider";
 import { ProductCard } from "@/components/store/product-card";
 import { ProductGallery } from "@/components/store/product-gallery";
 import {
@@ -17,6 +18,7 @@ import {
   productSku,
   type Product,
 } from "@/lib/catalog";
+import { MAX_QTY } from "@/lib/cart";
 import { messages } from "@/lib/i18n";
 
 type Tab = "desc" | "extra" | "reviews" | "questions";
@@ -45,11 +47,14 @@ export function ProductDetail({
 }) {
   const percent = discountPercent(product);
   const images = useMemo(() => productImages(product), [product]);
+  const { addItem } = useCart();
   const [tab, setTab] = useState<Tab>("desc");
   const [color, setColor] = useState(product.colors[0]);
   const [size, setSize] = useState(product.sizes[0]);
+  const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [priceHint, setPriceHint] = useState(false);
+  const [sizeGuide, setSizeGuide] = useState(false);
 
   const specs = [
     { label: messages.shop.specPattern, value: messages.shop.specPatternValue },
@@ -72,6 +77,7 @@ export function ProductDetail({
     if (!product.inStock) {
       return;
     }
+    addItem({ productId: product.id, color, size, quantity: qty });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }
@@ -85,17 +91,17 @@ export function ProductDetail({
   }
 
   return (
-    <main className="pb-10">
-      <nav className="bg-[#e9d8c4]">
+    <main className="pb-32 lg:pb-10">
+      <nav className="bg-soft">
         <ol className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-2 px-4 py-3 text-xs text-cocoa">
           <li>
-            <Link href="/" className="hover:text-espresso">
+            <Link href="/" className="hover:text-ink">
               {messages.shop.breadcrumbHome}
             </Link>
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link href="/products" className="hover:text-espresso">
+            <Link href="/products" className="hover:text-ink">
               {messages.shop.breadcrumbPants}
             </Link>
           </li>
@@ -103,13 +109,13 @@ export function ProductDetail({
           <li>
             <Link
               href={`/products?cat=${product.category}`}
-              className="hover:text-espresso"
+              className="hover:text-ink"
             >
               {categoryLabel(product.category)}
             </Link>
           </li>
           <li aria-hidden="true">/</li>
-          <li className="text-espresso">{product.title}</li>
+          <li className="text-ink">{product.title}</li>
         </ol>
       </nav>
 
@@ -124,8 +130,11 @@ export function ProductDetail({
 
             <div>
               <h1 className="text-[1.65rem] leading-10 font-medium">
-                {product.title} {productSku(product)}
+                {product.title}
               </h1>
+              <p className="mt-1 text-xs text-muted">
+                {messages.shop.sku} {productSku(product)}
+              </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="inline-flex items-center gap-1.5 text-muted">
@@ -135,14 +144,14 @@ export function ProductDetail({
                 <button
                   type="button"
                   onClick={() => openTab("reviews")}
-                  className="rounded-full bg-white px-3 py-1 text-xs ring-1 ring-line"
+                  className="rounded-full bg-surface px-3 py-1 text-xs ring-1 ring-line"
                 >
                   {messages.shop.reviewLink}
                 </button>
                 <button
                   type="button"
                   onClick={() => openTab("questions")}
-                  className="rounded-full bg-white px-3 py-1 text-xs ring-1 ring-line"
+                  className="rounded-full bg-surface px-3 py-1 text-xs ring-1 ring-line"
                 >
                   {messages.shop.questionLink}
                 </button>
@@ -151,7 +160,7 @@ export function ProductDetail({
               <div className="mt-7">
                 <p className="mb-3 flex items-center gap-2 text-sm">
                   <FaIcon icon="fa-palette" className="text-muted" />
-                  {messages.shop.chooseColor}
+                  {messages.shop.chooseColor}: {colorLabel(color)}
                 </p>
                 <div className="flex flex-wrap items-end gap-3">
                   {product.colors.map((value) => {
@@ -163,7 +172,7 @@ export function ProductDetail({
                         onClick={() => setColor(value)}
                         className={
                           selected
-                            ? "inline-flex items-center gap-2 rounded-full bg-white py-1 pr-3 pl-1 ring-1 ring-line"
+                            ? "inline-flex items-center gap-2 rounded-full bg-surface py-1 pr-3 pl-1 ring-1 ring-line"
                             : "flex flex-col items-center gap-1.5"
                         }
                       >
@@ -192,7 +201,7 @@ export function ProductDetail({
               <div className="mt-7">
                 <p className="mb-3 flex items-center gap-2 text-sm">
                   <FaIcon icon="fa-ruler" className="text-muted" />
-                  {messages.shop.chooseSize}
+                  {messages.shop.chooseSize}: {size}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((value) => {
@@ -204,8 +213,8 @@ export function ProductDetail({
                         onClick={() => setSize(value)}
                         className={`inline-flex h-10 min-w-16 items-center justify-center gap-2 rounded-full px-4 text-sm ${
                           selected
-                            ? "bg-white ring-1 ring-espresso"
-                            : "bg-white ring-1 ring-line"
+                            ? "bg-surface ring-1 ring-ink"
+                            : "bg-surface ring-1 ring-line"
                         }`}
                       >
                         {selected ? (
@@ -216,13 +225,26 @@ export function ProductDetail({
                     );
                   })}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setSizeGuide((value) => !value)}
+                  className="mt-3 text-xs text-shop hover:underline"
+                  aria-expanded={sizeGuide}
+                >
+                  {messages.shop.sizeGuide}
+                </button>
+                {sizeGuide ? (
+                  <p className="mt-2 rounded-xl bg-soft px-3 py-2 text-xs leading-6 text-muted">
+                    {messages.shop.sizeGuideBody}
+                  </p>
+                ) : null}
               </div>
 
               <div className="mt-8 grid grid-cols-3 gap-2">
                 {specs.map((spec) => (
                   <div
                     key={spec.label}
-                    className="rounded-xl bg-[#f3f3f3] px-3 py-3 text-center"
+                    className="rounded-xl bg-soft px-3 py-3 text-center"
                   >
                     <p className="text-[11px] text-muted">{spec.label}</p>
                     <p className="mt-1 text-sm">{spec.value}</p>
@@ -231,13 +253,13 @@ export function ProductDetail({
                 <button
                   type="button"
                   onClick={() => openTab("extra")}
-                  className="rounded-xl bg-[#f3f3f3] px-3 py-3 text-sm text-mocha"
+                  className="rounded-xl bg-soft px-3 py-3 text-sm text-mocha"
                 >
                   {messages.shop.viewAllSpecs}
                 </button>
               </div>
 
-              <article className="mt-8 rounded-2xl border border-line/80 bg-white p-4">
+              <article className="mt-8 rounded-2xl border border-line/80 bg-surface p-4">
                 <h2 className="flex items-center gap-2 text-sm font-medium">
                   <FaIcon icon="fa-gem" className="text-[#7c3aed]" />
                   {messages.shop.shippingTitle}
@@ -281,10 +303,10 @@ export function ProductDetail({
             </a>
           </section>
 
-          <section className="mt-8 grid gap-6 rounded-2xl bg-white px-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
+          <section className="mt-8 grid gap-6 rounded-2xl bg-surface px-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
             {perks.map((item) => (
               <div key={item.title} className="flex items-center gap-3">
-                <span className="flex size-11 items-center justify-center text-xl text-espresso">
+                <span className="flex size-11 items-center justify-center text-xl text-ink">
                   <FaIcon icon={item.icon} />
                 </span>
                 <div>
@@ -314,22 +336,22 @@ export function ProductDetail({
                   onClick={() => setTab(id)}
                   className={`rounded-xl px-5 py-2.5 text-sm ${
                     tab === id
-                      ? "bg-[#c5a27d] text-white"
-                      : "bg-white text-espresso ring-1 ring-line"
+                      ? "bg-bronze text-espresso"
+                      : "bg-surface text-ink ring-1 ring-line"
                   }`}
                 >
                   {label}
                 </button>
               ))}
             </div>
-            <div className="mt-3 rounded-2xl bg-[#f3f3f3] p-5 text-sm leading-8 text-muted">
+            <div className="mt-3 rounded-2xl bg-soft p-5 text-sm leading-8 text-muted">
               {tab === "desc" ? <p>{messages.shop.colorNote}</p> : null}
               {tab === "extra" ? (
                 <dl className="divide-y divide-line/70">
                   {extraRows.map(([label, value]) => (
                     <div
                       key={label}
-                      className="grid grid-cols-2 gap-4 py-3 text-espresso"
+                      className="grid grid-cols-2 gap-4 py-3 text-ink"
                     >
                       <dt className="text-muted">{label}</dt>
                       <dd>{value}</dd>
@@ -344,7 +366,7 @@ export function ProductDetail({
                       key={item.name}
                       className="border-b border-line/60 pb-4 last:border-0"
                     >
-                      <p className="font-medium text-espresso">{item.name}</p>
+                      <p className="font-medium text-ink">{item.name}</p>
                       <p className="mt-1">{item.text}</p>
                     </li>
                   ))}
@@ -358,7 +380,7 @@ export function ProductDetail({
                     <textarea
                       rows={3}
                       placeholder={messages.shop.askQuestion}
-                      className="mt-2 w-full rounded-xl bg-white p-3 text-espresso outline-none ring-1 ring-line"
+                      className="mt-2 w-full rounded-xl bg-surface p-3 text-ink outline-none ring-1 ring-line"
                     />
                   </label>
                   <button
@@ -383,9 +405,9 @@ export function ProductDetail({
         </div>
 
         <aside className="lg:sticky lg:top-24">
-          <div className="rounded-2xl bg-[#f4f1ec] p-5">
+          <div className="rounded-2xl bg-soft p-5">
             <div className="flex items-start gap-3 border-b border-line/70 pb-4">
-              <span className="flex size-9 items-center justify-center rounded-full bg-white text-mocha">
+              <span className="flex size-9 items-center justify-center rounded-full bg-surface text-mocha">
                 <FaIcon icon="fa-shield-halved" />
               </span>
               <div>
@@ -399,7 +421,7 @@ export function ProductDetail({
             <div className="py-5">
               {percent ? (
                 <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded-md bg-[#c5a27d] px-2 py-0.5 text-xs text-white">
+                  <span className="rounded-md bg-bronze px-2 py-0.5 text-xs text-espresso">
                     {percent.toLocaleString("fa-IR")}٪
                   </span>
                   {product.compareAt ? (
@@ -423,21 +445,52 @@ export function ProductDetail({
               </p>
             </div>
 
-            <button
-              type="button"
-              disabled={!product.inStock}
-              onClick={addToCart}
-              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-[#4a342c] text-sm text-white disabled:opacity-50"
-            >
-              {added ? messages.shop.addedToCart : messages.shop.addToCartFull}
-            </button>
+            <div className="mb-4 inline-flex h-11 items-center rounded-xl bg-surface ring-1 ring-line">
+              <button
+                type="button"
+                className="flex size-11 items-center justify-center"
+                aria-label={messages.shop.decreaseQty}
+                onClick={() => setQty((value) => Math.max(1, value - 1))}
+              >
+                <FaIcon icon="fa-minus" className="text-xs" />
+              </button>
+              <span className="w-8 text-center text-sm">
+                {qty.toLocaleString("fa-IR")}
+              </span>
+              <button
+                type="button"
+                className="flex size-11 items-center justify-center disabled:opacity-40"
+                aria-label={messages.shop.increaseQty}
+                disabled={qty >= MAX_QTY}
+                onClick={() => setQty((value) => Math.min(MAX_QTY, value + 1))}
+              >
+                <FaIcon icon="fa-plus" className="text-xs" />
+              </button>
+            </div>
+            {added ? (
+              <Link
+                href="/cart"
+                className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-espresso text-sm text-white"
+              >
+                {messages.shop.addedViewCart}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled={!product.inStock}
+                onClick={addToCart}
+                className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-espresso text-sm text-white disabled:opacity-50"
+              >
+                {messages.shop.addToCartFull}
+              </button>
+            )}
           </div>
 
           <div className="mt-3 grid gap-2">
             <button
               type="button"
               onClick={() => openTab("reviews")}
-              className="flex items-center gap-3 rounded-xl border border-line bg-white p-3 text-right text-xs leading-6"
+              className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3 text-right text-xs leading-6"
             >
               <FaIcon icon="fa-star" className="text-bronze" />
               {messages.shop.rateItem}
@@ -445,7 +498,7 @@ export function ProductDetail({
             <button
               type="button"
               onClick={() => openTab("reviews")}
-              className="flex items-center gap-3 rounded-xl border border-line bg-white p-3 text-right text-xs leading-6"
+              className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3 text-right text-xs leading-6"
             >
               <FaIcon icon="fa-comments" className="text-shop" />
               {messages.shop.userReviews}
@@ -453,7 +506,7 @@ export function ProductDetail({
             <button
               type="button"
               onClick={() => setPriceHint(true)}
-              className="flex items-center gap-3 rounded-xl border border-line bg-white p-3 text-right text-xs leading-6"
+              className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3 text-right text-xs leading-6"
             >
               <FaIcon icon="fa-lightbulb" className="text-bronze" />
               {priceHint
@@ -462,6 +515,31 @@ export function ProductDetail({
             </button>
           </div>
         </aside>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 border-t border-line bg-surface/95 px-4 py-3 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-lg items-center gap-3">
+          <p className="min-w-0 flex-1 truncate text-sm font-medium">
+            {formatToman(product.price)}
+          </p>
+          {added ? (
+            <Link
+              href="/cart"
+              className="inline-flex h-12 min-w-40 items-center justify-center rounded-xl bg-espresso px-5 text-sm text-white"
+            >
+              {messages.shop.addedViewCart}
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled={!product.inStock}
+              onClick={addToCart}
+              className="inline-flex h-12 min-w-40 items-center justify-center rounded-xl bg-espresso px-5 text-sm text-white disabled:opacity-50"
+            >
+              {messages.shop.addToCartFull}
+            </button>
+          )}
+        </div>
       </div>
     </main>
   );

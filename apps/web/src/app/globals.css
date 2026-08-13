@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --bone: #f3ede3;
   --oat: #e4d5c3;
@@ -16,6 +18,7 @@
   --olive: var(--sage);
   --page: #f5f5f5;
   --surface: #ffffff;
+  --soft: #ece6dc;
   --sale: #ef4056;
   --shop: #2f6fed;
   --ink: var(--espresso);
@@ -23,6 +26,24 @@
   --line: #d7c7b4;
   --accent: var(--mocha);
   --error: #9a4f3f;
+  --success: #22c55e;
+  --range-track: #dbe4f5;
+  --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  --page: #14110f;
+  --surface: #1f1916;
+  --soft: #2a221e;
+  --ink: #f3ede3;
+  --muted: #c4b4a4;
+  --cocoa: #c4b4a4;
+  --taupe: #9a8b7d;
+  --line: #3d312b;
+  --error: #e08a78;
+  --success: #4ade80;
+  --range-track: #3a322e;
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
 @font-face {
@@ -66,6 +87,7 @@
   --color-olive: var(--olive);
   --color-page: var(--page);
   --color-surface: var(--surface);
+  --color-soft: var(--soft);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
@@ -73,10 +95,17 @@
   --color-error: var(--error);
   --color-sale: var(--sale);
   --color-shop: var(--shop);
+  --color-success: var(--success);
+  --shadow-card: var(--card-shadow);
 }
 
 html {
+  color-scheme: light;
   font-synthesis: none;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -178,7 +207,7 @@ body {
 .price-range::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 999px;
-  background: #dbe4f5;
+  background: var(--range-track);
 }
 
 .price-range::-webkit-slider-thumb {
@@ -188,7 +217,7 @@ body {
   height: 16px;
   margin-top: -6px;
   border-radius: 999px;
-  border: 2px solid #fff;
+  border: 2px solid var(--surface);
   background: var(--shop);
   box-shadow: 0 0 0 1px var(--shop);
 }
@@ -196,21 +225,56 @@ body {
 .price-range::-moz-range-track {
   height: 4px;
   border-radius: 999px;
-  background: #dbe4f5;
+  background: var(--range-track);
 }
 
 .price-range::-moz-range-thumb {
   pointer-events: all;
   width: 16px;
   height: 16px;
-  border: 2px solid #fff;
+  border: 2px solid var(--surface);
   border-radius: 999px;
   background: var(--shop);
+}
+
+:focus-visible {
+  outline: 2px solid var(--mocha);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -5rem;
+  right: 1rem;
+  z-index: 80;
+  border-radius: 0.75rem;
+  background: var(--espresso);
+  color: var(--bone);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--bronze);
+  outline-offset: 2px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .login-shake,
   .fa-spin {
     animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

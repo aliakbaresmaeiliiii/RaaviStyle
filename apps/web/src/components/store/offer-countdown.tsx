@@ -23,15 +23,15 @@ export function OfferCountdown({ seconds = 8 * 60 * 60 }: { seconds?: number }) 
 
   return (
     <div dir="ltr" className="flex items-center gap-1 text-sm font-medium">
-      <span className="rounded-md bg-white px-1.5 py-0.5 text-sale">
+      <span className="rounded-md bg-surface px-1.5 py-0.5 text-sale">
         {pad(secs)}
       </span>
       <span>:</span>
-      <span className="rounded-md bg-white px-1.5 py-0.5 text-sale">
+      <span className="rounded-md bg-surface px-1.5 py-0.5 text-sale">
         {pad(minutes)}
       </span>
       <span>:</span>
-      <span className="rounded-md bg-white px-1.5 py-0.5 text-sale">
+      <span className="rounded-md bg-surface px-1.5 py-0.5 text-sale">
         {pad(hours)}
       </span>
     </div>

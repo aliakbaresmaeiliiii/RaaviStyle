@@ -1,6 +1,8 @@
+import { CartProvider } from "@/components/store/cart-provider";
 import { MobileDock } from "@/components/store/mobile-dock";
 import { StoreFooter } from "@/components/store/store-footer";
 import { StoreHeader } from "@/components/store/store-header";
+import { SkipLink } from "@/components/skip-link";
 
 export default function StoreLayout({
   children,
@@ -8,11 +10,14 @@ export default function StoreLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-page pb-16 sm:pb-0">
-      <StoreHeader />
-      {children}
-      <StoreFooter />
-      <MobileDock />
-    </div>
+    <CartProvider>
+      <div className="min-h-screen bg-page pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-0">
+        <SkipLink />
+        <StoreHeader />
+        <div id="main-content">{children}</div>
+        <StoreFooter />
+        <MobileDock />
+      </div>
+    </CartProvider>
   );
 }

@@ -8,26 +8,32 @@ type BrandLogoProps = {
   className?: string
   href?: string | null
   priority?: boolean
+  onDark?: boolean
 }
 
 export function BrandLogo({
   className = "h-16",
   href = "/",
   priority = false,
+  onDark = false,
 }: BrandLogoProps) {
   const image = (
     <Image
       src={brandLogoSrc}
       alt={messages.brand}
-      width={1536}
-      height={1024}
-      className="h-full w-auto object-contain"
-      sizes="200px"
+      width={999}
+      height={819}
+      unoptimized
       priority={priority}
+      className={`${className} w-auto object-contain`}
+      style={{ width: "auto" }}
+      sizes="280px"
     />
   )
 
-  const frameClassName = `inline-flex items-center ${className}`.trim()
+  const frameClassName = onDark
+    ? "inline-flex shrink-0 items-center"
+    : "inline-flex shrink-0 items-center rounded-xl bg-espresso px-1.5 py-0.5 dark:bg-transparent dark:px-0 dark:py-0"
 
   if (href === null) {
     return <span className={frameClassName}>{image}</span>
