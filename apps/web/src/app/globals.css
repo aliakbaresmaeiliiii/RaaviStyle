@@ -1,1 +1,153 @@
 @import "tailwindcss";
+
+:root {
+  --bone: #f3ede3;
+  --oat: #e4d5c3;
+  --mocha: #a47864;
+  --cocoa: #5c3d32;
+  --espresso: #1a1412;
+  --bronze: #c9a36a;
+  --sage: #7e8774;
+  --blush: #c4a39a;
+
+  --ivory: var(--bone);
+  --taupe: #cbbba8;
+  --champagne: var(--bronze);
+  --olive: var(--sage);
+  --page: var(--bone);
+  --surface: #faf6f0;
+  --ink: var(--espresso);
+  --muted: var(--cocoa);
+  --line: #d7c7b4;
+  --accent: var(--mocha);
+  --error: #9a4f3f;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/vazirmatn-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/vazirmatn-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/vazirmatn-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --font-sans: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  --font-display: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  --color-bone: var(--bone);
+  --color-oat: var(--oat);
+  --color-mocha: var(--mocha);
+  --color-cocoa: var(--cocoa);
+  --color-espresso: var(--espresso);
+  --color-bronze: var(--bronze);
+  --color-sage: var(--sage);
+  --color-blush: var(--blush);
+  --color-ivory: var(--ivory);
+  --color-taupe: var(--taupe);
+  --color-champagne: var(--champagne);
+  --color-olive: var(--olive);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-error: var(--error);
+}
+
+html {
+  font-synthesis: none;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+::selection {
+  background: var(--mocha);
+  color: var(--bone);
+}
+
+.login-panel {
+  background:
+    radial-gradient(
+      90% 70% at 100% 0%,
+      color-mix(in srgb, var(--bronze) 32%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      80% 80% at 0% 100%,
+      color-mix(in srgb, var(--mocha) 50%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(160deg, #2c1d19 0%, #1a1412 48%, #3a261f 100%);
+}
+
+.login-grain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.18) 0.6px,
+    transparent 0.6px
+  );
+  background-size: 3px 3px;
+}
+
+.login-orb {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+}
+
+@keyframes login-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+.login-shake {
+  animation: login-shake 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-shake,
+  .fa-spin {
+    animation: none;
+  }
+}
