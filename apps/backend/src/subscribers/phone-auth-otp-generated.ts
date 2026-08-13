@@ -10,7 +10,7 @@ export default async function phoneAuthOtpGeneratedHandler({
   }
 
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
-  logger.info(`OTP for ${data.phone}: ${data.otp}`)
+  logger.info(`OTP code: ${data.otp}`)
 }
 
 export const config: SubscriberConfig = {

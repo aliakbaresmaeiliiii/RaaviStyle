@@ -21,6 +21,7 @@ export function OtpForm({ phone }: OtpFormProps) {
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
   const [sent, setSent] = useState(false);
+  const [devOtp, setDevOtp] = useState("");
   const [countdown, setCountdown] = useState(0);
   const [isSending, startSending] = useTransition();
   const [isVerifying, startVerifying] = useTransition();
@@ -47,10 +48,12 @@ export function OtpForm({ phone }: OtpFormProps) {
       const result = await requestOtp(phone);
       if (result && !result.ok) {
         showError(result.error);
+        setDevOtp("");
         return;
       }
 
       setSent(true);
+      setDevOtp(result?.devOtp ?? "");
       setDigits(Array.from({ length: OTP_LENGTH }, () => ""));
       setCountdown(RESEND_SECONDS);
       focusInput(0);
@@ -241,7 +244,13 @@ export function OtpForm({ phone }: OtpFormProps) {
         </p>
       ) : null}
 
-      {process.env.NODE_ENV === "development" ? (
+      {devOtp ? (
+        <p className="mt-4 rounded-xl bg-oat px-4 py-3 text-center text-lg tracking-[0.4em] text-espresso">
+          {devOtp}
+        </p>
+      ) : null}
+
+      {process.env.NODE_ENV === "development" && !devOtp ? (
         <p className="mt-4 text-xs leading-6 text-taupe">
           {messages.login.devHint}
         </p>

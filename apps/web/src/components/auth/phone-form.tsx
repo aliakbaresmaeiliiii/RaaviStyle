@@ -20,20 +20,9 @@ export function PhoneForm() {
     phoneRef.current?.focus();
   }, []);
 
-  function showError(message: string) {
-    setError(message);
-    setShake(true);
-    window.setTimeout(() => setShake(false), 400);
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!phoneValid) {
-      showError(messages.errors.invalidPhone);
-      return;
-    }
-
-    router.push(`/login/otp?phone=${encodeURIComponent(phone)}`);
+    router.push("/");
   }
 
   return (
@@ -72,7 +61,6 @@ export function PhoneForm() {
           dir="ltr"
           autoComplete="tel"
           inputMode="numeric"
-          required
           placeholder="۹۱۲ ۱۲۳ ۴۵۶۷"
           value={phone}
           aria-invalid={Boolean(error)}
@@ -101,8 +89,7 @@ export function PhoneForm() {
 
       <button
         type="submit"
-        disabled={!phoneValid}
-        className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-mocha text-base font-medium text-bone shadow-[0_12px_30px_rgba(164,120,100,0.28)] transition hover:bg-espresso disabled:cursor-not-allowed disabled:bg-taupe disabled:shadow-none"
+        className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-mocha text-base font-medium text-bone shadow-[0_12px_30px_rgba(164,120,100,0.28)] transition hover:bg-espresso"
       >
         <FaIcon icon="fa-arrow-left" />
         {messages.login.continue}

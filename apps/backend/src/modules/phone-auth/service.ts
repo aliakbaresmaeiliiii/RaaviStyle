@@ -26,9 +26,8 @@ type OtpPayload = {
   otp: string
 }
 
+const OTP_LENGTH = 6
 const OTP_TTL = "5m"
-const OTP_MIN = 100000
-const OTP_MAX = 1000000
 
 class PhoneAuthService extends AbstractAuthModuleProvider {
   static DISPLAY_NAME = "ورود با موبایل"
@@ -95,7 +94,6 @@ class PhoneAuthService extends AbstractAuthModuleProvider {
     authIdentityProviderService: AuthIdentityProviderService
   ): Promise<AuthenticationResponse> {
     const phone = this.readPhone(data)
-
     if (!phone) {
       return {
         success: false,
@@ -133,11 +131,11 @@ class PhoneAuthService extends AbstractAuthModuleProvider {
       {}
     )
 
-    this.logger.info(`OTP generated for ${phone}`)
+    this.logger.info(`OTP code (6 digits): ${otp}`)
 
     return {
       success: true,
-      location: "otp",
+      location: process.env.NODE_ENV === "production" ? "otp" : otp,
     }
   }
 
@@ -216,7 +214,12 @@ class PhoneAuthService extends AbstractAuthModuleProvider {
   }
 
   private generateOTP(): { hashedOTP: string; otp: string } {
-    const otp = randomInt(OTP_MIN, OTP_MAX).toString()
+    let otp = String(randomInt(1, 10))
+
+    for (let index = 1; index < OTP_LENGTH; index++) {
+      otp += String(randomInt(0, 10))
+    }
+
     const hashedOTP = jwt.sign({ otp }, this.options.jwtSecret, {
       expiresIn: OTP_TTL,
     })
@@ -246,7 +249,7 @@ class PhoneAuthService extends AbstractAuthModuleProvider {
     }
 
     const otp = raw.trim()
-    return /^\d{6}$/.test(otp) ? otp : null
+    return new RegExp(`^\\d{${OTP_LENGTH}}$`).test(otp) ? otp : null
   }
 }
 

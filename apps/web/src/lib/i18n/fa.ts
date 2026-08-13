@@ -5,8 +5,38 @@ export const messages = {
     description: "فروشگاه پوشاک راوی‌استایل",
   },
   nav: {
-    signIn: "ورود",
+    signIn: "ورود | ثبت‌نام",
     account: "حساب کاربری",
+  },
+  shop: {
+    topBar: "ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان",
+    search: "جستجو در راوی‌استایل",
+    cart: "سبد خرید",
+    allCategories: "دسته‌بندی‌ها",
+    categories: "دسته‌ها",
+    home: "خانه",
+    amazing: "شگفت‌انگیز",
+    amazingSeeAll: "مشاهده همه",
+    popular: "پرفروش‌ترین‌ها",
+    newest: "تازه‌ها",
+    addToCart: "افزودن به سبد",
+    emptyCart: "سبد خرید شما خالی است.",
+    continueShopping: "ادامه خرید",
+    footerAbout: "فروشگاه پوشاک راوی‌استایل؛ انتخاب لباس با حس گرم و ساده.",
+    footerShop: "فروشگاه",
+    footerHelp: "راهنما",
+    footerContact: "تماس",
+    shipping: "شرایط ارسال",
+    returns: "مرجوعی کالا",
+    faq: "پرسش‌های متداول",
+    phone: "۰۲۱-۹۱۰۰۰۰۰۰",
+    email: "hello@raavistyle.ir",
+    copyright: "۱۴۰۵ راوی‌استایل. همه حقوق محفوظ است.",
+    heroTitle: "مجموعه بهار و تابستان",
+    heroBody: "پارچه‌های سبک، رنگ‌های گرم، دوخت دقیق.",
+    heroCta: "مشاهده محصولات",
+    bannerWomen: "زنانه",
+    bannerMen: "مردانه",
   },
   home: {
     eyebrow: "به‌زودی",
@@ -42,7 +72,7 @@ export const messages = {
     panelTitle: "زیبایی در سادگی گرم",
     panelBody: "ورود در چند ثانیه، بدون رمز. بعد از آن، کمد شما اینجاست.",
     collection: "مجموعه ۱۴۰۵",
-    devHint: "در محیط توسعه، کد در ترمینال بک‌اند چاپ می‌شود.",
+    devHint: "پیامک هنوز وصل نیست. در محیط توسعه کد همین‌جا نمایش داده می‌شود.",
   },
   account: {
     eyebrow: "حساب کاربری",
@@ -73,6 +103,8 @@ export const messages = {
     generic: "مشکلی پیش آمد. دوباره تلاش کنید.",
     missingPublishableKey:
       "کلید انتشار فروشگاه تنظیم نشده است. آن را از پنل ادمین مدوسا در تنظیمات کلیدهای انتشار کپی کنید.",
+    backendDown:
+      "سرور مدوسا روشن نیست یا به دیتابیس وصل نمی‌شود. کد ساخته نشد.",
   },
 } as const;
 

@@ -8,7 +8,7 @@ import { messages, translateError } from "./i18n";
 import { normalizePhone, phoneToPlaceholderEmail } from "./phone";
 
 export type AuthResult =
-  | { ok: true; phone?: string }
+  | { ok: true; phone?: string; devOtp?: string }
   | { ok: false; error: string };
 
 async function setAuthToken(token: string) {
@@ -105,11 +105,35 @@ export async function requestOtp(rawPhone: string): Promise<AuthResult> {
       await setAuthToken(loginResult);
       redirect("/account");
     }
-  } catch (error) {
-    return { ok: false, error: errorMessage(error) };
-  }
 
-  return { ok: true, phone };
+    const location =
+      loginResult && typeof loginResult === "object" && "location" in loginResult
+        ? String(loginResult.location)
+        : "";
+
+    return {
+      ok: true,
+      phone,
+      devOtp:
+        process.env.NODE_ENV !== "production" && /^\d{6}$/.test(location)
+          ? location
+          : undefined,
+    };
+  } catch (error) {
+    const raw = rawErrorMessage(error).toLowerCase();
+    const backendDown =
+      raw.includes("fetch") ||
+      raw.includes("econnrefused") ||
+      raw.includes("failed to fetch") ||
+      raw.includes("network");
+
+    return {
+      ok: false,
+      error: backendDown
+        ? messages.errors.backendDown
+        : errorMessage(error),
+    };
+  }
 }
 
 export async function verifyOtp(
