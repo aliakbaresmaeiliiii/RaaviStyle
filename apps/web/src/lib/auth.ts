@@ -3,16 +3,13 @@
 import { FetchError } from "@medusajs/js-sdk";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import {
-  AUTH_COOKIE,
-  AUTH_PROVIDER,
-  createMedusaClient,
-  missingPublishableKeyMessage,
-} from "./medusa";
+import { AUTH_COOKIE, AUTH_PROVIDER, createMedusaClient } from "./medusa";
 import { messages, translateError } from "./i18n";
 import { normalizePhone, phoneToPlaceholderEmail } from "./phone";
 
-export type AuthResult = { ok: true } | { ok: false; error: string };
+export type AuthResult =
+  | { ok: true; phone?: string }
+  | { ok: false; error: string };
 
 async function setAuthToken(token: string) {
   const cookieStore = await cookies();
@@ -60,11 +57,6 @@ export async function requestOtp(rawPhone: string): Promise<AuthResult> {
     return { ok: false, error: messages.errors.invalidPhone };
   }
 
-  const configError = missingPublishableKeyMessage();
-  if (configError) {
-    return { ok: false, error: messages.errors.missingPublishableKey };
-  }
-
   try {
     const sdk = createMedusaClient();
     let registrationToken: string | null = null;
@@ -93,7 +85,14 @@ export async function requestOtp(rawPhone: string): Promise<AuthResult> {
         );
       } catch (error) {
         if (!isAlreadyRegistered(rawErrorMessage(error))) {
-          return { ok: false, error: errorMessage(error) };
+          const raw = rawErrorMessage(error).toLowerCase();
+          const missingKey =
+            !process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ||
+            raw.includes("publishable");
+
+          if (!missingKey) {
+            return { ok: false, error: errorMessage(error) };
+          }
         }
       }
     }
@@ -102,21 +101,15 @@ export async function requestOtp(rawPhone: string): Promise<AuthResult> {
       phone,
     });
 
-    if (
-      typeof loginResult === "string" ||
-      !("location" in loginResult) ||
-      loginResult.location !== "otp"
-    ) {
-      return {
-        ok: false,
-        error: messages.errors.sendFailed,
-      };
+    if (typeof loginResult === "string") {
+      await setAuthToken(loginResult);
+      redirect("/account");
     }
   } catch (error) {
     return { ok: false, error: errorMessage(error) };
   }
 
-  redirect(`/login/otp?phone=${encodeURIComponent(phone)}`);
+  return { ok: true, phone };
 }
 
 export async function verifyOtp(

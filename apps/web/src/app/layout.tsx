@@ -5,9 +5,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: messages.meta.title,
   description: messages.meta.description,
+  icons: {
+    icon: "/brnading/logo-brand.png",
+    apple: "/brnading/logo-brand.png",
+  },
   openGraph: {
     locale: "fa_IR",
     siteName: messages.brand,
+    images: ["/brnading/logo-brand.png"],
   },
 };
 

@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useTransition } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaIcon } from "@/components/fa-icon";
-import { requestOtp } from "@/lib/auth";
 import { messages } from "@/lib/i18n";
 import { formatNationalMobile, isValidMobile } from "@/lib/phone";
 
 export function PhoneForm() {
+  const router = useRouter();
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const phoneRef = useRef<HTMLInputElement>(null);
   const errorId = useId();
   const hintId = useId();
@@ -33,13 +33,7 @@ export function PhoneForm() {
       return;
     }
 
-    setError("");
-    startTransition(async () => {
-      const result = await requestOtp(phone);
-      if (result && !result.ok) {
-        showError(result.error);
-      }
-    });
+    router.push(`/login/otp?phone=${encodeURIComponent(phone)}`);
   }
 
   return (
@@ -107,15 +101,11 @@ export function PhoneForm() {
 
       <button
         type="submit"
-        disabled={isPending || !phoneValid}
+        disabled={!phoneValid}
         className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-mocha text-base font-medium text-bone shadow-[0_12px_30px_rgba(164,120,100,0.28)] transition hover:bg-espresso disabled:cursor-not-allowed disabled:bg-taupe disabled:shadow-none"
       >
-        {isPending ? (
-          <FaIcon icon="fa-spinner fa-spin" />
-        ) : (
-          <FaIcon icon="fa-arrow-left" />
-        )}
-        {isPending ? messages.login.sending : messages.login.continue}
+        <FaIcon icon="fa-arrow-left" />
+        {messages.login.continue}
       </button>
       <p className="mt-5 flex items-center justify-center gap-2 text-center text-xs leading-6 text-taupe">
         <FaIcon icon="fa-shield-halved" />

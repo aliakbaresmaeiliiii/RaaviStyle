@@ -15,22 +15,19 @@ type OtpFormProps = {
 };
 
 export function OtpForm({ phone }: OtpFormProps) {
-  const [otp, setOtp] = useState("");
+  const [digits, setDigits] = useState<string[]>(() =>
+    Array.from({ length: OTP_LENGTH }, () => "")
+  );
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
-  const [countdown, setCountdown] = useState(RESEND_SECONDS);
-  const [isPending, startTransition] = useTransition();
-  const otpRef = useRef<HTMLInputElement>(null);
+  const [sent, setSent] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [isSending, startSending] = useTransition();
+  const [isVerifying, startVerifying] = useTransition();
+  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+  const requested = useRef(false);
   const errorId = useId();
-
-  useEffect(() => {
-    otpRef.current?.focus();
-    const timer = window.setInterval(() => {
-      setCountdown((value) => (value > 0 ? value - 1 : 0));
-    }, 1000);
-
-    return () => window.clearInterval(timer);
-  }, []);
+  const code = digits.join("");
 
   function showError(message: string) {
     setError(message);
@@ -38,40 +35,138 @@ export function OtpForm({ phone }: OtpFormProps) {
     window.setTimeout(() => setShake(false), 400);
   }
 
-  function handleOtpChange(value: string) {
-    const digits = toAsciiDigits(value).replace(/\D/g, "").slice(0, OTP_LENGTH);
-    setOtp(digits);
-    setError("");
-
-    if (digits.length === OTP_LENGTH) {
-      submitOtp(digits);
-    }
+  function focusInput(index: number) {
+    const node = inputsRef.current[Math.max(0, Math.min(index, OTP_LENGTH - 1))];
+    node?.focus();
+    node?.select();
   }
 
-  function submitOtp(code: string) {
+  function sendCode() {
     setError("");
-    startTransition(async () => {
-      const result = await verifyOtp(phone, code);
-      if (result && !result.ok) {
-        showError(result.error);
-        setOtp("");
-        otpRef.current?.focus();
-      }
-    });
-  }
-
-  function handleResend() {
-    setError("");
-    startTransition(async () => {
+    startSending(async () => {
       const result = await requestOtp(phone);
       if (result && !result.ok) {
         showError(result.error);
         return;
       }
 
-      setOtp("");
+      setSent(true);
+      setDigits(Array.from({ length: OTP_LENGTH }, () => ""));
       setCountdown(RESEND_SECONDS);
-      otpRef.current?.focus();
+      focusInput(0);
+    });
+  }
+
+  useEffect(() => {
+    if (requested.current) {
+      return;
+    }
+
+    requested.current = true;
+    sendCode();
+    focusInput(0);
+  }, [phone]);
+
+  useEffect(() => {
+    if (!sent || countdown <= 0) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setCountdown((value) => (value > 0 ? value - 1 : 0));
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [sent, countdown]);
+
+  function applyDigits(next: string[], startIndex: number) {
+    setDigits(next);
+    setError("");
+
+    const filled = next.join("");
+    if (filled.length === OTP_LENGTH) {
+      submitOtp(filled);
+      return;
+    }
+
+    const nextEmpty = next.findIndex((digit, index) => index >= startIndex && !digit);
+    focusInput(nextEmpty === -1 ? OTP_LENGTH - 1 : nextEmpty);
+  }
+
+  function handleChange(index: number, value: string) {
+    const incoming = toAsciiDigits(value).replace(/\D/g, "");
+    if (!incoming) {
+      const next = [...digits];
+      next[index] = "";
+      setDigits(next);
+      return;
+    }
+
+    const next = [...digits];
+    incoming.split("").forEach((digit, offset) => {
+      if (index + offset < OTP_LENGTH) {
+        next[index + offset] = digit;
+      }
+    });
+    applyDigits(next, index + incoming.length);
+  }
+
+  function handleKeyDown(
+    index: number,
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    if (event.key === "Backspace") {
+      event.preventDefault();
+      const next = [...digits];
+
+      if (next[index]) {
+        next[index] = "";
+        setDigits(next);
+        return;
+      }
+
+      if (index > 0) {
+        next[index - 1] = "";
+        setDigits(next);
+        focusInput(index - 1);
+      }
+      return;
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      focusInput(index - 1);
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      focusInput(index + 1);
+    }
+  }
+
+  function handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
+    event.preventDefault();
+    const incoming = toAsciiDigits(event.clipboardData.getData("text"))
+      .replace(/\D/g, "")
+      .slice(0, OTP_LENGTH);
+
+    if (!incoming) {
+      return;
+    }
+
+    const next = Array.from({ length: OTP_LENGTH }, (_, index) => incoming[index] ?? "");
+    applyDigits(next, incoming.length);
+  }
+
+  function submitOtp(value: string) {
+    setError("");
+    startVerifying(async () => {
+      const result = await verifyOtp(phone, value);
+      if (result && !result.ok) {
+        showError(result.error);
+        setDigits(Array.from({ length: OTP_LENGTH }, () => ""));
+        focusInput(0);
+      }
     });
   }
 
@@ -93,48 +188,43 @@ export function OtpForm({ phone }: OtpFormProps) {
       </Link>
 
       <div className={`mt-8 ${shake ? "login-shake" : ""}`}>
-        <label className="sr-only" htmlFor="otp">
-          {messages.login.otpLabel}
-        </label>
-        <div className="relative">
-          <input
-            id="otp"
-            ref={otpRef}
-            value={otp}
-            onChange={(event) => handleOtpChange(event.target.value)}
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            autoCorrect="off"
-            spellCheck={false}
-            maxLength={OTP_LENGTH}
-            disabled={isPending}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? errorId : undefined}
-            className="absolute inset-0 z-10 cursor-text opacity-0"
-          />
-          <div dir="ltr" className="flex gap-2.5">
-            {Array.from({ length: OTP_LENGTH }).map((_, index) => {
-              const filled = Boolean(otp[index]);
-              const active = otp.length === index && !isPending;
+        <div dir="ltr" className="flex gap-2.5">
+          {digits.map((digit, index) => {
+            const active = index === (code.length === OTP_LENGTH ? OTP_LENGTH - 1 : code.length);
 
-              return (
-                <div
-                  key={index}
-                  className={`flex h-16 flex-1 items-center justify-center rounded-2xl border text-xl font-medium transition ${
-                    error
-                      ? "border-error bg-error/5"
-                      : active
-                        ? "border-mocha bg-surface shadow-[0_0_0_4px_rgba(164,120,100,0.18)]"
-                        : filled
-                          ? "border-mocha bg-mocha/10"
-                          : "border-line bg-surface"
-                  }`}
-                >
-                  {otp[index] ?? ""}
-                </div>
-              );
-            })}
-          </div>
+            return (
+              <input
+                key={index}
+                ref={(node) => {
+                  inputsRef.current[index] = node;
+                }}
+                id={index === 0 ? "otp" : undefined}
+                value={digit}
+                onChange={(event) => handleChange(index, event.target.value)}
+                onKeyDown={(event) => handleKeyDown(index, event)}
+                onPaste={handlePaste}
+                onFocus={(event) => event.currentTarget.select()}
+                inputMode="numeric"
+                autoComplete={index === 0 ? "one-time-code" : "off"}
+                autoCorrect="off"
+                spellCheck={false}
+                maxLength={index === 0 ? OTP_LENGTH : 1}
+                disabled={isVerifying}
+                aria-label={`${messages.login.otpLabel} ${index + 1}`}
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? errorId : undefined}
+                className={`h-16 w-full rounded-2xl border bg-surface text-center text-xl font-medium outline-none transition ${
+                  error
+                    ? "border-error bg-error/5"
+                    : active
+                      ? "border-mocha shadow-[0_0_0_4px_rgba(164,120,100,0.18)]"
+                      : digit
+                        ? "border-mocha bg-mocha/10"
+                        : "border-line"
+                }`}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -144,10 +234,10 @@ export function OtpForm({ phone }: OtpFormProps) {
         </p>
       ) : null}
 
-      {isPending ? (
+      {isSending || isVerifying ? (
         <p className="mt-4 flex items-center gap-2 text-sm text-mocha">
           <FaIcon icon="fa-spinner fa-spin" />
-          {messages.login.verifying}
+          {isVerifying ? messages.login.verifying : messages.login.sending}
         </p>
       ) : null}
 
@@ -159,11 +249,11 @@ export function OtpForm({ phone }: OtpFormProps) {
 
       <button
         type="button"
-        disabled={countdown > 0 || isPending}
-        onClick={handleResend}
+        disabled={(sent && countdown > 0) || isSending}
+        onClick={sendCode}
         className="mt-8 text-sm text-cocoa hover:text-mocha disabled:cursor-not-allowed disabled:text-taupe"
       >
-        {countdown > 0
+        {sent && countdown > 0
           ? messages.login.resendIn(countdown)
           : messages.login.resend}
       </button>

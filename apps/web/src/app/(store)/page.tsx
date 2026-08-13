@@ -3,7 +3,7 @@ import { messages } from "@/lib/i18n";
 
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col justify-center px-6 py-16">
+    <main className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-6xl flex-col justify-center px-6 py-16">
       <p className="text-sm text-mocha">{messages.home.eyebrow}</p>
       <h1 className="mt-4 max-w-2xl text-4xl font-medium leading-snug md:text-5xl">
         {messages.home.title}

@@ -9,7 +9,7 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl flex-col justify-center px-6 py-16">
+    <main className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-6xl flex-col justify-center px-6 py-16">
       <h1 className="text-3xl font-medium">{messages.error.title}</h1>
       <p className="mt-4 max-w-md text-muted">{messages.error.body}</p>
       <button
