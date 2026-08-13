@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   title: messages.meta.title,
   description: messages.meta.description,
   icons: {
-    icon: "/brnading/logo-brand.png",
-    apple: "/brnading/logo-brand.png",
+    icon: "/brnading/logo.png",
+    apple: "/brnading/logo.png",
   },
   openGraph: {
     locale: "fa_IR",
     siteName: messages.brand,
-    images: ["/brnading/logo-brand.png"],
+    images: ["/brnading/logo.png"],
   },
 };
 

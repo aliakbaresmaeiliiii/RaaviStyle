@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AuthProgress } from "@/components/auth/auth-progress";
-import { BrandLogo, brandLogoDarkSrc } from "@/components/brand-logo";
+import { BrandLogo, brandLogoSrc } from "@/components/brand-logo";
 import { FaIcon } from "@/components/fa-icon";
 import { messages } from "@/lib/i18n";
 
@@ -37,11 +37,11 @@ export default function LoginLayout({
         <span className="login-orb -right-15 bottom-[20%] h-80 w-80 bg-bronze/25" />
         <span className="login-orb top-[40%] left-[30%] h-40 w-40 bg-sage/20" />
         <Image
-          src={brandLogoDarkSrc}
+          src={brandLogoSrc}
           alt=""
           width={1536}
           height={1024}
-          className="pointer-events-none absolute top-[18%] left-1/2 z-10 w-[min(22rem,58%)] -translate-x-1/2 object-contain opacity-80 mix-blend-lighten"
+          className="pointer-events-none absolute top-[18%] left-1/2 z-10 w-[min(22rem,58%)] -translate-x-1/2 object-contain"
           sizes="352px"
         />
         <p className="absolute top-12 left-12 z-10 text-sm font-light text-bronze">
