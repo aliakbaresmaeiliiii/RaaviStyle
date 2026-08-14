@@ -26,6 +26,7 @@ coverage
 
 # Misc
 *.pem
+*.download
 
 # Debug
 npm-debug.log*

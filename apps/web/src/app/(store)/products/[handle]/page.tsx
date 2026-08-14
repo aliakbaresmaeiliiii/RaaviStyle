@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/store/product-detail";
+import { getCustomer } from "@/lib/auth";
 import { products, similarProducts } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
 
@@ -30,5 +31,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  return <ProductDetail product={product} similar={similarProducts(product)} />;
+  const customer = await getCustomer();
+  const reviewerName = [customer?.first_name, customer?.last_name]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <ProductDetail
+      product={product}
+      similar={similarProducts(product)}
+      reviewerName={reviewerName}
+    />
+  );
 }

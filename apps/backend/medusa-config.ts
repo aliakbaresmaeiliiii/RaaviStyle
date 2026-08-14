@@ -19,6 +19,23 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: "./src/modules/cms",
+    },
+    {
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-local",
+            id: "local",
+            options: {
+              backend_url: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
+            },
+          },
+        ],
+      },
+    },
+    {
       resolve: "@medusajs/medusa/auth",
       dependencies: [
         Modules.CACHE,

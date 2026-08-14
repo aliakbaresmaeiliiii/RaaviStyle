@@ -1,0 +1,16 @@
+.styles-module-scss-module__ZTByRW__bottomSheetContainer{z-index:10!important}
+.styles-module-scss-module__btZgIW__bg{background-color:rgba(var(--color-black-rgb), .3)}
+.styles-module-scss-module__zbfuDq__bg{background-color:rgba(var(--color-digipay-rgb), .08)}
+.styles-module-scss-module__1IrYzq__upvoteIcon{animation:.5s linear styles-module-scss-module__1IrYzq__bounce}@keyframes styles-module-scss-module__1IrYzq__bounce{0%{transform:translateY(0)}25%{transform:translateY(-20px)}50%{transform:translateY(0)}75%{transform:translateY(-10px)}to{transform:translateY(0)}}
+.styles-module-scss-module__MYtaPW__container{background-color:#f0f0f14d;width:270px}
+.styles-module-scss-module__nAXijG__right{right:-22px}.styles-module-scss-module__nAXijG__left{left:-22px}
+.styles-module-scss-module__ocZB4G__header{border-top-left-radius:var(--medium-radius);border-top-right-radius:var(--medium-radius)}.styles-module-scss-module__ocZB4G__modalBody>div:nth-child(2){height:100%}
+.styles-module-scss-module__sQSO3W__SuggestedUsersItem{width:148px}
+.styles-module-scss-module__gTdnDG__followUnfollowButton{width:74px;padding:4px 8px!important}
+.styles-module-scss-module__1y-WXW__postViewImage{min-width:100%;min-height:100%}
+.styles-module-scss-module__O8vona__postSkeleton{background:var(--color-neutral-100);overflow:hidden}.styles-module-scss-module__O8vona__avatarSkeleton{background:var(--color-neutral-200);border-radius:50%;width:40px;height:40px}.styles-module-scss-module__O8vona__usernameSkeleton{background:var(--color-neutral-200);width:120px;height:16px}.styles-module-scss-module__O8vona__imageSkeleton{background:var(--color-neutral-200);width:100%;height:300px}.styles-module-scss-module__O8vona__contentSkeleton>div{background:var(--color-neutral-200);border-radius:8px;width:100%;height:16px;margin-bottom:8px}.styles-module-scss-module__O8vona__contentSkeleton>div:last-child{width:80%}
+@media (min-width:1024px){.styles-module-scss-module__d89f-G__button{width:110px}}
+.styles-module-scss-module__NNDl2W__overlay{background:linear-gradient(#000c,#fff0,#fff0,#00000080,#000c)}
+.styles-module-scss-module__fOD6Sq__badge__container{padding:1px}
+.styles-module-scss-module__oM2Olq__Divider{height:24px}
+.styles-module-scss-module__Hgh9RG__overlay{background-color:rgba(var(--color-black-rgb), .1)}

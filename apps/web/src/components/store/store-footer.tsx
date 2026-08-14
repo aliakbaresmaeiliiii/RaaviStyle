@@ -14,10 +14,12 @@ const shopLinks = [
   })),
 ];
 
-const helpItems = [
-  messages.shop.shipping,
-  messages.shop.returns,
-  messages.shop.faq,
+const helpLinks = [
+  { href: "/about", label: messages.about.nav },
+  { href: "/orders", label: messages.track.nav },
+  { href: "/faq#shipping", label: messages.shop.shipping },
+  { href: "/faq#returns", label: messages.shop.returns },
+  { href: "/faq", label: messages.shop.faq },
 ];
 
 const trustItems = [
@@ -82,6 +84,13 @@ export function StoreFooter() {
             <p className="mt-5 max-w-sm text-sm leading-8 text-oat/80">
               {messages.shop.footerAbout}
             </p>
+            <Link
+              href="/about"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-bronze transition hover:text-bone"
+            >
+              {messages.about.readMore}
+              <FaIcon icon="fa-arrow-left" className="text-xs" />
+            </Link>
             <p className="mt-8 text-xs text-bronze/90">
               {messages.shop.footerFollow}
             </p>
@@ -125,9 +134,14 @@ export function StoreFooter() {
               {messages.shop.footerHelp}
             </FooterHeading>
             <ul className="mt-5 space-y-3">
-              {helpItems.map((item) => (
-                <li key={item} className="text-sm text-oat/75">
-                  {item}
+              {helpLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-oat/75 transition hover:text-bronze"
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -417,11 +417,15 @@ export function categoryLabel(id: string): string {
   return categories.find((item) => item.id === id)?.label ?? id;
 }
 
-export function similarProducts(product: Product, limit = 4): Product[] {
-  const same = products.filter(
+export function similarProducts(
+  product: Product,
+  limit = 4,
+  catalog: Product[] = products,
+): Product[] {
+  const same = catalog.filter(
     (item) => item.id !== product.id && item.category === product.category,
   );
-  const rest = products.filter(
+  const rest = catalog.filter(
     (item) => item.id !== product.id && item.category !== product.category,
   );
 
@@ -482,4 +486,51 @@ export function productImages(product: Product): string[] {
 export function productLength(product: Product): string {
   const cm = 100 + (Number(product.id) % 9);
   return `${cm.toLocaleString("fa-IR")} سانتی‌متر`;
+}
+
+export type SizeChartRow = {
+  size: string;
+  waist: string;
+  hip: string;
+  length: string;
+};
+
+export type SizeFitVote = {
+  id: "muchLarger" | "bitLarger" | "expected" | "bitSmaller" | "muchSmaller";
+  count: number;
+};
+
+const womenChart: SizeChartRow[] = [
+  { size: "۳۶", waist: "۶۶–۷۰", hip: "۹۰–۹۴", length: "۹۸" },
+  { size: "۳۸", waist: "۷۰–۷۴", hip: "۹۴–۹۸", length: "۱۰۰" },
+  { size: "۴۰", waist: "۷۴–۷۸", hip: "۹۸–۱۰۲", length: "۱۰۲" },
+  { size: "۴۲", waist: "۷۸–۸۲", hip: "۱۰۲–۱۰۶", length: "۱۰۲" },
+  { size: "۴۴", waist: "۸۲–۸۶", hip: "۱۰۶–۱۱۰", length: "۱۰۳" },
+];
+
+const jeansChart: SizeChartRow[] = [
+  { size: "۲۹", waist: "۷۴", hip: "۹۴", length: "۱۰۰" },
+  { size: "۳۰", waist: "۷۶", hip: "۹۶", length: "۱۰۰" },
+  { size: "۳۱", waist: "۷۸", hip: "۹۸", length: "۱۰۲" },
+  { size: "۳۲", waist: "۸۰", hip: "۱۰۰", length: "۱۰۲" },
+  { size: "۳۳", waist: "۸۲", hip: "۱۰۲", length: "۱۰۳" },
+  { size: "۳۴", waist: "۸۴", hip: "۱۰۴", length: "۱۰۳" },
+];
+
+export function sizeChart(product: Product): SizeChartRow[] {
+  const source = product.sizes.includes("۲۹") ? jeansChart : womenChart;
+  const rows = source.filter((row) => product.sizes.includes(row.size));
+  return rows.length ? rows : source;
+}
+
+export function sizeFitVotes(product: Product): SizeFitVote[] {
+  const n = Number(product.id) || 1;
+
+  return [
+    { id: "muchLarger", count: 6 + (n % 5) },
+    { id: "bitLarger", count: 8 + (n % 7) },
+    { id: "expected", count: 28 + (n % 12) },
+    { id: "bitSmaller", count: 3 + (n % 4) },
+    { id: "muchSmaller", count: 1 + (n % 2) },
+  ];
 }

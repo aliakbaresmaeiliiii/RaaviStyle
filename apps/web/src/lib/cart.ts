@@ -14,6 +14,7 @@ export type CartItem = CartLine & {
 export const CART_STORAGE_KEY = "raavistyle.cart"
 export const CART_EVENT = "raavistyle-cart"
 export const FREE_SHIPPING_MIN = 2_000_000
+export const SHIPPING_FEE = 49_000
 export const MAX_QTY = 10
 
 export function lineKey(line: Pick<CartLine, "productId" | "color" | "size">) {
@@ -162,5 +163,16 @@ export function cartTotals(items: CartItem[]) {
     remainingForFreeShipping,
     freeShipping: remainingForFreeShipping === 0 && itemsPrice > 0,
     payable: itemsPrice,
+  }
+}
+
+export function checkoutTotals(items: CartItem[]) {
+  const base = cartTotals(items)
+  const shipping = base.freeShipping ? 0 : SHIPPING_FEE
+
+  return {
+    ...base,
+    shipping,
+    payable: base.itemsPrice + shipping,
   }
 }

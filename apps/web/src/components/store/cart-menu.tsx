@@ -16,17 +16,17 @@ export function CartMenu() {
   const totals = useMemo(() => cartTotals(items), [items])
 
   return (
-    <div className="group relative hidden sm:block">
+    <div className="group relative">
       <Link
         href="/cart"
-        className="relative inline-flex size-11 items-center justify-center rounded-xl border border-line hover:border-mocha hover:text-mocha"
+        className="relative inline-flex size-11 items-center justify-center text-ink hover:text-mocha"
         aria-label={messages.shop.cart}
       >
-        <FaIcon icon="fa-cart-shopping" />
+        <FaIcon icon="fa-cart-shopping" className="text-lg" />
         <CartBadge />
       </Link>
 
-      <div className="pointer-events-none invisible absolute top-full left-0 z-50 w-[22rem] pt-2 opacity-0 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
+      <div className="pointer-events-none invisible absolute top-full left-0 z-50 hidden w-[22rem] pt-2 opacity-0 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 sm:block">
         <div className="rounded-xl bg-surface p-4 shadow-lg ring-1 ring-line">
           {items.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted">
@@ -95,7 +95,7 @@ export function CartMenu() {
                   {messages.shop.addedViewCart}
                 </Link>
                 <Link
-                  href="/cart"
+                  href="/checkout"
                   className="inline-flex h-11 items-center justify-center rounded-lg bg-bronze text-sm text-white"
                 >
                   {messages.shop.miniCheckout}

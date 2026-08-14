@@ -4,8 +4,10 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { FaIcon } from "@/components/fa-icon";
 import { messages } from "@/lib/i18n";
+import { isWishlisted, toggleWishlist } from "@/lib/lists";
 
 type ProductGalleryProps = {
+  productId: string;
   title: string;
   images: string[];
   colorName: string;
@@ -18,7 +20,12 @@ const actions = [
   { id: "zoom", icon: "fa-expand", label: messages.shop.zoom },
 ] as const;
 
-export function ProductGallery({ title, images, colorName }: ProductGalleryProps) {
+export function ProductGallery({
+  productId,
+  title,
+  images,
+  colorName,
+}: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
   const [wishlist, setWishlist] = useState(false);
   const [compare, setCompare] = useState(false);
@@ -49,9 +56,13 @@ export function ProductGallery({ title, images, colorName }: ProductGalleryProps
     return () => window.removeEventListener("keydown", onKey);
   }, [go]);
 
+  useEffect(() => {
+    setWishlist(isWishlisted(productId));
+  }, [productId]);
+
   async function onAction(id: (typeof actions)[number]["id"]) {
     if (id === "wishlist") {
-      setWishlist((value) => !value);
+      setWishlist(toggleWishlist(productId));
       return;
     }
     if (id === "compare") {

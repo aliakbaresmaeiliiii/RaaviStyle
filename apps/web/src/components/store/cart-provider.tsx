@@ -33,6 +33,7 @@ type CartContextValue = {
   addItem: (input: AddItemInput) => void
   updateQuantity: (key: string, quantity: number) => void
   removeItem: (key: string) => void
+  clearCart: () => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
@@ -70,6 +71,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     writeCart(removeLine(parseCart(getCartSnapshot()), key))
   }, [])
 
+  const clearCart = useCallback(() => {
+    writeCart([])
+  }, [])
+
   const closeAdded = useCallback(() => {
     setAdded(null)
   }, [])
@@ -82,8 +87,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addItem,
       updateQuantity,
       removeItem,
+      clearCart,
     }),
-    [lines, ready, addItem, updateQuantity, removeItem],
+    [lines, ready, addItem, updateQuantity, removeItem, clearCart],
   )
 
   return (

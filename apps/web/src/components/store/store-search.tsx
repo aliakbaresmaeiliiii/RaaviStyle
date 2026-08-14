@@ -40,7 +40,7 @@ export function StoreSearch() {
         placeholder={messages.shop.search}
         autoComplete="off"
         enterKeyHint="search"
-        className="peer h-11 w-full rounded-xl bg-page pr-10 pl-10 text-sm outline-none ring-1 ring-line focus:ring-2 focus:ring-mocha sm:h-12 [&::-webkit-search-cancel-button]:hidden"
+        className="peer h-11 w-full rounded-full bg-soft pr-10 pl-10 text-sm outline-none focus:ring-2 focus:ring-mocha sm:h-12 [&::-webkit-search-cancel-button]:hidden"
       />
       <button
         type="button"

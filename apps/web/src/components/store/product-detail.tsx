@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { FaIcon } from "@/components/fa-icon";
 import { useCart } from "@/components/store/cart-provider";
 import { ProductCard } from "@/components/store/product-card";
 import { ProductGallery } from "@/components/store/product-gallery";
+import { ReviewFormDialog, StarRating } from "@/components/store/review-form";
+import {
+  SIZE_GUIDE_HASH,
+  SizeGuideDialog,
+} from "@/components/store/size-guide-dialog";
 import {
   categoryLabel,
   colorLabel,
@@ -20,15 +25,24 @@ import {
 } from "@/lib/catalog";
 import { MAX_QTY } from "@/lib/cart";
 import { messages } from "@/lib/i18n";
+import {
+  averageRating,
+  getFeedbackSnapshot,
+  questionsForProduct,
+  reviewsForProduct,
+  saveQuestion,
+  subscribeFeedback,
+} from "@/lib/reviews";
+import { formatFaCalendar } from "@/lib/tracking";
 
 type Tab = "desc" | "extra" | "reviews" | "questions";
 
-const reviews = [
-  { name: "نازنین", text: "سایز دقیق بود و روی تن خیلی راحت است." },
-  { name: "مریم", text: "پارچه خنک است؛ برای تابستان مناسب بود." },
-  { name: "سارا", text: "رنگ کمی تیره‌تر از عکس درآمد، ولی کیفیت خوب است." },
-  { name: "الهام", text: "ارسال سریع بود و بسته‌بندی مرتب." },
-  { name: "نیلوفر", text: "دوخت تمیز است و بعد از شستشو فرم را حفظ کرد." },
+const demoReviews = [
+  { name: "نازنین", text: "سایز دقیق بود و روی تن خیلی راحت است.", rating: 5 },
+  { name: "مریم", text: "پارچه خنک است؛ برای تابستان مناسب بود.", rating: 4 },
+  { name: "سارا", text: "رنگ کمی تیره‌تر از عکس درآمد، ولی کیفیت خوب است.", rating: 4 },
+  { name: "الهام", text: "ارسال سریع بود و بسته‌بندی مرتب.", rating: 5 },
+  { name: "نیلوفر", text: "دوخت تمیز است و بعد از شستشو فرم را حفظ کرد.", rating: 5 },
 ];
 
 const perks = [
@@ -41,9 +55,11 @@ const perks = [
 export function ProductDetail({
   product,
   similar,
+  reviewerName = "",
 }: {
   product: Product;
   similar: Product[];
+  reviewerName?: string;
 }) {
   const percent = discountPercent(product);
   const images = useMemo(() => productImages(product), [product]);
@@ -54,7 +70,24 @@ export function ProductDetail({
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [priceHint, setPriceHint] = useState(false);
-  const [sizeGuide, setSizeGuide] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [questionText, setQuestionText] = useState("");
+  const [questionError, setQuestionError] = useState("");
+  const feedbackRaw = useSyncExternalStore(
+    subscribeFeedback,
+    getFeedbackSnapshot,
+    () => "",
+  );
+  const userReviews = useMemo(
+    () => (feedbackRaw ? reviewsForProduct(product.id) : []),
+    [feedbackRaw, product.id],
+  );
+  const userQuestions = useMemo(
+    () => (feedbackRaw ? questionsForProduct(product.id) : []),
+    [feedbackRaw, product.id],
+  );
+  const reviewCount = userReviews.length + demoReviews.length;
+  const ratingValue = averageRating([...userReviews, ...demoReviews]);
 
   const specs = [
     { label: messages.shop.specPattern, value: messages.shop.specPatternValue },
@@ -123,6 +156,7 @@ export function ProductDetail({
         <div>
           <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)]">
             <ProductGallery
+              productId={product.id}
               title={product.title}
               images={images}
               colorName={colorLabel(color)}
@@ -139,7 +173,11 @@ export function ProductDetail({
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
                 <span className="inline-flex items-center gap-1.5 text-muted">
                   <FaIcon icon="fa-star" className="text-bronze" />
-                  {messages.shop.noRating}
+                  {ratingValue
+                    ? ratingValue.toLocaleString("fa-IR", {
+                        maximumFractionDigits: 1,
+                      })
+                    : messages.shop.noRating}
                 </span>
                 <button
                   type="button"
@@ -147,6 +185,9 @@ export function ProductDetail({
                   className="rounded-full bg-surface px-3 py-1 text-xs ring-1 ring-line"
                 >
                   {messages.shop.reviewLink}
+                  {reviewCount
+                    ? ` (${reviewCount.toLocaleString("fa-IR")})`
+                    : ""}
                 </button>
                 <button
                   type="button"
@@ -199,10 +240,26 @@ export function ProductDetail({
               </div>
 
               <div className="mt-7">
-                <p className="mb-3 flex items-center gap-2 text-sm">
-                  <FaIcon icon="fa-ruler" className="text-muted" />
-                  {messages.shop.chooseSize}: {size}
-                </p>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <p className="flex items-center gap-2 text-sm">
+                    <FaIcon icon="fa-ruler" className="text-muted" />
+                    {messages.shop.chooseSize}: {size}
+                  </p>
+                  <a
+                    href={`#${SIZE_GUIDE_HASH}`}
+                    className="shrink-0 text-sm text-shop hover:underline"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      const next = `${window.location.pathname}${window.location.search}#${SIZE_GUIDE_HASH}`;
+                      if (window.location.hash !== `#${SIZE_GUIDE_HASH}`) {
+                        window.history.pushState(null, "", next);
+                      }
+                      window.dispatchEvent(new HashChangeEvent("hashchange"));
+                    }}
+                  >
+                    {messages.shop.sizeGuide}
+                  </a>
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((value) => {
                     const selected = size === value;
@@ -211,9 +268,9 @@ export function ProductDetail({
                         key={value}
                         type="button"
                         onClick={() => setSize(value)}
-                        className={`inline-flex h-10 min-w-16 items-center justify-center gap-2 rounded-full px-4 text-sm ${
+                        className={`inline-flex h-10 min-w-16 items-center justify-center gap-2 rounded-lg px-4 text-sm ${
                           selected
-                            ? "bg-surface ring-1 ring-ink"
+                            ? "bg-surface ring-1 ring-shop"
                             : "bg-surface ring-1 ring-line"
                         }`}
                       >
@@ -225,19 +282,6 @@ export function ProductDetail({
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSizeGuide((value) => !value)}
-                  className="mt-3 text-xs text-shop hover:underline"
-                  aria-expanded={sizeGuide}
-                >
-                  {messages.shop.sizeGuide}
-                </button>
-                {sizeGuide ? (
-                  <p className="mt-2 rounded-xl bg-soft px-3 py-2 text-xs leading-6 text-muted">
-                    {messages.shop.sizeGuideBody}
-                  </p>
-                ) : null}
               </div>
 
               <div className="mt-8 grid grid-cols-3 gap-2">
@@ -325,7 +369,7 @@ export function ProductDetail({
                   ["extra", messages.shop.tabExtra],
                   [
                     "reviews",
-                    `${messages.shop.tabReviews} (${reviews.length.toLocaleString("fa-IR")})`,
+                    `${messages.shop.tabReviews} (${reviewCount.toLocaleString("fa-IR")})`,
                   ],
                   ["questions", messages.shop.tabQuestions],
                 ] as Array<[Tab, string]>
@@ -360,31 +404,111 @@ export function ProductDetail({
                 </dl>
               ) : null}
               {tab === "reviews" ? (
-                <ul className="space-y-4">
-                  {reviews.map((item) => (
-                    <li
-                      key={item.name}
-                      className="border-b border-line/60 pb-4 last:border-0"
+                <div>
+                  <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                    <p className="font-medium text-ink">
+                      {messages.shop.userReviews}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setReviewOpen(true)}
+                      className="inline-flex h-10 items-center rounded-lg border border-sale px-4 text-sm text-sale hover:bg-sale/5"
                     >
-                      <p className="font-medium text-ink">{item.name}</p>
-                      <p className="mt-1">{item.text}</p>
-                    </li>
-                  ))}
-                </ul>
+                      {messages.shop.writeReview}
+                    </button>
+                  </div>
+                  <ul className="space-y-4">
+                    {userReviews.map((item) => (
+                      <li
+                        key={item.id}
+                        className="border-b border-line/60 pb-4 last:border-0"
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-medium text-ink">{item.name}</p>
+                          {item.buyer ? (
+                            <span className="text-[11px] text-success">
+                              {messages.shop.buyerBadge}
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="mt-1">
+                          <StarRating value={item.rating} size="text-xs" />
+                        </div>
+                        <p className="mt-1">{item.text}</p>
+                        <p className="mt-1 text-xs">
+                          {formatFaCalendar(item.createdAt)}
+                        </p>
+                      </li>
+                    ))}
+                    {demoReviews.map((item) => (
+                      <li
+                        key={item.name}
+                        className="border-b border-line/60 pb-4 last:border-0"
+                      >
+                        <p className="font-medium text-ink">{item.name}</p>
+                        <div className="mt-1">
+                          <StarRating value={item.rating} size="text-xs" />
+                        </div>
+                        <p className="mt-1">{item.text}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ) : null}
               {tab === "questions" ? (
                 <div>
-                  <p>{messages.shop.noQuestions}</p>
+                  {userQuestions.length ? (
+                    <ul className="mb-5 space-y-4">
+                      {userQuestions.map((item) => (
+                        <li
+                          key={item.id}
+                          className="border-b border-line/60 pb-4 last:border-0"
+                        >
+                          <p className="font-medium text-ink">{item.name}</p>
+                          <p className="mt-1">{item.text}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{messages.shop.noQuestions}</p>
+                  )}
                   <label className="mt-4 block">
                     <span className="sr-only">{messages.shop.askQuestion}</span>
                     <textarea
                       rows={3}
+                      value={questionText}
+                      onChange={(event) => {
+                        setQuestionText(event.target.value);
+                        setQuestionError("");
+                      }}
                       placeholder={messages.shop.askQuestion}
                       className="mt-2 w-full rounded-xl bg-surface p-3 text-ink outline-none ring-1 ring-line"
                     />
                   </label>
+                  {questionError ? (
+                    <p className="mt-2 text-xs text-error">{questionError}</p>
+                  ) : null}
                   <button
                     type="button"
+                    onClick={() => {
+                      if (questionText.trim().length < 8) {
+                        setQuestionError(messages.pay.required);
+                        return;
+                      }
+                      saveQuestion(
+                        {
+                          id: product.id,
+                          title: product.title,
+                          href: product.href,
+                          image: product.image,
+                        },
+                        {
+                          name: reviewerName || "کاربر",
+                          text: questionText,
+                        },
+                      );
+                      setQuestionText("");
+                    }}
                     className="mt-3 inline-flex h-10 items-center rounded-lg bg-espresso px-4 text-white"
                   >
                     {messages.shop.sendQuestion}
@@ -489,11 +613,11 @@ export function ProductDetail({
           <div className="mt-3 grid gap-2">
             <button
               type="button"
-              onClick={() => openTab("reviews")}
+              onClick={() => setReviewOpen(true)}
               className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3 text-right text-xs leading-6"
             >
               <FaIcon icon="fa-star" className="text-bronze" />
-              {messages.shop.rateItem}
+              {messages.shop.writeReview}
             </button>
             <button
               type="button"
@@ -541,6 +665,19 @@ export function ProductDetail({
           )}
         </div>
       </div>
+
+      <SizeGuideDialog product={product} size={size} />
+      <ReviewFormDialog
+        product={{
+          id: product.id,
+          title: product.title,
+          href: product.href,
+          image: product.image,
+        }}
+        defaultName={reviewerName}
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+      />
     </main>
   );
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { FaIcon } from "@/components/fa-icon"
 import { ProductCard } from "@/components/store/product-card"
 import { useCart } from "@/components/store/cart-provider"
@@ -23,7 +23,6 @@ import { messages } from "@/lib/i18n"
 
 export function CartView() {
   const { lines, count, ready, updateQuantity, removeItem } = useCart()
-  const [checkoutNote, setCheckoutNote] = useState(false)
   const items = useMemo(() => resolveCart(lines), [lines])
   const totals = useMemo(() => cartTotals(items), [items])
   const suggested = useMemo(() => {
@@ -245,18 +244,12 @@ export function CartView() {
                 </div>
               </dl>
 
-              <button
-                type="button"
-                onClick={() => setCheckoutNote(true)}
+              <Link
+                href="/checkout"
                 className="mt-5 hidden h-12 w-full items-center justify-center rounded-xl bg-espresso text-sm text-white lg:inline-flex"
               >
                 {messages.shop.checkout}
-              </button>
-              {checkoutNote ? (
-                <p className="mt-3 text-xs leading-6 text-muted">
-                  {messages.shop.checkoutSoon}
-                </p>
-              ) : null}
+              </Link>
               <p className="mt-3 text-xs leading-6 text-muted">
                 {messages.shop.cartNote}
               </p>
@@ -287,19 +280,13 @@ export function CartView() {
                 {formatToman(totals.payable)}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => setCheckoutNote(true)}
+            <Link
+              href="/checkout"
               className="inline-flex h-12 min-w-40 flex-1 items-center justify-center rounded-xl bg-espresso px-5 text-sm text-white"
             >
               {messages.shop.checkout}
-            </button>
+            </Link>
           </div>
-          {checkoutNote ? (
-            <p className="mx-auto mt-2 max-w-lg text-xs leading-6 text-muted">
-              {messages.shop.checkoutSoon}
-            </p>
-          ) : null}
         </div>
       ) : null}
     </main>
