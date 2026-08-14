@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useMemo, useState, useSyncExternalStore } from "react"
 import { FaIcon } from "@/components/fa-icon"
 import { useCart } from "@/components/store/cart-provider"
+import { useCatalog } from "@/components/store/catalog-provider"
 import { formatToman } from "@/lib/catalog"
 import { checkoutTotals, resolveCart } from "@/lib/cart"
 import { messages } from "@/lib/i18n"
@@ -92,8 +93,9 @@ export function CheckoutView({
   defaultName?: string
 }) {
   const router = useRouter()
+  const products = useCatalog()
   const { lines, ready, clearCart } = useCart()
-  const items = useMemo(() => resolveCart(lines), [lines])
+  const items = useMemo(() => resolveCart(lines, products), [lines, products])
   const totals = useMemo(() => checkoutTotals(items), [items])
   const savedRaw = useSyncExternalStore(
     subscribeAddress,

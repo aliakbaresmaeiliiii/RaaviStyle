@@ -32,7 +32,7 @@ export function AccountSidebar({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="truncate font-medium">
-                {name || messages.nav.account}
+                {name || messages.nav.account}sadasdfsdfsd
               </p>
               {phone ? (
                 <p className="mt-1 text-sm text-muted" dir="ltr">

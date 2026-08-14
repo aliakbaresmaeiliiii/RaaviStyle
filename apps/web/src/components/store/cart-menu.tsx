@@ -6,13 +6,15 @@ import { useMemo } from "react"
 import { FaIcon } from "@/components/fa-icon"
 import { CartBadge } from "@/components/store/cart-badge"
 import { useCart } from "@/components/store/cart-provider"
+import { useCatalog } from "@/components/store/catalog-provider"
 import { colorLabel, formatToman, productSku } from "@/lib/catalog"
 import { cartTotals, lineKey, resolveCart } from "@/lib/cart"
 import { messages } from "@/lib/i18n"
 
 export function CartMenu() {
+  const products = useCatalog()
   const { lines, removeItem } = useCart()
-  const items = useMemo(() => resolveCart(lines), [lines])
+  const items = useMemo(() => resolveCart(lines, products), [lines, products])
   const totals = useMemo(() => cartTotals(items), [items])
 
   return (

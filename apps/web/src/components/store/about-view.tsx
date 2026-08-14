@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaIcon } from "@/components/fa-icon";
-import { categories, products, type Product } from "@/lib/catalog";
+import { categories, type Product } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
+import type { SitePage } from "@/lib/medusa-cms";
 
 const featuredCategoryIds = ["bag", "mom", "cargo", "straight", "linen"] as const;
 
@@ -61,32 +62,58 @@ const promises = [
   },
 ];
 
-function productForCategory(id: string): Product | undefined {
-  return products.find((product) => product.category === id);
+function productForCategory(catalog: Product[], id: string): Product | undefined {
+  return catalog.find((product) => product.category === id);
 }
 
-const featuredModels = featuredCategoryIds
-  .map((id) => {
-    const category = categories.find((item) => item.id === id);
-    const product = productForCategory(id);
+export function AboutView({
+  products,
+  cms,
+}: {
+  products: Product[];
+  cms?: SitePage | null;
+}) {
+  const featuredModels = featuredCategoryIds
+    .map((id) => {
+      const category = categories.find((item) => item.id === id);
+      const product = productForCategory(products, id);
 
-    if (!category || !product) {
-      return null;
-    }
+      if (!category || !product) {
+        return null;
+      }
 
-    return { category, product };
-  })
-  .filter((item): item is { category: (typeof categories)[number]; product: Product } =>
-    Boolean(item),
-  );
+      return { category, product };
+    })
+    .filter((item): item is { category: (typeof categories)[number]; product: Product } =>
+      Boolean(item),
+    );
 
-const storyImage = featuredModels[0]?.product.image ?? products[0]?.image;
-const stackImages = [
-  productForCategory("wide")?.image,
-  productForCategory("skinny")?.image,
-].filter((src): src is string => Boolean(src));
+  const modelTiles =
+    featuredModels.length > 0
+      ? featuredModels
+      : products.slice(0, 5).map((product) => ({
+          category: {
+            id: product.id,
+            label: product.title,
+            href: product.href,
+            icon: "fa-shirt",
+          },
+          product,
+        }));
 
-export function AboutView() {
+  const storyImage =
+    cms?.image_url || featuredModels[0]?.product.image || products[0]?.image;
+  const stackImages = [
+    cms?.image_url,
+    productForCategory(products, "wide")?.image,
+    productForCategory(products, "skinny")?.image,
+    products[0]?.image,
+    products[1]?.image,
+  ].filter((src, index, list): src is string =>
+    Boolean(src) && list.indexOf(src) === index,
+  ).slice(0, 2);
+  const title = cms?.title || messages.about.title;
+  const lead = cms?.body || messages.about.lead;
   return (
     <main>
       <nav className="bg-soft" aria-label={messages.about.nav}>
@@ -113,10 +140,10 @@ export function AboutView() {
               {messages.about.eyebrow}
             </p>
             <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl lg:text-6xl">
-              {messages.about.title}
+              {title}
             </h1>
             <p className="mt-6 max-w-lg text-base font-light leading-8 text-oat">
-              {messages.about.lead}
+              {lead}
             </p>
             <Link
               href="/products"
@@ -235,7 +262,7 @@ export function AboutView() {
           {messages.about.modelsBody}
         </p>
         <ul className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4">
-          {featuredModels.map((item, index) => (
+          {modelTiles.map((item, index) => (
             <li
               key={item.category.id}
               className={index === 0 ? "col-span-2 row-span-2" : ""}

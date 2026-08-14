@@ -33,7 +33,7 @@ type PageInput = {
 }
 
 const listPagesStep = createStep(
-  "list-site-pages",
+  "list-pages",
   async (_, { container }) => {
     const cms: CmsModuleService = container.resolve(CMS_MODULE)
     let pages = await cms.listSitePages({}, { take: 50 })
@@ -48,7 +48,7 @@ const listPagesStep = createStep(
 )
 
 const upsertPageStep = createStep(
-  "upsert-site-page",
+  "upsert-page",
   async (input: PageInput, { container }) => {
     const cms: CmsModuleService = container.resolve(CMS_MODULE)
     const existing = await cms.listSitePages({ handle: input.handle })

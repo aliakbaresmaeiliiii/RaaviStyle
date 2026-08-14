@@ -1,3 +1,4 @@
+import { cache } from "react"
 import { createMedusaClient } from "@/lib/medusa"
 import {
   colorFilters,
@@ -6,13 +7,17 @@ import {
 } from "@/lib/catalog"
 
 type MedusaImage = { url?: string | null }
-type MedusaOption = { title?: string | null; values?: Array<{ value?: string | null }> }
+type MedusaOption = {
+  title?: string | null
+  values?: Array<{ value?: string | null }>
+}
 type MedusaCategory = { handle?: string | null }
 type MedusaVariant = {
   calculated_price?: {
     calculated_amount?: number | null
     original_amount?: number | null
   } | null
+  prices?: Array<{ amount?: number | null }> | null
   manage_inventory?: boolean | null
   inventory_quantity?: number | null
 }
@@ -41,9 +46,12 @@ const NAME_TO_HEX: Record<string, string> = {
   beige: "#d4c4b0",
 }
 
-function optionValues(product: MedusaProduct, title: string) {
-  const option = product.options?.find(
-    (item) => item.title?.toLowerCase() === title.toLowerCase(),
+const COLOR_TITLES = ["color", "colour", "رنگ"]
+const SIZE_TITLES = ["size", "سایز"]
+
+function optionValues(product: MedusaProduct, titles: string[]) {
+  const option = product.options?.find((item) =>
+    titles.includes((item.title ?? "").trim().toLowerCase()),
   )
   return (option?.values ?? [])
     .map((item) => item.value)
@@ -59,9 +67,16 @@ function toHex(value: string) {
   if (named) {
     return named
   }
-  return (
-    colorFilters.find((item) => item.label === trimmed)?.value ?? trimmed
-  )
+  return colorFilters.find((item) => item.label === trimmed)?.value ?? trimmed
+}
+
+function variantPrice(variant?: MedusaVariant) {
+  const calculated = variant?.calculated_price?.calculated_amount
+  if (typeof calculated === "number") {
+    return Math.round(calculated)
+  }
+  const listed = variant?.prices?.[0]?.amount
+  return typeof listed === "number" ? Math.round(listed) : 0
 }
 
 export function mapMedusaProduct(product: MedusaProduct): Product | null {
@@ -70,39 +85,17 @@ export function mapMedusaProduct(product: MedusaProduct): Product | null {
   }
 
   const variant = product.variants?.[0]
-  const amount = variant?.calculated_price?.calculated_amount
+  const price = variantPrice(variant)
   const original = variant?.calculated_price?.original_amount
-  const price = typeof amount === "number" ? Math.round(amount) : 0
-  const colors = optionValues(product, "Color").map(toHex)
-  const sizes = optionValues(product, "Size")
+  const colors = optionValues(product, COLOR_TITLES).map(toHex)
+  const sizes = optionValues(product, SIZE_TITLES)
   const category =
     product.categories?.[0]?.handle ||
     (typeof product.metadata?.category === "string"
       ? product.metadata.category
       : "straight")
   const image =
-    product.thumbnail ||
-    product.images?.[0]?.url ||
-    ""
-
-  if (!image || !price) {
-    return {
-      id: product.id,
-      title: product.title || product.handle,
-      href: `/products/${product.handle}`,
-      image: image || "/logo-mark.svg",
-      price: price || 0,
-      compareAt:
-        typeof original === "number" && original > price ? Math.round(original) : undefined,
-      tone: colors[0] || "#e4d5c3",
-      colors: colors.length ? colors : ["#1a1412"],
-      sizes: sizes.length ? sizes : ["۳۸", "۴۰", "۴۲"],
-      category,
-      inStock:
-        variant?.manage_inventory === false ||
-        (variant?.inventory_quantity ?? 1) > 0,
-    }
-  }
+    product.thumbnail || product.images?.[0]?.url || "/logo-mark.svg"
 
   return {
     id: product.id,
@@ -124,30 +117,27 @@ export function mapMedusaProduct(product: MedusaProduct): Product | null {
   }
 }
 
-export async function loadStoreProducts(): Promise<Product[]> {
+async function fetchStoreProducts(): Promise<Product[]> {
   try {
     const sdk = createMedusaClient()
+    const { regions } = await sdk.store.region.list()
+    const regionId = regions[0]?.id
     const { products } = await sdk.store.product.list({
       limit: 100,
-      fields: "*variants.calculated_price,*images,*categories,*options",
+      fields: "*variants.calculated_price,*variants.prices,*images,*categories,*options",
+      ...(regionId ? { region_id: regionId } : {}),
     })
     const mapped = (products as MedusaProduct[])
       .map(mapMedusaProduct)
       .filter((item): item is Product => Boolean(item))
 
-    if (!mapped.length) {
-      return localProducts
-    }
-
-    const remoteHrefs = new Set(mapped.map((item) => item.href))
-    return [
-      ...mapped,
-      ...localProducts.filter((item) => !remoteHrefs.has(item.href)),
-    ]
+    return mapped.length ? mapped : localProducts
   } catch {
     return localProducts
   }
 }
+
+export const loadStoreProducts = cache(fetchStoreProducts)
 
 export async function loadStoreProduct(handle: string): Promise<Product | null> {
   const catalog = await loadStoreProducts()

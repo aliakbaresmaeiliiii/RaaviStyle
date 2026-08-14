@@ -44,8 +44,8 @@ export default async function initial_data_seed({
     input: {
       salesChannelsData: [
         {
-          name: "Default Sales Channel",
-          description: "Created by Medusa",
+          name: "فروشگاه راوی‌استایل",
+          description: "کانال فروش فروشگاه راوی‌استایل",
         },
       ],
     },
@@ -78,7 +78,7 @@ export default async function initial_data_seed({
     input: {
       stores: [
         {
-          name: "Default Store",
+          name: "راوی‌استایل",
           supported_currencies: [
             {
               currency_code: "eur",
@@ -100,7 +100,7 @@ export default async function initial_data_seed({
     input: {
       regions: [
         {
-          name: "Europe",
+          name: "ایران",
           currency_code: "eur",
           countries,
           payment_providers: ["pp_system_default"],
@@ -127,9 +127,9 @@ export default async function initial_data_seed({
     input: {
       locations: [
         {
-          name: "European Warehouse",
+          name: "انبار تهران",
           address: {
-            city: "Copenhagen",
+            city: "تهران",
             country_code: "DK",
             address_1: "",
           },
@@ -157,11 +157,11 @@ export default async function initial_data_seed({
   const shippingProfile = shippingProfileResult[0];
 
   const fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-    name: "European Warehouse delivery",
+    name: "ارسال از انبار تهران",
     type: "shipping",
     service_zones: [
       {
-        name: "Europe",
+        name: "ایران",
         geo_zones: [
           {
             country_code: "gb",
@@ -208,14 +208,14 @@ export default async function initial_data_seed({
   await createShippingOptionsWorkflow(container).run({
     input: [
       {
-        name: "Standard Shipping",
+        name: "ارسال عادی",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
-          label: "Standard",
-          description: "Ship in 2-3 days.",
+          label: "عادی",
+          description: "ارسال در ۲ تا ۳ روز.",
           code: "standard",
         },
         prices: [
@@ -246,14 +246,14 @@ export default async function initial_data_seed({
         ],
       },
       {
-        name: "Express Shipping",
+        name: "ارسال سریع",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
-          label: "Express",
-          description: "Ship in 24 hours.",
+          label: "سریع",
+          description: "ارسال تا ۲۴ ساعت.",
           code: "express",
         },
         prices: [
@@ -303,19 +303,19 @@ export default async function initial_data_seed({
     input: {
       product_categories: [
         {
-          name: "Shirts",
+          name: "بگ",
           is_active: true,
         },
         {
-          name: "Sweatshirts",
+          name: "مام‌استایل",
           is_active: true,
         },
         {
-          name: "Pants",
+          name: "کارگو",
           is_active: true,
         },
         {
-          name: "Merch",
+          name: "راسته",
           is_active: true,
         },
       ],
@@ -328,29 +328,29 @@ export default async function initial_data_seed({
     input: {
       product_options: [
         {
-          title: "Size",
-          values: ["S", "M", "L", "XL"],
+          title: "سایز",
+          values: ["۳۸", "۴۰", "۴۲", "۴۴"],
         },
         {
-          title: "Color",
-          values: ["Black", "White"],
+          title: "رنگ",
+          values: ["مشکی", "سفید"],
         },
       ],
     },
   });
-  const sizeOption = productOptionsResult.find((o) => o.title === "Size")!;
-  const colorOption = productOptionsResult.find((o) => o.title === "Color")!;
+  const sizeOption = productOptionsResult.find((o) => o.title === "سایز")!;
+  const colorOption = productOptionsResult.find((o) => o.title === "رنگ")!;
 
   await createProductsWorkflow(container).run({
     input: {
       products: [
         {
-          title: "Medusa T-Shirt",
+          title: "شلوار بگ نخی",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Shirts")!.id,
+            categoryResult.find((cat) => cat.name === "بگ")!.id,
           ],
           description:
-            "Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.",
+            "شلوار بگ نخی سبک، مناسب روزمره. دوخت ایران.",
           handle: "t-shirt",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -375,11 +375,11 @@ export default async function initial_data_seed({
           ],
           variants: [
             {
-              title: "S / Black",
+              title: "۳۸ / مشکی",
               sku: "SHIRT-S-BLACK",
               options: {
-                Size: "S",
-                Color: "Black",
+                سایز: "۳۸",
+                رنگ: "مشکی",
               },
               prices: [
                 {
@@ -393,11 +393,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "S / White",
+              title: "۳۸ / سفید",
               sku: "SHIRT-S-WHITE",
               options: {
-                Size: "S",
-                Color: "White",
+                سایز: "۳۸",
+                رنگ: "سفید",
               },
               prices: [
                 {
@@ -411,11 +411,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M / Black",
+              title: "۴۰ / مشکی",
               sku: "SHIRT-M-BLACK",
               options: {
-                Size: "M",
-                Color: "Black",
+                سایز: "۴۰",
+                رنگ: "مشکی",
               },
               prices: [
                 {
@@ -429,11 +429,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M / White",
+              title: "۴۰ / سفید",
               sku: "SHIRT-M-WHITE",
               options: {
-                Size: "M",
-                Color: "White",
+                سایز: "۴۰",
+                رنگ: "سفید",
               },
               prices: [
                 {
@@ -447,11 +447,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L / Black",
+              title: "۴۲ / مشکی",
               sku: "SHIRT-L-BLACK",
               options: {
-                Size: "L",
-                Color: "Black",
+                سایز: "۴۲",
+                رنگ: "مشکی",
               },
               prices: [
                 {
@@ -465,11 +465,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L / White",
+              title: "۴۲ / سفید",
               sku: "SHIRT-L-WHITE",
               options: {
-                Size: "L",
-                Color: "White",
+                سایز: "۴۲",
+                رنگ: "سفید",
               },
               prices: [
                 {
@@ -483,11 +483,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL / Black",
+              title: "۴۴ / مشکی",
               sku: "SHIRT-XL-BLACK",
               options: {
-                Size: "XL",
-                Color: "Black",
+                سایز: "۴۴",
+                رنگ: "مشکی",
               },
               prices: [
                 {
@@ -501,11 +501,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL / White",
+              title: "۴۴ / سفید",
               sku: "SHIRT-XL-WHITE",
               options: {
-                Size: "XL",
-                Color: "White",
+                سایز: "۴۴",
+                رنگ: "سفید",
               },
               prices: [
                 {
@@ -526,12 +526,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Sweatshirt",
+          title: "شلوار مام‌استایل کتان",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Sweatshirts")!.id,
+            categoryResult.find((cat) => cat.name === "مام‌استایل")!.id,
           ],
           description:
-            "Reimagine the feeling of a classic sweatshirt. With our cotton sweatshirt, everyday essentials no longer have to be ordinary.",
+            "مام‌استایل با کمر راحت و پارچه کتان.",
           handle: "sweatshirt",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -547,10 +547,10 @@ export default async function initial_data_seed({
           options: [{ id: sizeOption.id }],
           variants: [
             {
-              title: "S",
+              title: "۳۸",
               sku: "SWEATSHIRT-S",
               options: {
-                Size: "S",
+                سایز: "۳۸",
               },
               prices: [
                 {
@@ -564,10 +564,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M",
+              title: "۴۰",
               sku: "SWEATSHIRT-M",
               options: {
-                Size: "M",
+                سایز: "۴۰",
               },
               prices: [
                 {
@@ -581,10 +581,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L",
+              title: "۴۲",
               sku: "SWEATSHIRT-L",
               options: {
-                Size: "L",
+                سایز: "۴۲",
               },
               prices: [
                 {
@@ -598,10 +598,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL",
+              title: "۴۴",
               sku: "SWEATSHIRT-XL",
               options: {
-                Size: "XL",
+                سایز: "۴۴",
               },
               prices: [
                 {
@@ -622,12 +622,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Sweatpants",
+          title: "شلوار کارگو",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Pants")!.id,
+            categoryResult.find((cat) => cat.name === "کارگو")!.id,
           ],
           description:
-            "Reimagine the feeling of classic sweatpants. With our cotton sweatpants, everyday essentials no longer have to be ordinary.",
+            "کارگو با جیب و جزئیات برای استفاده روزانه.",
           handle: "sweatpants",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -643,10 +643,10 @@ export default async function initial_data_seed({
           options: [{ id: sizeOption.id }],
           variants: [
             {
-              title: "S",
+              title: "۳۸",
               sku: "SWEATPANTS-S",
               options: {
-                Size: "S",
+                سایز: "۳۸",
               },
               prices: [
                 {
@@ -660,10 +660,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M",
+              title: "۴۰",
               sku: "SWEATPANTS-M",
               options: {
-                Size: "M",
+                سایز: "۴۰",
               },
               prices: [
                 {
@@ -677,10 +677,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L",
+              title: "۴۲",
               sku: "SWEATPANTS-L",
               options: {
-                Size: "L",
+                سایز: "۴۲",
               },
               prices: [
                 {
@@ -694,10 +694,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL",
+              title: "۴۴",
               sku: "SWEATPANTS-XL",
               options: {
-                Size: "XL",
+                سایز: "۴۴",
               },
               prices: [
                 {
@@ -718,12 +718,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Shorts",
+          title: "شلوار راسته کتان",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Merch")!.id,
+            categoryResult.find((cat) => cat.name === "راسته")!.id,
           ],
           description:
-            "Reimagine the feeling of classic shorts. With our cotton shorts, everyday essentials no longer have to be ordinary.",
+            "راسته کلاسیک با قد استاندارد و پارچه کتان.",
           handle: "shorts",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -739,10 +739,10 @@ export default async function initial_data_seed({
           options: [{ id: sizeOption.id }],
           variants: [
             {
-              title: "S",
+              title: "۳۸",
               sku: "SHORTS-S",
               options: {
-                Size: "S",
+                سایز: "۳۸",
               },
               prices: [
                 {
@@ -756,10 +756,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M",
+              title: "۴۰",
               sku: "SHORTS-M",
               options: {
-                Size: "M",
+                سایز: "۴۰",
               },
               prices: [
                 {
@@ -773,10 +773,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L",
+              title: "۴۲",
               sku: "SHORTS-L",
               options: {
-                Size: "L",
+                سایز: "۴۲",
               },
               prices: [
                 {
@@ -790,10 +790,10 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL",
+              title: "۴۴",
               sku: "SHORTS-XL",
               options: {
-                Size: "XL",
+                سایز: "۴۴",
               },
               prices: [
                 {

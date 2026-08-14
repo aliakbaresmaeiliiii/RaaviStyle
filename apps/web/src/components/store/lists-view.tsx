@@ -3,7 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react"
 import { FaIcon } from "@/components/fa-icon"
 import { ProductCard } from "@/components/store/product-card"
-import { products } from "@/lib/catalog"
+import { useCatalog } from "@/components/store/catalog-provider"
 import { messages } from "@/lib/i18n"
 import {
   getWishlistNotifySnapshot,
@@ -24,6 +24,7 @@ const tabs: Array<{ id: ListTab; label: string }> = [
 ]
 
 export function ListsView() {
+  const products = useCatalog()
   const [tab, setTab] = useState<ListTab>("wishlist")
   const hydrated = useSyncExternalStore(
     () => () => undefined,
@@ -47,7 +48,7 @@ export function ListsView() {
         const product = products.find((item) => item.id === id)
         return product ? [product] : []
       }),
-    [ids],
+    [ids, products],
   )
   const notifyOn = notifyRaw !== "0"
 

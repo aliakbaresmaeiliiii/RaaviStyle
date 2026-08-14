@@ -1,3 +1,4 @@
+import { ForcePersian } from "../../components/force-persian"
 import { defineRouteConfig } from "@medusajs/admin-sdk"
 import { PencilSquare } from "@medusajs/icons"
 import {
@@ -108,6 +109,7 @@ const CmsPage = () => {
 
   return (
     <Container className="p-0">
+      <ForcePersian />
       <div className="px-6 py-4 border-b border-ui-border-base">
         <Heading>{t("cms.title")}</Heading>
         <Text size="small" className="text-ui-fg-subtle mt-1">

@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/store/product-card";
 import { FaIcon } from "@/components/fa-icon";
+import { useCatalog } from "@/components/store/catalog-provider";
 import {
   PRICE_MAX,
   categories,
   colorFilters,
   colorLabel,
-  products,
   sizeFilters,
   type Product,
 } from "@/lib/catalog";
@@ -26,6 +26,7 @@ const sorts: Array<{ id: SortKey; label: string }> = [
 ];
 
 export function CatalogHome() {
+  const products = useCatalog();
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -108,6 +109,7 @@ export function CatalogHome() {
     onlyStock,
     onlySale,
     saleFromUrl,
+    products,
   ]);
 
   const chips = [

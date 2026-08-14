@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { FaIcon } from "@/components/fa-icon";
 import { messages } from "@/lib/i18n";
+import type { SitePage } from "@/lib/medusa-cms";
 
 const groups = [
   {
@@ -56,7 +58,9 @@ const groups = [
   },
 ];
 
-export function FaqView() {
+export function FaqView({ cms }: { cms?: SitePage | null }) {
+  const title = cms?.title || messages.faq.title;
+  const lead = cms?.body || messages.faq.lead;
   return (
     <main>
       <nav className="bg-soft" aria-label={messages.faq.nav}>
@@ -80,11 +84,22 @@ export function FaqView() {
             {messages.faq.eyebrow}
           </p>
           <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl">
-            {messages.faq.title}
+            {title}
           </h1>
           <p className="mt-5 max-w-lg text-base font-light leading-8 text-oat">
-            {messages.faq.lead}
+            {lead}
           </p>
+          {cms?.image_url ? (
+            <figure className="relative mt-8 hidden h-40 max-w-md overflow-hidden rounded-2xl ring-1 ring-white/10 sm:block">
+              <Image
+                src={cms.image_url}
+                alt=""
+                fill
+                sizes="400px"
+                className="object-cover"
+              />
+            </figure>
+          ) : null}
           <ul className="mt-8 flex flex-wrap gap-2">
             {groups.map((group) => (
               <li key={group.id}>

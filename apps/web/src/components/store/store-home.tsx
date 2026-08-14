@@ -3,8 +3,9 @@ import Link from "next/link";
 import { FaIcon } from "@/components/fa-icon";
 import { OfferCountdown } from "@/components/store/offer-countdown";
 import { ProductCard } from "@/components/store/product-card";
-import { categories, products, type Product } from "@/lib/catalog";
+import { categories, type Product } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
+import type { SitePage } from "@/lib/medusa-cms";
 
 const featuredIds = ["bag", "mom", "cargo", "straight", "linen"] as const;
 
@@ -54,42 +55,83 @@ const pays = [
   },
 ];
 
-function productForCategory(id: string) {
-  return products.find((product) => product.category === id);
+function productForCategory(catalog: Product[], id: string) {
+  return catalog.find((product) => product.category === id);
 }
 
-const featuredModels = featuredIds
-  .map((id) => {
-    const category = categories.find((item) => item.id === id);
-    const product = productForCategory(id);
-
-    if (!category || !product) {
-      return null;
+function uniqueImages(sources: Array<string | undefined | null>) {
+  const seen = new Set<string>();
+  return sources.filter((src): src is string => {
+    if (!src || seen.has(src)) {
+      return false;
     }
+    seen.add(src);
+    return true;
+  });
+}
 
-    return { category, product };
-  })
-  .filter(
-    (item): item is { category: (typeof categories)[number]; product: Product } =>
-      Boolean(item),
+export function StoreHome({
+  products,
+  cms,
+}: {
+  products: Product[];
+  cms?: SitePage | null;
+}) {
+  function findByCategory(id: string) {
+    return productForCategory(products, id);
+  }
+
+  const featuredModels = featuredIds
+    .map((id) => {
+      const category = categories.find((item) => item.id === id);
+      const product = findByCategory(id);
+
+      if (!category || !product) {
+        return null;
+      }
+
+      return { category, product };
+    })
+    .filter(
+      (
+        item,
+      ): item is { category: (typeof categories)[number]; product: Product } =>
+        Boolean(item),
+    );
+
+  const modelTiles =
+    featuredModels.length > 0
+      ? featuredModels
+      : products.slice(0, 5).map((product) => ({
+          category: {
+            id: product.id,
+            label: product.title,
+            href: product.href,
+            icon: "fa-shirt",
+          },
+          product,
+        }));
+
+  const restCategories = categories.filter(
+    (category) =>
+      !featuredIds.includes(category.id as (typeof featuredIds)[number]),
   );
 
-const restCategories = categories.filter(
-  (category) => !featuredIds.includes(category.id as (typeof featuredIds)[number]),
-);
+  const heroImages = uniqueImages([
+    cms?.image_url,
+    findByCategory("bag")?.image,
+    findByCategory("cargo")?.image,
+    products[0]?.image,
+    products[1]?.image,
+  ]).slice(0, 2);
 
-const heroImages = [
-  productForCategory("bag")?.image,
-  productForCategory("cargo")?.image,
-].filter((src): src is string => Boolean(src));
-
-const linenImage = productForCategory("linen")?.image;
-const cargoImage = productForCategory("cargo")?.image;
-
-export function StoreHome() {
+  const linenImage = findByCategory("linen")?.image ?? products[2]?.image;
+  const cargoImage = findByCategory("cargo")?.image ?? products[3]?.image;
   const amazing = products.filter((product) => product.compareAt).slice(0, 8);
   const popular = products.filter((product) => product.inStock).slice(0, 8);
   const newest = [...products].slice(-8).reverse();
+  const title = cms?.title || messages.home.title;
+  const body = cms?.body || messages.home.body;
 
   return (
     <main>
@@ -104,10 +146,10 @@ export function StoreHome() {
               {messages.home.eyebrow}
             </p>
             <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl lg:text-6xl">
-              {messages.home.title}
+              {title}
             </h1>
             <p className="mt-5 max-w-lg text-base font-light leading-8 text-oat">
-              {messages.home.body}
+              {body}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -208,7 +250,7 @@ export function StoreHome() {
           {messages.home.modelsBody}
         </p>
         <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4">
-          {featuredModels.map((item, index) => (
+          {modelTiles.map((item, index) => (
             <li
               key={item.category.id}
               className={index === 0 ? "col-span-2 row-span-2" : ""}

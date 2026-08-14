@@ -36,6 +36,7 @@
     "jsonwebtoken": "^9.0.3",
     "react-i18next": "13.5.0",
     "react-router-dom": "7.18.2",
+    "recharts": "2.15.4",
     "zod": "4.2.0"
   },
   "devDependencies": {

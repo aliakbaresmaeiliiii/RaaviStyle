@@ -270,14 +270,20 @@ body {
   display: none;
 }
 
-.swipe-tab-track {
-  will-change: transform;
+.swipe-tab-scroller {
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .swipe-tab-track {
-    transition: none !important;
-  }
+.swipe-tab-panel {
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -113,7 +114,13 @@ export function OrdersListView() {
   const [lookupError, setLookupError] = useState("")
   const [reviewItem, setReviewItem] = useState<StoredOrderItem | null>(null)
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
-  const tabIndex = tabs.findIndex((item) => item.id === tab)
+  const tabIndex = Math.max(
+    0,
+    tabs.findIndex((item) => item.id === tab),
+  )
+  const onTabIndexChange = useCallback((next: number) => {
+    setTab(tabs[next]?.id ?? "all")
+  }, [])
 
   const orders = useMemo(() => (raw ? readOrders() : []), [raw])
 
@@ -190,7 +197,7 @@ export function OrdersListView() {
   }
 
   return (
-    <section className="overflow-hidden rounded-xl bg-surface shadow-card">
+    <section className="overflow-clip rounded-xl bg-surface shadow-card">
       <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-4 sm:px-5">
         {searchOpen ? (
           <form onSubmit={onLookup} className="flex min-w-0 flex-1 items-center gap-2">
@@ -278,10 +285,7 @@ export function OrdersListView() {
         })}
       </div>
 
-      <SwipeableTabs
-        index={Math.max(0, tabIndex)}
-        onIndexChange={(next) => setTab(tabs[next]?.id ?? "all")}
-      >
+      <SwipeableTabs index={tabIndex} onIndexChange={onTabIndexChange}>
         {tabs.map((item) => (
           <div
             key={item.id}
@@ -336,7 +340,7 @@ function OrdersPanel({
 
   if (orders.length === 0) {
     return (
-      <div className="py-12 text-center">
+      <div className="flex min-h-80 flex-col items-center justify-center py-12 text-center">
         <p className="text-sm font-medium">
           {tab === "all" ? messages.track.empty : emptyCopy[tab]}
         </p>
@@ -390,6 +394,7 @@ function OrderCard({
       <article className="overflow-hidden rounded-xl border border-line">
         <Link
           href={`/orders/${order.id}`}
+          draggable={false}
           className="block p-4 hover:bg-soft/40 sm:p-5"
         >
           <div className="flex items-start justify-between gap-3">

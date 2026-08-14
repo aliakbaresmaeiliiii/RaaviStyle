@@ -1,20 +1,18 @@
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/store/product-detail";
 import { getCustomer } from "@/lib/auth";
-import { products, similarProducts } from "@/lib/catalog";
+import { similarProducts } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
+import { loadStoreProducts } from "@/lib/medusa-catalog";
 
 type ProductPageProps = {
   params: Promise<{ handle: string }>;
 };
 
-function findProduct(handle: string) {
-  return products.find((item) => item.href.endsWith(`/${handle}`));
-}
-
 export async function generateMetadata({ params }: ProductPageProps) {
   const { handle } = await params;
-  const product = findProduct(handle);
+  const catalog = await loadStoreProducts();
+  const product = catalog.find((item) => item.href.endsWith(`/${handle}`));
 
   return {
     title: product
@@ -25,7 +23,8 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params;
-  const product = findProduct(handle);
+  const catalog = await loadStoreProducts();
+  const product = catalog.find((item) => item.href.endsWith(`/${handle}`));
 
   if (!product) {
     notFound();
@@ -39,7 +38,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <ProductDetail
       product={product}
-      similar={similarProducts(product)}
+      similar={similarProducts(product, 4, catalog)}
       reviewerName={reviewerName}
     />
   );

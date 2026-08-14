@@ -6,11 +6,11 @@ import { useMemo } from "react"
 import { FaIcon } from "@/components/fa-icon"
 import { ProductCard } from "@/components/store/product-card"
 import { useCart } from "@/components/store/cart-provider"
+import { useCatalog } from "@/components/store/catalog-provider"
 import {
   colorLabel,
   discountPercent,
   formatToman,
-  products,
 } from "@/lib/catalog"
 import {
   cartTotals,
@@ -22,13 +22,14 @@ import {
 import { messages } from "@/lib/i18n"
 
 export function CartView() {
+  const products = useCatalog()
   const { lines, count, ready, updateQuantity, removeItem } = useCart()
-  const items = useMemo(() => resolveCart(lines), [lines])
+  const items = useMemo(() => resolveCart(lines, products), [lines, products])
   const totals = useMemo(() => cartTotals(items), [items])
   const suggested = useMemo(() => {
     const inCart = new Set(items.map((item) => item.product.id))
     return products.filter((product) => !inCart.has(product.id)).slice(0, 4)
-  }, [items])
+  }, [items, products])
   const shippingProgress = Math.min(
     100,
     Math.round((totals.itemsPrice / FREE_SHIPPING_MIN) * 100),

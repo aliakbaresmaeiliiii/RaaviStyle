@@ -92,9 +92,12 @@ export function writeCart(lines: CartLine[]) {
   window.dispatchEvent(new Event(CART_EVENT))
 }
 
-export function resolveCart(lines: CartLine[]): CartItem[] {
+export function resolveCart(
+  lines: CartLine[],
+  catalog: Product[] = products,
+): CartItem[] {
   return lines.flatMap((line) => {
-    const product = products.find((item) => item.id === line.productId)
+    const product = catalog.find((item) => item.id === line.productId)
 
     if (!product) {
       return []

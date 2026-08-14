@@ -4,7 +4,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef } from "react"
 import { FaIcon } from "@/components/fa-icon"
-import { colorLabel, productSku, products } from "@/lib/catalog"
+import { useCatalog } from "@/components/store/catalog-provider"
+import { colorLabel, productSku } from "@/lib/catalog"
 import type { CartLine } from "@/lib/cart"
 import { messages } from "@/lib/i18n"
 
@@ -16,6 +17,7 @@ export function CartAddedDialog({
   onClose: () => void
 }) {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const products = useCatalog()
   const product = products.find((entry) => entry.id === item.productId)
 
   useEffect(() => {
