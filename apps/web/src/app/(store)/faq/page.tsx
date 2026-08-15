@@ -3,6 +3,9 @@ import { FaqView } from "@/components/store/faq-view";
 import { messages } from "@/lib/i18n";
 import { loadSitePage } from "@/lib/medusa-cms";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: `${messages.faq.nav} | ${messages.meta.title}`,
   description: messages.faq.metaDescription,

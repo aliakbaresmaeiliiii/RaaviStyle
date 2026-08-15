@@ -59,13 +59,14 @@ const upsertPageStep = createStep(
     const imageUrl = input.image_url || null
 
     if (current) {
-      const updated = await cms.updateSitePages({
+      await cms.updateSitePages({
         id: current.id,
         title: input.title,
         body: input.body,
         image_url: imageUrl,
       })
-      return new StepResponse(updated)
+      const fresh = await cms.retrieveSitePage(current.id)
+      return new StepResponse(fresh)
     }
 
     const created = await cms.createSitePages({

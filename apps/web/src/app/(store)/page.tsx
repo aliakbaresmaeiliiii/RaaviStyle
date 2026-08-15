@@ -2,6 +2,9 @@ import { StoreHome } from "@/components/store/store-home";
 import { loadStoreProducts } from "@/lib/medusa-catalog";
 import { loadSitePage } from "@/lib/medusa-cms";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Home() {
   const [products, cms] = await Promise.all([
     loadStoreProducts(),
