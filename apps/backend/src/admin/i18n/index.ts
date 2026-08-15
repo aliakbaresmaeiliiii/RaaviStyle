@@ -1,3 +1,4 @@
+import "../brand-admin"
 import fa from "./json/en.json" with { type: "json" }
 
 export default {

@@ -21,5 +21,5 @@ export function missingPublishableKeyMessage() {
     return null;
   }
 
-  return "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY is missing. Copy it from Medusa Admin → Settings → Publishable API Keys into apps/web/.env.local.";
+  return "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY is missing. Copy it from RaaviStyle Admin → Settings → Publishable API Keys into apps/web/.env.local.";
 }

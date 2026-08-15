@@ -1,11 +1,11 @@
 # RaaviStyle
 
-Empty commerce monorepo: **Next.js 16** storefront and **Medusa 2** backend.
+فروشگاه راوی‌استایل: **Next.js** فروشگاه و **پنل مدیریت** در `apps/backend`.
 
 ```text
 apps/
-  backend/   Medusa API + Admin  (http://localhost:9000)
-  web/       Next.js App Router  (http://localhost:3000)
+  backend/   API + Admin  (http://localhost:9000)
+  web/       فروشگاه      (http://localhost:3000)
 ```
 
 ## Prerequisites

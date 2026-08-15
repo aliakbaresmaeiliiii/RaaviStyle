@@ -2,15 +2,15 @@
 
 ## Overview
 
-RaaviStyle — a Turborepo workspace monorepo containing a Medusa backend (`@medusajs/medusa` 2.19, Node 20+, PostgreSQL 15+) and an empty Next.js 16 storefront.
+RaaviStyle — a Turborepo workspace monorepo containing the RaaviStyle backend (`@medusajs/medusa` 2.19, Node 20+, PostgreSQL 15+) and a Next.js 16 storefront.
 
 ## Directory Structure
 
 ```text
 .
 ├── apps/
-│   ├── backend/                  # Medusa application (@raavistyle/backend)
-│   │   ├── medusa-config.ts      # Medusa config: DB URL, CORS, secrets, modules
+│   ├── backend/                  # RaaviStyle application (@raavistyle/backend)
+│   │   ├── medusa-config.ts      # Backend config: DB URL, CORS, secrets, modules
 │   │   ├── integration-tests/    # setup.js (Jest setupFiles) and http/*.spec.ts suites
 │   │   └── src/
 │   │       ├── admin/            # Admin dashboard extensions (widgets/, i18n/, routes)

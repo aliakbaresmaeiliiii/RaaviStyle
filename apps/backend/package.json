@@ -1,8 +1,8 @@
 {
   "name": "@raavistyle/backend",
   "version": "0.0.1",
-  "description": "RaaviStyle Medusa backend.",
-  "author": "Medusa (https://medusajs.com)",
+  "description": "RaaviStyle backend.",
+  "author": "RaaviStyle",
   "license": "MIT",
   "keywords": [
     "sqlite",
@@ -10,7 +10,7 @@
     "typescript",
     "ecommerce",
     "headless",
-    "medusa"
+    "raavistyle"
   ],
   "scripts": {
     "build": "medusa build",
