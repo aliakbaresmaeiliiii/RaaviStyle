@@ -1,4 +1,5 @@
 import { ForcePersian } from "../../components/force-persian"
+import { AdminGrid } from "../../components/admin-grid"
 import { defineRouteConfig } from "@medusajs/admin-sdk"
 import { PencilSquare } from "@medusajs/icons"
 import {
@@ -7,14 +8,14 @@ import {
   Heading,
   Input,
   Label,
-  Select,
   Text,
   Textarea,
   toast,
 } from "@medusajs/ui"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import type { ColDef } from "ag-grid-community"
 
 type SitePage = {
   id: string
@@ -23,8 +24,6 @@ type SitePage = {
   body: string
   image_url: string | null
 }
-
-const HANDLES = ["home", "about", "faq"] as const
 
 const CmsPage = () => {
   const { t } = useTranslation()
@@ -48,6 +47,23 @@ const CmsPage = () => {
   })
 
   const page = data?.pages.find((item) => item.handle === handle)
+
+  const pageColumns = useMemo<ColDef<SitePage>[]>(
+    () => [
+      {
+        field: "handle",
+        headerName: t("cms.handle"),
+        valueFormatter: (params) => t(`cms.${params.value}`),
+      },
+      { field: "title", headerName: t("cms.pageTitle") },
+      {
+        field: "image_url",
+        headerName: t("cms.image"),
+        valueFormatter: (params) => (params.value ? "دارد" : "ندارد"),
+      },
+    ],
+    [t]
+  )
 
   useEffect(() => {
     if (!page) {
@@ -117,21 +133,19 @@ const CmsPage = () => {
         </Text>
       </div>
       <div className="px-6 py-4 flex flex-col gap-4">
-        <div>
-          <Label>{t("cms.handle")}</Label>
-          <Select value={handle} onValueChange={setHandle}>
-            <Select.Trigger>
-              <Select.Value />
-            </Select.Trigger>
-            <Select.Content>
-              {HANDLES.map((item) => (
-                <Select.Item key={item} value={item}>
-                  {t(`cms.${item}`)}
-                </Select.Item>
-              ))}
-            </Select.Content>
-          </Select>
-        </div>
+        <AdminGrid<SitePage>
+          rowData={data?.pages ?? []}
+          columnDefs={pageColumns}
+          height={220}
+          onRowClicked={(event) => {
+            if (event.data?.handle) {
+              setHandle(event.data.handle)
+            }
+          }}
+        />
+        <Text size="small" className="text-ui-fg-subtle">
+          {t("cms.handle")}: {t(`cms.${handle}`)}
+        </Text>
         <div>
           <Label>{t("cms.pageTitle")}</Label>
           <Input value={title} onChange={(event) => setTitle(event.target.value)} />

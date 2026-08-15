@@ -1,20 +1,22 @@
 import { ForcePersian } from "../../components/force-persian"
+import { AdminGrid } from "../../components/admin-grid"
 import { defineRouteConfig } from "@medusajs/admin-sdk"
 import { ChartBar } from "@medusajs/icons"
 import { Heading, Text } from "@medusajs/ui"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
+import { useMemo } from "react"
 import {
   Area,
   AreaChart,
   Bar,
   BarChart,
-  CartesianGrid,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts"
+import type { ColDef } from "ag-grid-community"
 
 type CountRange = {
   today: number
@@ -23,25 +25,32 @@ type CountRange = {
   total: number
 }
 
+type DayRow = {
+  date: string
+  label: string
+  users: number
+  visitors: number
+  views: number
+}
+
+type PageRow = {
+  path: string
+  count: number
+}
+
 type Overview = {
   users: CountRange
   visitors: CountRange
   views: CountRange
   orders: CountRange
   products: number
-  series: Array<{
-    date: string
-    label: string
-    users: number
-    visitors: number
-    views: number
-  }>
+  series: DayRow[]
   weekdays: Array<{
     day: string
     visitors: number
     users: number
   }>
-  topPages: Array<{ path: string; count: number }>
+  topPages: PageRow[]
 }
 
 const PALETTE = {
@@ -49,7 +58,6 @@ const PALETTE = {
   mocha: "#a47864",
   sage: "#7e8a6a",
   clay: "#c26a4a",
-  ink: "#1c1410",
 }
 
 function fa(value: number) {
@@ -74,6 +82,43 @@ const DashboardPage = () => {
   const overview = data
   const series = overview?.series ?? []
   const weekdays = overview?.weekdays ?? []
+  const topPages = overview?.topPages.length
+    ? overview.topPages
+    : [{ path: "/", count: 0 }]
+
+  const dayColumns = useMemo<ColDef<DayRow>[]>(
+    () => [
+      { field: "label", headerName: "تاریخ" },
+      {
+        field: "users",
+        headerName: "کاربر جدید",
+        valueFormatter: (params) => fa(params.value ?? 0),
+      },
+      {
+        field: "visitors",
+        headerName: "بازدیدکننده",
+        valueFormatter: (params) => fa(params.value ?? 0),
+      },
+      {
+        field: "views",
+        headerName: "بازدید صفحه",
+        valueFormatter: (params) => fa(params.value ?? 0),
+      },
+    ],
+    []
+  )
+
+  const pageColumns = useMemo<ColDef<PageRow>[]>(
+    () => [
+      { field: "path", headerName: "مسیر" },
+      {
+        field: "count",
+        headerName: "بازدید",
+        valueFormatter: (params) => fa(params.value ?? 0),
+      },
+    ],
+    []
+  )
 
   return (
     <div className="rs-theme rs-dash">
@@ -131,7 +176,7 @@ const DashboardPage = () => {
         </Link>
       </div>
 
-      <div className="rs-grid">
+      <div className="rs-panels">
         <section className="rs-card">
           <h2>۳۰ روز اخیر · کاربر و بازدید</h2>
           <div style={{ width: "100%", height: 280, direction: "ltr" }}>
@@ -147,7 +192,6 @@ const DashboardPage = () => {
                     <stop offset="95%" stopColor={PALETTE.mocha} stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="rgba(28,20,16,0.08)" vertical={false} />
                 <XAxis dataKey="label" tick={{ fill: "#7a6a60", fontSize: 11 }} />
                 <YAxis allowDecimals={false} tick={{ fill: "#7a6a60", fontSize: 11 }} />
                 <Tooltip
@@ -180,7 +224,6 @@ const DashboardPage = () => {
           <div style={{ width: "100%", height: 280, direction: "ltr" }}>
             <ResponsiveContainer>
               <BarChart data={weekdays} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="rgba(28,20,16,0.08)" vertical={false} />
                 <XAxis dataKey="day" tick={{ fill: "#7a6a60", fontSize: 11 }} />
                 <YAxis allowDecimals={false} tick={{ fill: "#7a6a60", fontSize: 11 }} />
                 <Tooltip
@@ -197,19 +240,25 @@ const DashboardPage = () => {
         </section>
       </div>
 
-      <section className="rs-card" style={{ marginTop: "0.85rem" }}>
-        <h2>صفحات پربازدید این هفته</h2>
-        <div className="rs-pages">
-          {(overview?.topPages.length ? overview.topPages : [{ path: "/", count: 0 }]).map(
-            (item) => (
-              <div className="rs-page-row" key={item.path}>
-                <code>{item.path}</code>
-                <strong>{fa(item.count)}</strong>
-              </div>
-            )
-          )}
-        </div>
-      </section>
+      <div className="rs-panels" style={{ marginTop: "0.85rem" }}>
+        <section className="rs-card">
+          <h2>جدول ۳۰ روز اخیر</h2>
+          <AdminGrid<DayRow>
+            rowData={series}
+            columnDefs={dayColumns}
+            height={360}
+            pagination={true}
+          />
+        </section>
+        <section className="rs-card">
+          <h2>صفحات پربازدید این هفته</h2>
+          <AdminGrid<PageRow>
+            rowData={topPages}
+            columnDefs={pageColumns}
+            height={360}
+          />
+        </section>
+      </div>
     </div>
   )
 }

@@ -1,3 +1,40 @@
+@font-face {
+  font-family: Vazirmatn;
+  src: url("../fonts/vazirmatn-light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("../fonts/vazirmatn-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("../fonts/vazirmatn-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-sans: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  --font-display: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+}
+
+html,
+body,
+#medusa,
+.font-sans {
+  font-family: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif !important;
+  font-synthesis: none;
+}
+
 .rs-theme {
   --rs-espresso: #1c1410;
   --rs-mocha: #a47864;
@@ -19,7 +56,7 @@ body.rs-custom-login .txt-small.my-6 {
 }
 
 .rs-dash {
-  font-family: "Vazirmatn", "IRANSans", Tahoma, sans-serif;
+  font-family: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
   color: var(--rs-ink);
   padding-bottom: 2rem;
 }
@@ -52,11 +89,29 @@ body.rs-custom-login .txt-small.my-6 {
   font-size: 0.95rem;
 }
 
-.rs-kpis {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.rs-kpis,
+.rs-shortcuts,
+.rs-panels {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.85rem;
+}
+
+.rs-kpis {
   margin-bottom: 1.25rem;
+}
+
+.rs-kpis > *,
+.rs-shortcuts > * {
+  flex: 1 1 220px;
+}
+
+.rs-panels > * {
+  flex: 1 1 360px;
+}
+
+.rs-ag {
+  min-height: 240px;
 }
 
 .rs-kpi {
@@ -90,12 +145,6 @@ body.rs-custom-login .txt-small.my-6 {
   color: #a47864;
 }
 
-.rs-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 0.9fr;
-  gap: 0.85rem;
-}
-
 .rs-card {
   border-radius: 1.5rem;
   background: #fffdf8;
@@ -111,9 +160,6 @@ body.rs-custom-login .txt-small.my-6 {
 }
 
 .rs-shortcuts {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
   margin: 1.25rem 0;
 }
 
@@ -143,38 +189,3 @@ body.rs-custom-login .txt-small.my-6 {
   color: #7a6a60;
 }
 
-.rs-pages {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.rs-page-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.9rem;
-  background: #f7f1e8;
-}
-
-.rs-page-row code {
-  font-size: 0.8rem;
-}
-
-@media (max-width: 1100px) {
-  .rs-kpis,
-  .rs-shortcuts,
-  .rs-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 720px) {
-  .rs-kpis,
-  .rs-shortcuts,
-  .rs-grid {
-    grid-template-columns: 1fr;
-  }
-}
