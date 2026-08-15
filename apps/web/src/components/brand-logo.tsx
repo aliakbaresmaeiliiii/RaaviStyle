@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { messages } from "@/lib/i18n"
 
-export const brandLogoSrc = "/brnading/logo.png"
+export const brandLogoSrc = "/logo.png"
 
 type BrandLogoProps = {
   className?: string

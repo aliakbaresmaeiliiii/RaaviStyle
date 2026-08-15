@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   title: messages.meta.title,
   description: messages.meta.description,
   icons: {
-    icon: "/brnading/logo.png",
-    apple: "/brnading/logo.png",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
     locale: "fa_IR",
     siteName: messages.brand,
-    images: ["/brnading/logo.png"],
+    images: ["/logo.png"],
   },
 };
 
