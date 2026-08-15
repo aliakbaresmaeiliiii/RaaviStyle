@@ -51,12 +51,16 @@ const upsertPageStep = createStep(
   "upsert-page",
   async (input: PageInput, { container }) => {
     const cms: CmsModuleService = container.resolve(CMS_MODULE)
-    const existing = await cms.listSitePages({ handle: input.handle })
+    const existing = await cms.listSitePages(
+      { handle: input.handle },
+      { take: 5 }
+    )
+    const current = existing.find((page) => page.handle === input.handle)
     const imageUrl = input.image_url || null
 
-    if (existing[0]) {
+    if (current) {
       const updated = await cms.updateSitePages({
-        id: existing[0].id,
+        id: current.id,
         title: input.title,
         body: input.body,
         image_url: imageUrl,

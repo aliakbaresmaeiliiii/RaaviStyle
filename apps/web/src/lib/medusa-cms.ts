@@ -1,42 +1,65 @@
-import { cache } from "react"
+import { cache } from "react";
 
 export type SitePage = {
-  handle: string
-  title: string
-  body: string
-  image_url: string | null
-}
+  handle: string;
+  title: string;
+  body: string;
+  image_url: string | null;
+};
 
 function backendUrl() {
-  return process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL ?? "http://localhost:9000"
+  return process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL ?? "http://localhost:9000";
+}
+
+function publishableKey() {
+  return process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY;
+}
+
+function absolutize(url: string | null) {
+  if (!url) {
+    return null;
+  }
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
+  const origin = backendUrl().replace(/\/$/, "");
+  return url.startsWith("/") ? `${origin}${url}` : `${origin}/${url}`;
 }
 
 async function fetchSitePage(handle: string): Promise<SitePage | null> {
-  const key = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+  const key = publishableKey();
   if (!key) {
-    return null
+    return null;
   }
 
   try {
     const response = await fetch(
       `${backendUrl()}/store/cms/pages/${handle}`,
       {
+        cache: "no-store",
         headers: {
           "x-publishable-api-key": key,
         },
-        next: { revalidate: 15 },
       },
-    )
+    );
 
     if (!response.ok) {
-      return null
+      return null;
     }
 
-    const json = (await response.json()) as { page?: SitePage }
-    return json.page ?? null
+    const json = (await response.json()) as { page?: SitePage };
+    const page = json.page;
+    if (!page) {
+      return null;
+    }
+
+    return {
+      ...page,
+      image_url: absolutize(page.image_url),
+    };
   } catch {
-    return null
+    return null;
   }
 }
 
-export const loadSitePage = cache(fetchSitePage)
+export const loadSitePage = cache(fetchSitePage);

@@ -398,7 +398,7 @@ export const products: Product[] = [
 export const PRICE_MAX = 6000000;
 
 export function formatToman(value: number): string {
-  return `${value.toLocaleString("fa-IR")} تومان`;
+  return `${value.toLocaleString("fa-IR")} ریال`;
 }
 
 export function discountPercent(product: Product): number | null {

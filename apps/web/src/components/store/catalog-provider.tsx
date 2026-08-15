@@ -13,9 +13,7 @@ export function CatalogProvider({
   children: React.ReactNode
 }) {
   return (
-    <CatalogContext.Provider
-      value={products.length ? products : localProducts}
-    >
+    <CatalogContext.Provider value={products}>
       {children}
     </CatalogContext.Provider>
   )

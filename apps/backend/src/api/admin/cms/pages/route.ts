@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { revalidateStorefront } from "../../../../utils/revalidate-storefront"
 import {
   listSitePagesWorkflow,
   upsertSitePageWorkflow,
@@ -40,5 +41,6 @@ export async function POST(
     },
   })
 
+  await revalidateStorefront()
   res.json({ page: result })
 }

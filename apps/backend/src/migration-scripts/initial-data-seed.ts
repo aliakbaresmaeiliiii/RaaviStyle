@@ -81,8 +81,12 @@ export default async function initial_data_seed({
           name: "راوی‌استایل",
           supported_currencies: [
             {
-              currency_code: "eur",
+              currency_code: "irr",
               is_default: true,
+            },
+            {
+              currency_code: "eur",
+              is_default: false,
             },
             {
               currency_code: "usd",
@@ -101,7 +105,7 @@ export default async function initial_data_seed({
       regions: [
         {
           name: "ایران",
-          currency_code: "eur",
+          currency_code: "irr",
           countries,
           payment_providers: ["pp_system_default"],
         },
@@ -220,6 +224,10 @@ export default async function initial_data_seed({
         },
         prices: [
           {
+            currency_code: "irr",
+            amount: 490000,
+          },
+          {
             currency_code: "usd",
             amount: 10,
           },
@@ -229,7 +237,7 @@ export default async function initial_data_seed({
           },
           {
             region_id: region.id,
-            amount: 10,
+            amount: 490000,
           },
         ],
         rules: [
@@ -258,6 +266,10 @@ export default async function initial_data_seed({
         },
         prices: [
           {
+            currency_code: "irr",
+            amount: 490000,
+          },
+          {
             currency_code: "usd",
             amount: 10,
           },
@@ -267,7 +279,7 @@ export default async function initial_data_seed({
           },
           {
             region_id: region.id,
-            amount: 10,
+            amount: 490000,
           },
         ],
         rules: [
@@ -383,6 +395,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -400,6 +416,10 @@ export default async function initial_data_seed({
                 رنگ: "سفید",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -419,6 +439,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -436,6 +460,10 @@ export default async function initial_data_seed({
                 رنگ: "سفید",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -455,6 +483,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -472,6 +504,10 @@ export default async function initial_data_seed({
                 رنگ: "سفید",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -491,6 +527,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -508,6 +548,10 @@ export default async function initial_data_seed({
                 رنگ: "سفید",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -554,6 +598,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -570,6 +618,10 @@ export default async function initial_data_seed({
                 سایز: "۴۰",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -588,6 +640,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -604,6 +660,10 @@ export default async function initial_data_seed({
                 سایز: "۴۴",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -650,6 +710,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -666,6 +730,10 @@ export default async function initial_data_seed({
                 سایز: "۴۰",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -684,6 +752,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -700,6 +772,10 @@ export default async function initial_data_seed({
                 سایز: "۴۴",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -746,6 +822,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -762,6 +842,10 @@ export default async function initial_data_seed({
                 سایز: "۴۰",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",
@@ -780,6 +864,10 @@ export default async function initial_data_seed({
               },
               prices: [
                 {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
+                {
                   amount: 10,
                   currency_code: "eur",
                 },
@@ -796,6 +884,10 @@ export default async function initial_data_seed({
                 سایز: "۴۴",
               },
               prices: [
+                {
+                  amount: 1500000,
+                  currency_code: "irr",
+                },
                 {
                   amount: 10,
                   currency_code: "eur",

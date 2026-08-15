@@ -7,6 +7,9 @@ import { StoreHeader } from "@/components/store/store-header";
 import { SkipLink } from "@/components/skip-link";
 import { loadStoreProducts } from "@/lib/medusa-catalog";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function StoreLayout({
   children,
 }: {

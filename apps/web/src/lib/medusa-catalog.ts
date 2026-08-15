@@ -120,18 +120,26 @@ export function mapMedusaProduct(product: MedusaProduct): Product | null {
 async function fetchStoreProducts(): Promise<Product[]> {
   try {
     const sdk = createMedusaClient()
-    const { regions } = await sdk.store.region.list()
+    const { regions } = await sdk.client.fetch<{
+      regions: Array<{ id: string }>
+    }>("/store/regions", { method: "GET", cache: "no-store" })
     const regionId = regions[0]?.id
-    const { products } = await sdk.store.product.list({
-      limit: 100,
-      fields: "*variants.calculated_price,*variants.prices,*images,*categories,*options",
-      ...(regionId ? { region_id: regionId } : {}),
-    })
-    const mapped = (products as MedusaProduct[])
+    const { products } = await sdk.client.fetch<{ products: MedusaProduct[] }>(
+      "/store/products",
+      {
+        method: "GET",
+        cache: "no-store",
+        query: {
+          limit: 100,
+          fields:
+            "*variants.calculated_price,*variants.prices,*images,*categories,*options",
+          ...(regionId ? { region_id: regionId } : {}),
+        },
+      }
+    )
+    return products
       .map(mapMedusaProduct)
       .filter((item): item is Product => Boolean(item))
-
-    return mapped.length ? mapped : localProducts
   } catch {
     return localProducts
   }

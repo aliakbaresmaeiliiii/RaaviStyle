@@ -192,8 +192,18 @@ const DashboardPage = () => {
                     <stop offset="95%" stopColor={PALETTE.mocha} stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="label" tick={{ fill: "#7a6a60", fontSize: 11 }} />
-                <YAxis allowDecimals={false} tick={{ fill: "#7a6a60", fontSize: 11 }} />
+                <XAxis
+                  dataKey="label"
+                  tick={{ fill: "#7a6a60", fontSize: 11, fontFamily: "Vazirmatn, Tahoma, sans-serif" }}
+                />
+                <YAxis
+                  allowDecimals={false}
+                  tick={{
+                    fill: "#7a6a60",
+                    fontSize: 11,
+                    fontFamily: "Vazirmatn, Tahoma, sans-serif",
+                  }}
+                />
                 <Tooltip
                   formatter={(value: number, name: string) => [
                     fa(value),
@@ -224,8 +234,18 @@ const DashboardPage = () => {
           <div style={{ width: "100%", height: 280, direction: "ltr" }}>
             <ResponsiveContainer>
               <BarChart data={weekdays} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                <XAxis dataKey="day" tick={{ fill: "#7a6a60", fontSize: 11 }} />
-                <YAxis allowDecimals={false} tick={{ fill: "#7a6a60", fontSize: 11 }} />
+                <XAxis
+                  dataKey="day"
+                  tick={{ fill: "#7a6a60", fontSize: 11, fontFamily: "Vazirmatn, Tahoma, sans-serif" }}
+                />
+                <YAxis
+                  allowDecimals={false}
+                  tick={{
+                    fill: "#7a6a60",
+                    fontSize: 11,
+                    fontFamily: "Vazirmatn, Tahoma, sans-serif",
+                  }}
+                />
                 <Tooltip
                   formatter={(value: number, name: string) => [
                     fa(value),

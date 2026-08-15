@@ -156,7 +156,7 @@ export const messages = {
     addedViewCart: "مشاهده سبد خرید",
     miniCheckout: "تسویه حساب",
     cartUnitPrice: (quantity: number, price: number) =>
-      `${quantity.toLocaleString("fa-IR")} × ${price.toLocaleString("fa-IR")} تومان`,
+      `${quantity.toLocaleString("fa-IR")} × ${price.toLocaleString("fa-IR")} ریال`,
     resultsCount: (count: number) =>
       `${count.toLocaleString("fa-IR")} کالا`,
     searchResults: (query: string) => `نتایج «${query}»`,

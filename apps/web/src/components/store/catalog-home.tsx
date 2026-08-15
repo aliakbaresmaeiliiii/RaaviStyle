@@ -530,8 +530,8 @@ function FilterPanel({
             />
           </div>
           <div className="mt-2 flex justify-between text-xs text-muted">
-            <span>{minPrice.toLocaleString("fa-IR")} تومان</span>
-            <span>{maxPrice.toLocaleString("fa-IR")} تومان</span>
+            <span>{minPrice.toLocaleString("fa-IR")} ریال</span>
+            <span>{maxPrice.toLocaleString("fa-IR")} ریال</span>
           </div>
           <div className="mt-3 flex justify-between text-[11px]">
             <span className="rounded-md bg-sage/15 px-2 py-1 text-sage">

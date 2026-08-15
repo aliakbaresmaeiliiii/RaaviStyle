@@ -5,11 +5,20 @@ import {
   type RowClickedEvent,
 } from "ag-grid-community"
 import { AgGridProvider, AgGridReact } from "ag-grid-react"
+import "../styles/theme.css"
 
 const modules = [AllCommunityModule]
 
+const fontFamily = [
+  "Vazirmatn",
+  "Tahoma",
+  "Segoe UI",
+  "Noto Sans Arabic",
+  "sans-serif",
+]
+
 const theme = themeQuartz.withParams({
-  fontFamily: "Vazirmatn, Tahoma, Segoe UI, Noto Sans Arabic, sans-serif",
+  fontFamily,
   accentColor: "#c4a574",
   backgroundColor: "#fffdf8",
   foregroundColor: "#1c1410",

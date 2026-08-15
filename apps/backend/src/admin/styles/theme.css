@@ -22,17 +22,63 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: Vazirmatn;
+  src: url("../fonts/vazirmatn-medium.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("../fonts/vazirmatn-medium.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --font-sans: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
-  --font-display: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  --rs-font: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  --font-sans: var(--rs-font);
+  --font-display: var(--rs-font);
 }
 
 html,
 body,
 #medusa,
-.font-sans {
-  font-family: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif !important;
+#medusa *:not(code):not(pre):not(.font-mono),
+.font-sans,
+.h1-core,
+.h2-core,
+.h3-core,
+[class*="txt-compact-"],
+[class*="txt-small"],
+[class*="txt-medium"],
+[class*="txt-large"],
+[class*="txt-xsmall"],
+[class*="txt-xlarge"],
+.rs-dash,
+.rs-ag,
+.rs-ag *,
+.recharts-wrapper text,
+[data-radix-popper-content-wrapper],
+[data-radix-popper-content-wrapper] *,
+[data-radix-portal],
+[data-radix-portal] *:not(code):not(pre) {
+  font-family: var(--rs-font) !important;
   font-synthesis: none;
+}
+
+pre,
+code,
+.font-mono,
+.font-mono *,
+#medusa pre,
+#medusa code,
+#medusa .font-mono,
+#medusa .font-mono * {
+  font-family: "Roboto Mono", ui-monospace, monospace !important;
 }
 
 .rs-theme {
@@ -51,12 +97,26 @@ body.rs-custom-login .mb-4.flex.flex-col.items-center:not(.rs-login-hero) {
   display: none;
 }
 
+body.rs-custom-login .h-\[50px\].w-\[50px\],
+body.rs-custom-login .mb-4.flex.h-\[50px\] {
+  display: none !important;
+}
+
 body.rs-custom-login .txt-small.my-6 {
   display: none;
 }
 
+.rs-login-logo {
+  display: block;
+  width: 168px;
+  height: auto;
+  margin: 0 0 0.85rem;
+  border-radius: 1.15rem;
+  background: #111;
+}
+
 .rs-dash {
-  font-family: Vazirmatn, Tahoma, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  font-family: var(--rs-font);
   color: var(--rs-ink);
   padding-bottom: 2rem;
 }
