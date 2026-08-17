@@ -1,3 +1,5 @@
+import { messages } from "./i18n/fa";
+
 export type Product = {
   id: string;
   title: string;
@@ -396,6 +398,99 @@ export const products: Product[] = [
 ];
 
 export const PRICE_MAX = 6000000;
+export type CategoryLabelKey = keyof typeof messages.categories;
+export type CatalogCategory = {
+  id: string
+  labelKey: CategoryLabelKey;
+  icon: string
+  href: string
+}
+
+export type CatalogColorFilter = {
+  id: string
+  label: string
+  value: string
+}
+
+export type CatalogFilters = {
+  categories: CatalogCategory[]
+  colors: CatalogColorFilter[]
+  sizes: string[]
+  priceMax: number
+}
+
+export const defaultFilters: CatalogFilters = {
+  categories: categories.map((category) => ({
+    ...category,
+    labelKey: category.label as CategoryLabelKey,
+  }) as CatalogCategory),
+  colors: colorFilters,
+  sizes: sizeFilters,
+  priceMax: PRICE_MAX,
+}
+
+const CATEGORY_ALIASES: Record<string, string> = {
+  bag: "bag",
+  shirts: "bag",
+  بگ: "bag",
+  "half-bag": "half-bag",
+  "نیم‌بگ": "half-bag",
+  "نیم-بگ": "half-bag",
+  mom: "mom",
+  sweatshirts: "mom",
+  "مام‌استایل": "mom",
+  "مام-استایل": "mom",
+  straight: "straight",
+  merch: "straight",
+  راسته: "straight",
+  wide: "wide",
+  وایدلگ: "wide",
+  cargo: "cargo",
+  pants: "cargo",
+  کارگو: "cargo",
+  skinny: "skinny",
+  اسکینی: "skinny",
+  bootcut: "bootcut",
+  "بوت‌کات": "bootcut",
+  linen: "linen",
+  لینن: "linen",
+  formal: "formal",
+  رسمی: "formal",
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
+  bag: "fa-bag-shopping",
+  "half-bag": "fa-shirt",
+  mom: "fa-child",
+  straight: "fa-grip-lines",
+  wide: "fa-arrows-left-right",
+  cargo: "fa-box",
+  skinny: "fa-person",
+  bootcut: "fa-shoe-prints",
+  linen: "fa-leaf",
+  formal: "fa-user-tie",
+}
+
+export function categoryKey(value: string) {
+  return CATEGORY_ALIASES[value] || CATEGORY_ALIASES[value.toLowerCase()] || value
+}
+
+export function categoryIcon(id: string, label = "") {
+  const key = categoryKey(id)
+  return (
+    CATEGORY_ICONS[key] ||
+    CATEGORY_ICONS[id] ||
+    CATEGORY_ICONS[label] ||
+    "fa-shirt"
+  )
+}
+
+export function categoriesMatch(left: string, right: string) {
+  if (!left || !right) {
+    return false
+  }
+  return left === right || categoryKey(left) === categoryKey(right)
+}
 
 export function formatToman(value: number): string {
   return `${value.toLocaleString("fa-IR")} ریال`;
@@ -413,8 +508,21 @@ export function colorLabel(value: string): string {
   return colorFilters.find((item) => item.value === value)?.label ?? value;
 }
 
-export function categoryLabel(id: string): string {
-  return categories.find((item) => item.id === id)?.label ?? id;
+export function categoryLabel(id: string, list: CatalogCategory[] = categories.map((category) => ({
+  ...category,
+  labelKey: category.label as CategoryLabelKey,
+}) as CatalogCategory)): string {
+  return (
+    list.find((item) => item.id === id || categoriesMatch(item.id, id))?.labelKey ??
+    id
+  )
+}
+
+export function colorLabelFrom(
+  value: string,
+  list: CatalogColorFilter[] = colorFilters,
+): string {
+  return list.find((item) => item.value === value)?.label ?? colorLabel(value)
 }
 
 export function similarProducts(

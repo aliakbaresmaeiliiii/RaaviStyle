@@ -4,13 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/store/product-card";
 import { FaIcon } from "@/components/fa-icon";
-import { useCatalog } from "@/components/store/catalog-provider";
+import { useCatalog, useCatalogFilters } from "@/components/store/catalog-provider";
 import {
-  PRICE_MAX,
-  categories,
-  colorFilters,
-  colorLabel,
-  sizeFilters,
+  categoriesMatch,
+  categoryLabel,
+  colorLabelFrom,
+  type CatalogFilters,
   type Product,
 } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
@@ -27,6 +26,7 @@ const sorts: Array<{ id: SortKey; label: string }> = [
 
 export function CatalogHome() {
   const products = useCatalog();
+  const filters = useCatalogFilters();
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -46,7 +46,7 @@ export function CatalogHome() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(PRICE_MAX);
+  const [maxPrice, setMaxPrice] = useState(filters.priceMax);
   const [onlyStock, setOnlyStock] = useState(false);
   const [onlySale, setOnlySale] = useState(false);
 
@@ -65,7 +65,7 @@ export function CatalogHome() {
     setSelectedColor("");
     setSelectedSize("");
     setMinPrice(0);
-    setMaxPrice(PRICE_MAX);
+    setMaxPrice(filters.priceMax);
     setOnlyStock(false);
     setOnlySale(false);
     setSelectedCategory("");
@@ -76,7 +76,7 @@ export function CatalogHome() {
       if (query && !product.title.includes(query)) {
         return false;
       }
-      if (selectedCategory && product.category !== selectedCategory) {
+      if (selectedCategory && !categoriesMatch(product.category, selectedCategory)) {
         return false;
       }
       if (selectedColor && !product.colors.includes(selectedColor)) {
@@ -116,14 +116,14 @@ export function CatalogHome() {
     selectedCategory
       ? {
           id: "cat",
-          label: categories.find((item) => item.id === selectedCategory)?.label,
+          label: categoryLabel(selectedCategory, filters.categories),
           onClear: () => setSelectedCategory(""),
         }
       : null,
     selectedColor
       ? {
           id: "color",
-          label: colorLabel(selectedColor),
+          label: colorLabelFrom(selectedColor, filters.colors),
           onClear: () => setSelectedColor(""),
         }
       : null,
@@ -149,13 +149,13 @@ export function CatalogHome() {
           },
         }
       : null,
-    minPrice > 0 || maxPrice < PRICE_MAX
+    minPrice > 0 || maxPrice < filters.priceMax
       ? {
           id: "price",
           label: `${minPrice.toLocaleString("fa-IR")} – ${maxPrice.toLocaleString("fa-IR")}`,
           onClear: () => {
             setMinPrice(0);
-            setMaxPrice(PRICE_MAX);
+            setMaxPrice(filters.priceMax);
           },
         }
       : null,
@@ -207,6 +207,7 @@ export function CatalogHome() {
       }
     },
     resetFilters,
+    filters,
   };
 
   return (
@@ -220,7 +221,7 @@ export function CatalogHome() {
           {saleFromUrl
             ? messages.shop.amazing
             : selectedCategory
-              ? categories.find((item) => item.id === selectedCategory)?.label
+              ? categoryLabel(selectedCategory, filters.categories)
               : messages.shop.allCategories}
         </h1>
       )}
@@ -380,6 +381,7 @@ function FilterPanel({
   onlySale,
   setOnlySale,
   resetFilters,
+  filters,
 }: {
   open: { category: boolean; color: boolean; size: boolean; price: boolean };
   setOpen: React.Dispatch<
@@ -400,6 +402,7 @@ function FilterPanel({
   onlySale: boolean;
   setOnlySale: (value: boolean) => void;
   resetFilters: () => void;
+  filters: CatalogFilters;
 }) {
   return (
     <>
@@ -433,16 +436,16 @@ function FilterPanel({
             />
             {messages.shop.allModels}
           </label>
-          {categories.map((category) => (
+          {filters.categories.map((category) => (
             <label key={category.id} className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="radio"
                 name="category"
-                checked={selectedCategory === category.id}
+                checked={selectedCategory === category.id}  
                 onChange={() => setSelectedCategory(category.id)}
                 className="accent-shop"
-              />
-              {category.label}
+              />  
+              {messages.categories[category.labelKey]}
             </label>
           ))}
         </div>
@@ -454,7 +457,7 @@ function FilterPanel({
         onToggle={() => setOpen((value) => ({ ...value, color: !value.color }))}
       >
         <div className="flex flex-wrap gap-2">
-          {colorFilters.map((color) => (
+          {filters.colors.map((color) => (
             <button
               key={color.id}
               type="button"
@@ -482,7 +485,7 @@ function FilterPanel({
         onToggle={() => setOpen((value) => ({ ...value, size: !value.size }))}
       >
         <div className="flex flex-wrap gap-2">
-          {sizeFilters.map((size) => (
+          {filters.sizes.map((size) => (
             <button
               key={size}
               type="button"
@@ -509,7 +512,7 @@ function FilterPanel({
             <input
               type="range"
               min={0}
-              max={PRICE_MAX}
+              max={filters.priceMax}
               step={50000}
               value={minPrice}
               onChange={(event) =>
@@ -520,7 +523,7 @@ function FilterPanel({
             <input
               type="range"
               min={0}
-              max={PRICE_MAX}
+              max={filters.priceMax}
               step={50000}
               value={maxPrice}
               onChange={(event) =>

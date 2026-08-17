@@ -12,9 +12,22 @@ export async function StoreHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-surface shadow-sm">
-      <div className="bg-espresso text-center text-[11px] text-bone sm:text-xs">
-        <p className="mx-auto max-w-7xl px-4 py-1.5 sm:py-2">
-          {messages.shop.topBar}
+      <div className="bg-[#ED1944] text-center text-[11px] text-bone sm:text-xs">
+        <p className="flex  items-center justify-center gap-1.5  px-4 py-1.5 sm:py-2">
+          <span className="text-2xl font-extrabold">{messages.shop.topBar}</span>
+          <span
+            className="
+   relative inline-block overflow-hidden h-10
+    rounded-3xl bg-white p-2 text-xl text-red-500 font-extrabold
+    after:absolute after:inset-y-0 after:-left-full
+    after:w-1/2 after:skew-x-[-20deg]
+    after:bg-gradient-to-r
+    after:from-transparent after:via-white/80 after:to-transparent
+    after:animate-[shine_2.5s_ease-in-out_infinite]
+            "
+          >
+            4 قسط با دیجی پی
+          </span>
         </p>
       </div>
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5 sm:gap-6 sm:py-3">

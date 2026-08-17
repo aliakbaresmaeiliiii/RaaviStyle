@@ -55,46 +55,46 @@ const socialLinks = [
 
 export function StoreFooter() {
   return (
-    <footer className="store-footer relative mt-16 overflow-hidden text-bone">
-      <div className="login-grain opacity-15" />
-      <span className="login-orb -top-24 -left-16 h-64 w-64 bg-mocha/25" />
-      <span className="login-orb -right-20 bottom-0 h-72 w-72 bg-bronze/15" />
+    <footer className="relative mt-16 overflow-hidden ">
+      <div className=" opacity-15" />
+      <span className="-top-24 -left-16 h-64 w-64 bg-mocha/25" />
+      <span className="-right-20 bottom-0 h-72 w-72 bg-bronze/15" />
 
-      <div className="relative">
+      <div className="relative ">
         <ul className="mx-auto grid max-w-7xl border-b border-white/10 sm:grid-cols-3">
           {trustItems.map((item) => (
             <li
               key={item.title}
               className="flex items-start gap-4 border-b border-white/10 px-6 py-7 last:border-b-0 sm:border-b-0 sm:border-e sm:px-8 sm:py-8 sm:last:border-e-0"
             >
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-bronze/30 bg-white/5 text-bronze">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-bronze/30 bg-white/5 ">
                 <FaIcon icon={item.icon} />
               </span>
               <div>
-                <p className="text-sm font-medium text-bone">{item.title}</p>
-                <p className="mt-1 text-xs leading-6 text-oat/70">{item.hint}</p>
+                <p className="text-sm font-medium ">{item.title}</p>
+                <p className="mt-1 text-xs leading-6 ">{item.hint}</p>
               </div>
             </li>
           ))}
         </ul>
 
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:px-8 lg:grid-cols-[1.35fr_repeat(3,minmax(0,1fr))] lg:gap-12">
+        <div className="mx-auto grid bg-[#183a68] gap-10 px-6 py-14 sm:px-8 lg:grid-cols-[1.35fr_repeat(3,minmax(0,1fr))] lg:gap-12 ">
           <div>
             <BrandLogo className="h-20" onDark />
-            <p className="mt-5 max-w-sm text-sm leading-8 text-oat/80">
+            <p className="mt-5 max-w-sm text-sm leading-8 /80 text-silver-light">
               {messages.shop.footerAbout}
             </p>
             <Link
               href="/about"
-              className="mt-4 inline-flex items-center gap-2 text-sm text-bronze transition hover:text-bone"
+              className="mt-4 inline-flex items-center gap-2 text-sm  transition text-silver-light"
             >
               {messages.about.readMore}
-              <FaIcon icon="fa-arrow-left" className="text-xs" />
+              <FaIcon icon="fa-arrow-left" className="text-xs text-silver-light" />
             </Link>
-            <p className="mt-8 text-xs text-bronze/90">
+            <p className="mt-8 text-xs /90 text-silver-light">
               {messages.shop.footerFollow}
             </p>
-            <ul className="mt-3 flex gap-2">
+            <ul className="mt-3 flex gap-2 text-silver-light">
               {socialLinks.map((item) => (
                 <li key={item.href}>
                   <a
@@ -102,7 +102,7 @@ export function StoreFooter() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={item.label}
-                    className="inline-flex size-10 items-center justify-center rounded-full border border-white/12 bg-white/5 text-oat transition hover:border-bronze/50 hover:bg-bronze/15 hover:text-bronze"
+                    className="inline-flex  size-10 items-center justify-center rounded-full border border-white/12 bg-white/5  transition hover:border-bronze/50 hover:bg-bronze/15 hover:"
                   >
                     <item.icon className="size-4" />
                   </a>
@@ -112,7 +112,7 @@ export function StoreFooter() {
           </div>
 
           <nav aria-labelledby="footer-shop">
-            <FooterHeading id="footer-shop">
+            <FooterHeading id="footer-shop ">
               {messages.shop.footerShop}
             </FooterHeading>
             <ul className="mt-5 space-y-3">
@@ -120,7 +120,7 @@ export function StoreFooter() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-oat/75 transition hover:text-bronze"
+                    className="text-sm  transition text-silver-light"
                   >
                     {item.label}
                   </Link>
@@ -138,7 +138,7 @@ export function StoreFooter() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-oat/75 transition hover:text-bronze"
+                    className="text-sm  transition text-silver-light"
                   >
                     {item.label}
                   </Link>
@@ -155,12 +155,12 @@ export function StoreFooter() {
               <li>
                 <a
                   href="tel:+982191000000"
-                  className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-3 py-3 transition hover:border-bronze/40 hover:bg-white/7"
+                  className="group text-silver-light flex items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-3 py-3 transition hover:border-bronze/40 hover:bg-white/7"
                 >
-                  <span className="flex size-9 items-center justify-center rounded-full bg-bronze/15 text-bronze">
+                  <span className="flex size-9 items-center justify-center rounded-full bg-bronze/15 text-silver-light">
                     <FaIcon icon="fa-phone" />
                   </span>
-                  <span className="text-sm text-oat group-hover:text-bone" dir="ltr">
+                  <span className="text-sm  text-silver-light" dir="ltr">
                     {messages.shop.phone}
                   </span>
                 </a>
@@ -170,10 +170,10 @@ export function StoreFooter() {
                   href={`mailto:${messages.shop.email}`}
                   className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-3 py-3 transition hover:border-bronze/40 hover:bg-white/7"
                 >
-                  <span className="flex size-9 items-center justify-center rounded-full bg-bronze/15 text-bronze">
+                  <span className="flex size-9 items-center justify-center rounded-full bg-bronze/15 text-silver-light">
                     <FaIcon icon="fa-envelope" />
                   </span>
-                  <span className="text-sm text-oat group-hover:text-bone">
+                  <span className="text-sm  text-silver-light">
                     {messages.shop.email}
                   </span>
                 </a>
@@ -183,7 +183,7 @@ export function StoreFooter() {
         </div>
 
         <div className="border-t border-white/10">
-          <p className="mx-auto max-w-7xl px-6 py-5 text-center text-xs text-oat/55 sm:px-8">
+          <p className="mx-auto max-w-7xl px-6 py-5 text-center text-xs /55 sm:px-8">
             {messages.shop.copyright}
           </p>
         </div>
@@ -201,10 +201,10 @@ function FooterHeading({
 }) {
   return (
     <div>
-      <h2 id={id} className="text-sm font-medium text-bone">
+      <h2 id={id} className="text-sm font-medium text-silver-light">
         {children}
       </h2>
-      <span className="mt-3 block h-px w-8 bg-bronze/80" aria-hidden="true" />
+      <span className="mt-3 block h-px w-8 text-silver-light" aria-hidden="true" />
     </div>
   );
 }

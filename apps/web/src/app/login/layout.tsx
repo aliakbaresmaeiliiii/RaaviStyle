@@ -49,11 +49,9 @@ export default function LoginLayout({
           className="pointer-events-none absolute top-[12%] left-1/2 z-10 w-[min(28rem,70%)] -translate-x-1/2 object-contain"
           sizes="448px"
         />
-        <p className="absolute top-12 left-12 z-10 text-sm font-light text-bronze">
-          {messages.login.collection}
-        </p>
+      
         <div className="relative z-10 p-14 text-bone">
-          <p className="text-sm font-light text-bronze">
+          <p className="text-sm font-light ">
             {messages.login.panelKicker}
           </p>
           <h1 className="mt-4 max-w-md text-5xl font-light leading-snug">

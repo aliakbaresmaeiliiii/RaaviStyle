@@ -80,9 +80,7 @@ export function FaqView({ cms }: { cms?: SitePage | null }) {
         <span className="login-orb -top-20 -left-12 h-56 w-56 bg-mocha/35" />
         <span className="login-orb -right-16 bottom-0 h-64 w-64 bg-bronze/20" />
         <div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 sm:py-16">
-          <p className="text-sm font-light tracking-wide text-bronze">
-            {messages.faq.eyebrow}
-          </p>
+         
           <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl">
             {title}
           </h1>

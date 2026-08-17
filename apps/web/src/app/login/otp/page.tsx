@@ -17,7 +17,7 @@ export default async function OtpPage({ searchParams }: OtpPageProps) {
   const customer = await getCustomer();
 
   if (customer) {
-    redirect("/account");
+    redirect("/");
   }
 
   const { phone } = await searchParams;

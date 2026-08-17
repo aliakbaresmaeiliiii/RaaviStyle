@@ -5,7 +5,7 @@ import { MobileDock } from "@/components/store/mobile-dock";
 import { StoreFooter } from "@/components/store/store-footer";
 import { StoreHeader } from "@/components/store/store-header";
 import { SkipLink } from "@/components/skip-link";
-import { loadStoreProducts } from "@/lib/medusa-catalog";
+import { loadStoreCatalog } from "@/lib/medusa-catalog";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -15,10 +15,10 @@ export default async function StoreLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const catalog = await loadStoreProducts();
+  const { products, filters } = await loadStoreCatalog();
 
   return (
-    <CatalogProvider products={catalog}>
+    <CatalogProvider products={products} filters={filters}>
       <CartProvider>
         <div className="min-h-screen bg-page pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-0">
           <AnalyticsBeacon />

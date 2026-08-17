@@ -170,7 +170,7 @@ export async function verifyOtp(
     return { ok: false, error: errorMessage(error) };
   }
 
-  redirect("/account");
+  redirect("/");
 }
 
 export async function getCustomer() {

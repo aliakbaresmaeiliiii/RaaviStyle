@@ -175,7 +175,6 @@ export function OtpForm({ phone }: OtpFormProps) {
 
   return (
     <div>
-      <p className="text-sm text-mocha">{messages.login.eyebrow}</p>
       <h2 className="mt-2 text-3xl font-medium leading-snug">
         {messages.login.verifyTitle}
       </h2>

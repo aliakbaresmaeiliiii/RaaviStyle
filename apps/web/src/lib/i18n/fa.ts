@@ -14,12 +14,33 @@ export const messages = {
   theme: {
     toggle: "تغییر پوسته",
   },
+  categories: {
+    bag: "بگ",
+    halfBag: "نیم‌بگ",
+    mom: "مام‌استایل",
+    straight: "راسته",
+    wide: "وایدلگ",
+    cargo: "کارگو",
+    skinny: "اسکینی",
+    bootcut: "بوت‌کات",
+    linen: "لینن",
+    formal: "رسمی",
+    Shirts: "پیراهن‌ها",
+  },
   shop: {
-    topBar: "ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان",
+    topBar: "خرید با حساب دیجی کالات",
     search: "جستجو شلوار...",
     cart: "سبد خرید",
+    shirts: "پیراهن‌ها",
+    pants: "شلوارها",
+    shorts: "شلوارک‌ها",
+    skirts: "کلاهک‌ها",
+    dresses: "دوخت‌ها",
+    jackets: "پلیور‌ها",
+    coats: "پلیور‌ها",
+    sweaters: "پلیور‌ها",
+    tshirts: "پلیور‌ها",
     allCategories: "همه شلوارها",
-    categories: "دسته‌ها",
     home: "خانه",
     amazing: "شگفت‌انگیز",
     amazingSeeAll: "مشاهده همه",
@@ -28,7 +49,8 @@ export const messages = {
     addToCart: "افزودن به سبد",
     emptyCart: "سبد خرید شما خالی است.",
     continueShopping: "ادامه خرید",
-    footerAbout: "فروشگاه تخصصی شلوار راوی‌استایل؛ بگ، جین، مام‌استایل، کارگو و راسته.",
+    footerAbout:
+      "فروشگاه تخصصی شلوار راوی‌استایل؛ بگ، جین، مام‌استایل، کارگو و راسته.",
     footerShop: "فروشگاه",
     footerHelp: "راهنما",
     footerContact: "تماس با ما",
@@ -157,8 +179,7 @@ export const messages = {
     miniCheckout: "تسویه حساب",
     cartUnitPrice: (quantity: number, price: number) =>
       `${quantity.toLocaleString("fa-IR")} × ${price.toLocaleString("fa-IR")} ریال`,
-    resultsCount: (count: number) =>
-      `${count.toLocaleString("fa-IR")} کالا`,
+    resultsCount: (count: number) => `${count.toLocaleString("fa-IR")} کالا`,
     searchResults: (query: string) => `نتایج «${query}»`,
     noResults: "محصولی با این شرایط پیدا نشد",
     noResultsHint: "فیلتر را تغییر دهید یا همه محصولات را ببینید.",
@@ -191,8 +212,7 @@ export const messages = {
     increaseQty: "زیاد کردن تعداد",
     removeItem: "حذف از سبد",
     emptyCartHint: "محصولی که می‌خواهید را پیدا کنید و به سبد اضافه کنید.",
-    cartItemCount: (count: number) =>
-      `(${count.toLocaleString("fa-IR")} کالا)`,
+    cartItemCount: (count: number) => `(${count.toLocaleString("fa-IR")} کالا)`,
     seller: "فروشنده",
     sellerName: "راوی‌استایل",
     itemsPrice: "قیمت کالاها",
@@ -232,7 +252,8 @@ export const messages = {
     methodSnappBody: "پرداخت اقساطی، بدون چک یا سفته",
     methodTara: "تارا",
     methodTaraBody: "الان بخرید، آخر ماه پرداخت کنید",
-    gatewayNote: "درگاه بانکی هنوز وصل نیست؛ سفارش ثبت می‌شود تا پرداخت فعال شود.",
+    gatewayNote:
+      "درگاه بانکی هنوز وصل نیست؛ سفارش ثبت می‌شود تا پرداخت فعال شود.",
     placeOrder: "ثبت سفارش",
     placing: "در حال ثبت...",
     empty: "سبد خرید خالی است.",
@@ -246,8 +267,7 @@ export const messages = {
     viewCart: "مشاهده سبد",
   },
   home: {
-    eyebrow: "مجموعه ۱۴۰۵",
-    title: "شلواری که روی تن می‌نشیند",
+    title: "تخفیفات شگفت انگیز",
     body: "بگ، مام‌استایل، کارگو و راسته. پارچه‌های سبک، رنگ‌های گرم، دوخت دقیق.",
     shop: "مشاهده محصولات",
     story: "داستان راوی",
@@ -338,8 +358,7 @@ export const messages = {
     aLogin:
       "با شماره موبایل و کد پیامکی. اگر حساب نداشته باشید، همان لحظه ساخته می‌شود و رمز جداگانه‌ای لازم نیست.",
     qPay: "چه روش‌های پرداختی دارید؟",
-    aPay:
-      "پرداخت در محل، اینترنتی با کارت شتاب، اقساط اسنپ‌پی و اعتبار تارا. درگاه بانکی هنوز در حال اتصال است؛ سفارش ثبت می‌شود تا پرداخت فعال شود.",
+    aPay: "پرداخت در محل، اینترنتی با کارت شتاب، اقساط اسنپ‌پی و اعتبار تارا. درگاه بانکی هنوز در حال اتصال است؛ سفارش ثبت می‌شود تا پرداخت فعال شود.",
     qCartHold: "کالای سبد تا کی رزرو است؟",
     aCartHold:
       "تا وقتی سفارش ثبت نشده، موجودی قطعی نیست. اگر کالا تمام شود از سبد برداشته می‌شود.",
@@ -373,15 +392,15 @@ export const messages = {
     aColor:
       "رنگ‌ها تا حد ممکن واقعی ثبت شده‌اند؛ به‌خاطر نور و نمایشگر ممکن است اختلاف جزئی دیده شود.",
     qAuth: "از اصالت کالا مطمئن باشم؟",
-    aAuth:
-      "هر شلوار با گارانتی اصالت و سلامت فیزیکی از راوی‌استایل می‌رسد.",
+    aAuth: "هر شلوار با گارانتی اصالت و سلامت فیزیکی از راوی‌استایل می‌رسد.",
     qOrigin: "کالا کجا تولید می‌شود؟",
     aOrigin: "کشور تولید ایران است.",
   },
   track: {
     nav: "پیگیری سفارش",
     myOrders: "سفارش‌های من",
-    metaDescription: "پیگیری مرسوله راوی‌استایل. نشانی و شماره فقط برای صاحب سفارش روی همین دستگاه.",
+    metaDescription:
+      "پیگیری مرسوله راوی‌استایل. نشانی و شماره فقط برای صاحب سفارش روی همین دستگاه.",
     lookupTitle: "پیگیری با شماره سفارش",
     lookupHint:
       "شماره را از رسید ثبت سفارش وارد کنید. فقط سفارش‌هایی که با همین مرورگر ثبت شده‌اند دیده می‌شوند.",
@@ -421,7 +440,8 @@ export const messages = {
     buyAgain: "خرید دوباره",
     total: "مبلغ کل",
     qty: (count: number) => `${count.toLocaleString("fa-IR")} عدد`,
-    moreItems: (count: number) => `و ${count.toLocaleString("fa-IR")} کالای دیگر`,
+    moreItems: (count: number) =>
+      `و ${count.toLocaleString("fa-IR")} کالای دیگر`,
     courier: "پیک",
     courierName: "راوی‌پست",
     trackingNo: "کد رهگیری",
@@ -434,7 +454,8 @@ export const messages = {
     recipient: "گیرنده",
     showAddress: "نمایش نشانی کامل",
     hideAddress: "پنهان کردن نشانی",
-    addressHint: "نشانی و کد پستی پیش‌فرض مخفی است؛ فقط با انتخاب شما باز می‌شود.",
+    addressHint:
+      "نشانی و کد پستی پیش‌فرض مخفی است؛ فقط با انتخاب شما باز می‌شود.",
     items: "اقلام سفارش",
     placedAt: "زمان ثبت",
     help: "سؤال درباره مرسوله؟",
@@ -463,7 +484,8 @@ export const messages = {
     statusDelivered: "تحویل داده شد",
     statusDeliveredBody: "بسته به گیرنده تحویل شده است.",
     payCodNote: "مبلغ هنگام تحویل دریافت می‌شود.",
-    payOnlineNote: "پرداخت اینترنتی پس از اتصال درگاه تکمیل می‌شود؛ مرسوله از روی سفارش ثبت‌شده پیگیری می‌شود.",
+    payOnlineNote:
+      "پرداخت اینترنتی پس از اتصال درگاه تکمیل می‌شود؛ مرسوله از روی سفارش ثبت‌شده پیگیری می‌شود.",
     privacy: "جزئیات گیرنده روی این دستگاه می‌ماند و در عنوان صفحه نمی‌آید.",
     historyTitle: "تاریخچه سفارشات",
     nextStep: (label: string) => `مرحله بعد: ${label}`,
@@ -588,48 +610,50 @@ export const messages = {
   },
 } as const;
 
-const errorMatchers: Array<{ test: (message: string) => boolean; text: string }> =
-  [
-    {
-      test: (message) => message.includes("valid mobile"),
-      text: messages.errors.invalidPhone,
-    },
-    {
-      test: (message) => message.includes("6-digit"),
-      text: messages.errors.otpRequired,
-    },
-    {
-      test: (message) => message.includes("expired") || message.includes("منقضی"),
-      text: messages.errors.otpExpired,
-    },
-    {
-      test: (message) =>
-        message.includes("invalid otp") || message.includes("نامعتبر"),
-      text: messages.errors.invalidOtp,
-    },
-    {
-      test: (message) =>
-        message.includes("request a new otp") || message.includes("کد جدید"),
-      text: messages.errors.requestNewOtp,
-    },
-    {
-      test: (message) => message.includes("could not send"),
-      text: messages.errors.sendFailed,
-    },
-    {
-      test: (message) => message.includes("could not verify"),
-      text: messages.errors.verifyFailed,
-    },
-    {
-      test: (message) =>
-        message.includes("does not exist") || message.includes("یافت نشد"),
-      text: messages.errors.userNotFound,
-    },
-    {
-      test: (message) => message.includes("publishable"),
-      text: messages.errors.missingPublishableKey,
-    },
-  ];
+const errorMatchers: Array<{
+  test: (message: string) => boolean;
+  text: string;
+}> = [
+  {
+    test: (message) => message.includes("valid mobile"),
+    text: messages.errors.invalidPhone,
+  },
+  {
+    test: (message) => message.includes("6-digit"),
+    text: messages.errors.otpRequired,
+  },
+  {
+    test: (message) => message.includes("expired") || message.includes("منقضی"),
+    text: messages.errors.otpExpired,
+  },
+  {
+    test: (message) =>
+      message.includes("invalid otp") || message.includes("نامعتبر"),
+    text: messages.errors.invalidOtp,
+  },
+  {
+    test: (message) =>
+      message.includes("request a new otp") || message.includes("کد جدید"),
+    text: messages.errors.requestNewOtp,
+  },
+  {
+    test: (message) => message.includes("could not send"),
+    text: messages.errors.sendFailed,
+  },
+  {
+    test: (message) => message.includes("could not verify"),
+    text: messages.errors.verifyFailed,
+  },
+  {
+    test: (message) =>
+      message.includes("does not exist") || message.includes("یافت نشد"),
+    text: messages.errors.userNotFound,
+  },
+  {
+    test: (message) => message.includes("publishable"),
+    text: messages.errors.missingPublishableKey,
+  },
+];
 
 export function translateError(message: string): string {
   const lower = message.toLowerCase();

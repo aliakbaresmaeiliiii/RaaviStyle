@@ -13,7 +13,6 @@ export default async function AccountPage() {
 
   return (
     <section className="rounded-xl bg-surface p-5 shadow-card sm:p-6">
-      <p className="text-sm text-mocha">{messages.account.eyebrow}</p>
       <h1 className="mt-2 text-2xl font-medium">{messages.account.welcome}</h1>
       <p className="mt-2 text-sm leading-7 text-muted">{messages.account.hint}</p>
 

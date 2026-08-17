@@ -12,8 +12,9 @@ export default async function LoginPage() {
   const customer = await getCustomer();
 
   if (customer) {
-    redirect("/account");
+    redirect("/");
   }
 
   return <PhoneForm />;
 }
+

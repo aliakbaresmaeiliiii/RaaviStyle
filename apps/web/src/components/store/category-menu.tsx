@@ -3,10 +3,11 @@
 import Link from "next/link"
 import { useEffect, useId, useRef, useState } from "react"
 import { FaIcon } from "@/components/fa-icon"
-import { categories } from "@/lib/catalog"
+import { useCatalogFilters } from "@/components/store/catalog-provider"
 import { messages } from "@/lib/i18n"
 
 export function CategoryMenu() {
+  const filters = useCatalogFilters()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
@@ -66,7 +67,7 @@ export function CategoryMenu() {
             <FaIcon icon="fa-table-cells" />
             {messages.shop.allCategories}
           </Link>
-          {categories.map((category) => (
+          {filters.categories.map((category) => (
             <Link
               key={category.id}
               href={category.href}

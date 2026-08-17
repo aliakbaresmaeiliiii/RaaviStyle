@@ -10,7 +10,7 @@ import type CmsModuleService from "../modules/cms/service"
 export const DEFAULT_PAGES = [
   {
     handle: "home",
-    title: "شلواری که روی تن می‌نشیند",
+    title: "تخفیفات شگفت انگیز",
     body: "بگ، مام‌استایل، کارگو و راسته. پارچه‌های سبک، رنگ‌های گرم، دوخت دقیق.",
   },
   {

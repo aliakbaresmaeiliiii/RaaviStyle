@@ -129,28 +129,23 @@ export function StoreHome({
   const cargoImage = findByCategory("cargo")?.image ?? products[3]?.image;
   const amazing = products.filter((product) => product.compareAt).slice(0, 8);
   const popular = products.filter((product) => product.inStock).slice(0, 8);
-  const newest = [...products].slice(-8).reverse();
+  const newest = products.slice(0, 8);
   const title = cms?.title || messages.home.title;
   const body = cms?.body || messages.home.body;
 
   return (
     <main>
-      <section className="login-panel relative overflow-hidden text-bone">
-        <div className="login-grain opacity-20" />
-        <span className="login-orb -top-24 -left-16 h-72 w-72 bg-mocha/40" />
-        <span className="login-orb -right-20 bottom-0 h-80 w-80 bg-bronze/20" />
+      <section className="relative overflow-hidden bg-[#183a68]">
+        <div className=" opacity-20" />
+        <span className="-top-24 -left-16 h-72 w-72 bg-mocha/40" />
+        <span className="-right-20 bottom-0 h-80 w-80 bg-bronze/20" />
 
         <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:py-20">
           <div>
-            <p className="text-sm font-light tracking-wide text-bronze">
-              {messages.home.eyebrow}
-            </p>
-            <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-xl text-4xl font-li leading-snug sm:text-5xl lg:text-6xl">
               {title}
             </h1>
-            <p className="mt-5 max-w-lg text-base font-light leading-8 text-oat">
-              {body}
-            </p>
+            <p className="mt-5 max-w-lg text-base font-li leading-8 ">{body}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/products"
@@ -160,37 +155,12 @@ export function StoreHome({
               </Link>
               <Link
                 href="/about"
-                className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 text-sm text-bone transition hover:border-bronze hover:text-bronze"
+                className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 text-sm  transition hover:border-bronze hover:"
               >
                 {messages.home.story}
               </Link>
             </div>
-            <ul className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-8">
-              <li>
-                <p className="text-2xl font-light text-bronze">
-                  {messages.about.statModelsValue}
-                </p>
-                <p className="mt-2 text-xs text-oat/70">
-                  {messages.about.statModels}
-                </p>
-              </li>
-              <li>
-                <p className="text-2xl font-light text-bronze">
-                  {messages.about.statSizesValue}
-                </p>
-                <p className="mt-2 text-xs text-oat/70">
-                  {messages.about.statSizes}
-                </p>
-              </li>
-              <li>
-                <p className="text-2xl font-light text-bronze">
-                  {messages.about.statOriginValue}
-                </p>
-                <p className="mt-2 text-xs text-oat/70">
-                  {messages.about.statOrigin}
-                </p>
-              </li>
-            </ul>
+      
           </div>
 
           <div className="relative mx-auto hidden h-[28rem] w-full max-w-md lg:block">
@@ -273,17 +243,20 @@ export function StoreHome({
                   className="object-cover motion-safe:transition motion-safe:duration-500 motion-safe:group-hover:scale-105"
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-espresso/80 via-espresso/10 to-transparent" />
-                <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 p-4 text-bone">
+                <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 p-4 ">
                   <span>
-                    <span className="block text-xs text-oat/80">
+                    <span className="block text-xs text-white ">
                       {messages.shop.breadcrumbPants}
                     </span>
-                    <span className="mt-1 block text-lg font-medium">
+                    <span className="mt-1 block text-lg font-medium text-white">
                       {item.category.label}
                     </span>
                   </span>
                   <span className="flex size-9 items-center justify-center rounded-full border border-white/20 bg-white/10">
-                    <FaIcon icon="fa-arrow-left" className="text-xs" />
+                    <FaIcon
+                      icon="fa-arrow-left"
+                      className="text-xs text-white"
+                    />
                   </span>
                 </span>
               </Link>
@@ -368,20 +341,15 @@ export function StoreHome({
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <div className="relative overflow-hidden rounded-[2rem] bg-espresso px-6 py-12 text-bone sm:px-12">
-          <div className="login-grain opacity-15" />
-          <span className="login-orb -left-10 -top-16 h-48 w-48 bg-mocha/35" />
-          <span className="login-orb -bottom-16 -right-8 h-56 w-56 bg-bronze/20" />
+        <div className="relative overflow-hidden rounded-[2rem] bg-[#183a68] px-6 py-12  sm:px-12">
+          <div className=" opacity-15 text-white" />
+          <span className="-left-10 -top-16 h-48 w-48 bg-mocha/35" />
+          <span className="-bottom-16 -right-8 h-56 w-56 bg-bronze/20" />
           <div className="relative max-w-xl">
-            <p className="text-sm font-light text-bronze">
-              {messages.about.eyebrow}
-            </p>
-            <h2 className="mt-3 text-3xl font-light leading-snug sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-light text-white  leading-snug sm:text-4xl">
               {messages.home.storyTitle}
             </h2>
-            <p className="mt-4 text-sm leading-8 text-oat">
-              {messages.home.storyBody}
-            </p>
+            <p className="mt-4 text-sm leading-8 text-white">{messages.home.storyBody}</p>
             <Link
               href="/about"
               className="mt-8 inline-flex h-12 items-center rounded-full bg-bone px-6 text-sm text-espresso"
@@ -445,10 +413,7 @@ function ProductRail({ products: items }: { products: Product[] }) {
   return (
     <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-4 md:overflow-visible">
       {items.map((product) => (
-        <div
-          key={product.id}
-          className="w-[44%] shrink-0 sm:w-[38%] md:w-auto"
-        >
+        <div key={product.id} className="w-[44%] shrink-0 sm:w-[38%] md:w-auto">
           <ProductCard product={product} />
         </div>
       ))}
@@ -470,7 +435,7 @@ function CampaignCard({
   return (
     <Link
       href={href}
-      className="group relative min-h-64 overflow-hidden rounded-[1.75rem] bg-espresso text-bone"
+      className="group relative min-h-64 overflow-hidden rounded-[1.75rem] bg-espresso "
     >
       {image ? (
         <Image
@@ -484,7 +449,7 @@ function CampaignCard({
       <span className="absolute inset-0 bg-gradient-to-t from-espresso via-espresso/30 to-transparent" />
       <span className="absolute inset-x-0 bottom-0 p-6">
         <span className="block text-2xl font-light">{title}</span>
-        <span className="mt-2 block text-sm text-oat">{body}</span>
+        <span className="mt-2 block text-sm ">{body}</span>
       </span>
     </Link>
   );

@@ -136,9 +136,7 @@ export function AboutView({
 
         <div className="relative mx-auto grid max-w-7xl items-end gap-12 px-6 py-16 sm:px-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:py-24">
           <div>
-            <p className="text-sm font-light tracking-wide text-bronze">
-              {messages.about.eyebrow}
-            </p>
+        
             <h1 className="mt-4 max-w-xl text-4xl font-light leading-snug sm:text-5xl lg:text-6xl">
               {title}
             </h1>
@@ -332,9 +330,7 @@ export function AboutView({
           <span className="login-orb -left-10 -top-16 h-56 w-56 bg-mocha/35" />
           <span className="login-orb -bottom-16 -right-8 h-64 w-64 bg-bronze/20" />
           <div className="relative max-w-xl">
-            <p className="text-sm font-light text-bronze">
-              {messages.about.closeKicker}
-            </p>
+   
             <h2 className="mt-3 text-3xl font-light leading-snug sm:text-4xl">
               {messages.about.closeTitle}
             </h2>

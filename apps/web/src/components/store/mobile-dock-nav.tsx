@@ -20,7 +20,7 @@ export function MobileDockNav({
     {
       href: "/products",
       icon: "fa-table-cells",
-      label: messages.shop.categories,
+      label: messages.shop.allModels,
     },
     { href: "/cart", icon: "fa-cart-shopping", label: messages.shop.dockCart },
     {
@@ -53,7 +53,11 @@ export function MobileDockNav({
                   <FaIcon icon={item.icon} />
                   {item.href === "/cart" ? <CartBadge /> : null}
                 </span>
-                {item.label}
+                {
+                  messages.categories[
+                    item.label as keyof typeof messages.categories
+                  ]
+                }
               </Link>
             </li>
           );

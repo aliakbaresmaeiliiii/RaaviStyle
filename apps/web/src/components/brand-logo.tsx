@@ -4,6 +4,7 @@ import { messages } from "@/lib/i18n"
 
 export const brandLogoSrc = "/logo.png"
 
+
 type BrandLogoProps = {
   className?: string
   href?: string | null
@@ -33,7 +34,7 @@ export function BrandLogo({
 
   const frameClassName = onDark
     ? "inline-flex shrink-0 items-center"
-    : "inline-flex shrink-0 items-center rounded-xl bg-espresso px-1.5 py-0.5 dark:bg-transparent dark:px-0 dark:py-0"
+    : "inline-flex items-center rounded-xl  px-1.5 py-0.5 dark:bg-transparent dark:px-0 dark:py-0"
 
   if (href === null) {
     return <span className={frameClassName}>{image}</span>
