@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { categories, type Product } from "@/lib/catalog";
 import { messages } from "@/lib/i18n";
 import type { SitePage } from "@/lib/medusa-cms";
+import { HeroSlider } from "./hero-slider";
 
 const featuredIds = ["bag", "mom", "cargo", "straight", "linen"] as const;
 
@@ -73,9 +74,11 @@ function uniqueImages(sources: Array<string | undefined | null>) {
 export function StoreHome({
   products,
   cms,
+  href = "/products?cat=sale",
 }: {
   products: Product[];
   cms?: SitePage | null;
+  href: string;
 }) {
   function findByCategory(id: string) {
     return productForCategory(products, id);
@@ -85,7 +88,7 @@ export function StoreHome({
     .map((id) => {
       const category = categories.find((item) => item.id === id);
       const product = findByCategory(id);
-
+      debugger;
       if (!category || !product) {
         return null;
       }
@@ -119,100 +122,94 @@ export function StoreHome({
 
   const heroImages = uniqueImages([
     cms?.image_url,
-    findByCategory("bag")?.image,
-    findByCategory("cargo")?.image,
-    products[0]?.image,
-    products[1]?.image,
+    findByCategory("bag")?.image?.[0],
+    findByCategory("cargo")?.image[0],
+    products[0]?.image[0],
+    products[1]?.image[0],
   ]).slice(0, 2);
 
-  const linenImage = findByCategory("linen")?.image ?? products[2]?.image;
-  const cargoImage = findByCategory("cargo")?.image ?? products[3]?.image;
+  const linenImage = findByCategory("linen")?.image[0] ?? products[2]?.image[0];
+
+  const cargoImage = findByCategory("cargo")?.image[0] ?? products[3]?.image[0];
+
   const amazing = products.filter((product) => product.compareAt).slice(0, 8);
   const popular = products.filter((product) => product.inStock).slice(0, 8);
   const newest = products.slice(0, 8);
   const title = cms?.title || messages.home.title;
-  const body = cms?.body || messages.home.body;
 
   return (
     <main>
-      <section className="relative overflow-hidden bg-[#183a68]">
-        <div className=" opacity-20" />
-        <span className="-top-24 -left-16 h-72 w-72 bg-mocha/40" />
-        <span className="-right-20 bottom-0 h-80 w-80 bg-bronze/20" />
-
-        <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:py-20">
-          <div>
-            <h1 className="mt-4 max-w-xl text-4xl font-li leading-snug sm:text-5xl lg:text-6xl">
-              {title}
-            </h1>
-            <p className="mt-5 max-w-lg text-base font-li leading-8 ">{body}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/products"
-                className="inline-flex h-12 items-center rounded-full bg-bone px-6 text-sm text-espresso"
-              >
-                {messages.home.shop}
-              </Link>
-              <Link
-                href="/about"
-                className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 text-sm  transition hover:border-bronze hover:"
-              >
-                {messages.home.story}
-              </Link>
-            </div>
-      
+      <section className="relative overflow-hidden bg-[#edf2ec]">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[6fr_920px] lg:gap-12 lg:px-8">
+          {/* LEFT: Slider */}
+          <div className="order-2 min-w-0 lg:order-2">
+            <HeroSlider products={products} title="پیشنهاد ویژه" />
           </div>
 
-          <div className="relative mx-auto hidden h-[28rem] w-full max-w-md lg:block">
-            {heroImages[0] ? (
-              <figure className="absolute top-0 end-0 h-[78%] w-[68%] overflow-hidden rounded-[2rem] ring-1 ring-white/10">
-                <Image
-                  src={heroImages[0]}
-                  alt=""
-                  fill
-                  priority
-                  sizes="280px"
-                  className="object-cover"
-                />
-              </figure>
-            ) : null}
-            {heroImages[1] ? (
-              <figure className="absolute bottom-0 start-0 h-[72%] w-[62%] overflow-hidden rounded-[2rem] ring-1 ring-white/15">
-                <Image
-                  src={heroImages[1]}
-                  alt=""
-                  fill
-                  sizes="260px"
-                  className="object-cover"
-                />
-              </figure>
-            ) : null}
+          {/* RIGHT: Text */}
+          <div className="order-1 text-center lg:order-1 lg:text-right">
+            <span className="mb-3 inline-block text-xs font-medium tracking-wide text-[#e72d32]">
+              پیشنهاد ویژه
+            </span>
+
+            <h2 className="text-3xl font-bold leading-tight text-[#e72d32] sm:text-4xl">
+              {title}
+            </h2>
+
+            <p className="mx-auto mt-3 max-w-[220px] text-sm leading-7 text-[#737873] lg:mx-0">
+              بهترین محصولات با تخفیف‌های ویژه
+            </p>
+
+            <Link
+              href={href}
+              className="mt-5 inline-flex h-10 items-center rounded-full bg-[#e72d32] px-5 text-xs font-medium text-white transition hover:bg-[#d9242a] active:scale-95"
+            >
+              مشاهده همه تخفیف‌ها
+              <span className="mr-2">←</span>
+            </Link>
           </div>
         </div>
       </section>
 
-      <ul className="mx-auto grid max-w-7xl gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
-        {trust.map((item) => (
+      <ul className="mx-auto grid max-w-7xl border-y border-line/60 sm:grid-cols-2 lg:grid-cols-4 mt-5">
+        {trust.map((item, index) => (
           <li
             key={item.title}
-            className="flex items-start gap-3 bg-page px-5 py-5"
+            className={`
+        group relative flex gap-4 px-6 py-6
+        transition-colors duration-300
+        hover:bg-surface/60
+        ${index !== 0 ? "border-t border-line/60 sm:border-l sm:border-t-0" : ""}
+        ${index === 2 ? "lg:border-l" : ""}
+      `}
           >
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-mocha shadow-card">
+            <span
+              className="
+          flex size-10 shrink-0 items-center justify-center
+          rounded-full
+          bg-surface
+          text-mocha
+          ring-1 ring-line/70
+          transition-all duration-300
+          group-hover:bg-mocha
+          group-hover:text-white
+          group-hover:ring-mocha
+        "
+            >
               <FaIcon icon={item.icon} />
             </span>
+
             <div>
-              <p className="text-sm font-medium">{item.title}</p>
-              <p className="mt-1 text-xs leading-6 text-muted">{item.hint}</p>
+              <p className="text-sm font-semibold tracking-tight">
+                {item.title}
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-muted">{item.hint}</p>
             </div>
           </li>
         ))}
       </ul>
-
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
-        <p className="flex items-center gap-3 text-sm text-mocha">
-          <span className="block h-px w-8 bg-bronze" aria-hidden="true" />
-          {messages.shop.browseModels}
-        </p>
         <h2 className="mt-3 max-w-md text-3xl font-medium leading-snug">
           {messages.home.modelsTitle}
         </h2>
@@ -232,7 +229,7 @@ export function StoreHome({
                 }`}
               >
                 <Image
-                  src={item.product.image}
+                  src={item.product.image[0]}
                   alt={item.category.label}
                   fill
                   sizes={
@@ -287,7 +284,6 @@ export function StoreHome({
           </ul>
         ) : null}
       </section>
-
       <section className="bg-soft py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -311,7 +307,6 @@ export function StoreHome({
           <ProductRail products={amazing} />
         </div>
       </section>
-
       <section className="mx-auto grid max-w-7xl gap-4 px-4 py-12 sm:px-6 md:grid-cols-2">
         <CampaignCard
           href="/products?cat=linen"
@@ -326,7 +321,6 @@ export function StoreHome({
           body={messages.home.campaignCargoBody}
         />
       </section>
-
       <section className="mx-auto max-w-7xl px-4 pb-4 sm:px-6">
         <ProductSection
           title={messages.shop.popular}
@@ -339,7 +333,6 @@ export function StoreHome({
           products={newest}
         />
       </section>
-
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <div className="relative overflow-hidden rounded-[2rem] bg-[#183a68] px-6 py-12  sm:px-12">
           <div className=" opacity-15 text-white" />
@@ -349,7 +342,9 @@ export function StoreHome({
             <h2 className="mt-3 text-3xl font-light text-white  leading-snug sm:text-4xl">
               {messages.home.storyTitle}
             </h2>
-            <p className="mt-4 text-sm leading-8 text-white">{messages.home.storyBody}</p>
+            <p className="mt-4 text-sm leading-8 text-white">
+              {messages.home.storyBody}
+            </p>
             <Link
               href="/about"
               className="mt-8 inline-flex h-12 items-center rounded-full bg-bone px-6 text-sm text-espresso"
@@ -359,7 +354,6 @@ export function StoreHome({
           </div>
         </div>
       </section>
-
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <h2 className="text-lg font-medium">{messages.home.payTitle}</h2>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -446,7 +440,7 @@ function CampaignCard({
           className="object-cover opacity-70 motion-safe:transition motion-safe:duration-500 motion-safe:group-hover:scale-105"
         />
       ) : null}
-      <span className="absolute inset-0 bg-gradient-to-t from-espresso via-espresso/30 to-transparent" />
+      <span className="absolute inset-0 bg-linear-to-t from-espresso via-espresso/30 to-transparent" />
       <span className="absolute inset-x-0 bottom-0 p-6">
         <span className="block text-2xl font-light">{title}</span>
         <span className="mt-2 block text-sm ">{body}</span>

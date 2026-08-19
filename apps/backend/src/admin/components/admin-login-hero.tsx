@@ -3,7 +3,7 @@ import { Heading, Text } from "@medusajs/ui"
 import { Link } from "react-router-dom"
 import { ForcePersian } from "./force-persian"
 import { adminLoginCopy } from "../login-copy"
-import logo from "../public/logo.png"
+import logo from "../assets/logo.png"
 
 export function AdminLoginHero() {
   useEffect(() => {

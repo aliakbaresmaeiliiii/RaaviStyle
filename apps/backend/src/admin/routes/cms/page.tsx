@@ -55,7 +55,7 @@ const CmsPage = () => {
         headerName: t("cms.handle"),
         valueFormatter: (params) => t(`cms.${params.value}`),
       },
-      { field: "title", headerName: t("cms.pageTitle") },
+      { field: "title", headerName: t("aliakbarEsmaeili") },
       {
         field: "image_url",
         headerName: t("cms.image"),

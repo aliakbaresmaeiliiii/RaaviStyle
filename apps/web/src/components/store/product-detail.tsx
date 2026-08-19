@@ -40,16 +40,40 @@ type Tab = "desc" | "extra" | "reviews" | "questions";
 const demoReviews = [
   { name: "نازنین", text: "سایز دقیق بود و روی تن خیلی راحت است.", rating: 5 },
   { name: "مریم", text: "پارچه خنک است؛ برای تابستان مناسب بود.", rating: 4 },
-  { name: "سارا", text: "رنگ کمی تیره‌تر از عکس درآمد، ولی کیفیت خوب است.", rating: 4 },
+  {
+    name: "سارا",
+    text: "رنگ کمی تیره‌تر از عکس درآمد، ولی کیفیت خوب است.",
+    rating: 4,
+  },
   { name: "الهام", text: "ارسال سریع بود و بسته‌بندی مرتب.", rating: 5 },
-  { name: "نیلوفر", text: "دوخت تمیز است و بعد از شستشو فرم را حفظ کرد.", rating: 5 },
+  {
+    name: "نیلوفر",
+    text: "دوخت تمیز است و بعد از شستشو فرم را حفظ کرد.",
+    rating: 5,
+  },
 ];
 
 const perks = [
-  { icon: "fa-truck-fast", title: messages.shop.perkShip, body: messages.shop.perkShipSub },
-  { icon: "fa-money-bill-wave", title: messages.shop.perkPay, body: messages.shop.perkPaySub },
-  { icon: "fa-rotate-left", title: messages.shop.perkReturn, body: messages.shop.perkReturnSub },
-  { icon: "fa-box", title: messages.shop.perkAuth, body: messages.shop.perkAuthSub },
+  {
+    icon: "fa-truck-fast",
+    title: messages.shop.perkShip,
+    body: messages.shop.perkShipSub,
+  },
+  {
+    icon: "fa-money-bill-wave",
+    title: messages.shop.perkPay,
+    body: messages.shop.perkPaySub,
+  },
+  {
+    icon: "fa-rotate-left",
+    title: messages.shop.perkReturn,
+    body: messages.shop.perkReturnSub,
+  },
+  {
+    icon: "fa-box",
+    title: messages.shop.perkAuth,
+    body: messages.shop.perkAuthSub,
+  },
 ];
 
 export function ProductDetail({
@@ -225,12 +249,18 @@ export function ProductDetail({
                             <FaIcon
                               icon="fa-check"
                               className={`text-xs ${
-                                isLightColor(value) ? "text-espresso" : "text-white"
+                                isLightColor(value)
+                                  ? "text-espresso"
+                                  : "text-white"
                               }`}
                             />
                           ) : null}
                         </span>
-                        <span className={selected ? "text-sm" : "text-[11px] text-muted"}>
+                        <span
+                          className={
+                            selected ? "text-sm" : "text-[11px] text-muted"
+                          }
+                        >
                           {colorLabel(value)}
                         </span>
                       </button>
@@ -275,7 +305,10 @@ export function ProductDetail({
                         }`}
                       >
                         {selected ? (
-                          <FaIcon icon="fa-check" className="text-xs text-shop" />
+                          <FaIcon
+                            icon="fa-check"
+                            className="text-xs text-shop"
+                          />
                         ) : null}
                         {value}
                       </button>
@@ -325,7 +358,9 @@ export function ProductDetail({
             >
               <div>
                 <p className="text-sm font-medium">{messages.shop.taraTitle}</p>
-                <p className="mt-1 text-xs text-white/80">{messages.shop.taraBody}</p>
+                <p className="mt-1 text-xs text-white/80">
+                  {messages.shop.taraBody}
+                </p>
               </div>
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/15">
                 <FaIcon icon="fa-arrow-left" />
@@ -338,8 +373,12 @@ export function ProductDetail({
               className="flex min-h-[4.5rem] items-center justify-between rounded-2xl bg-[#2f6fed] px-5 text-white"
             >
               <div>
-                <p className="text-sm font-medium">{messages.shop.snappTitle}</p>
-                <p className="mt-1 text-xs text-white/80">{messages.shop.snappBody}</p>
+                <p className="text-sm font-medium">
+                  {messages.shop.snappTitle}
+                </p>
+                <p className="mt-1 text-xs text-white/80">
+                  {messages.shop.snappBody}
+                </p>
               </div>
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/15">
                 <FaIcon icon="fa-arrow-left" />
@@ -519,7 +558,9 @@ export function ProductDetail({
           </section>
 
           <section className="mt-12">
-            <h2 className="mb-5 text-xl font-medium">{messages.shop.similar}</h2>
+            <h2 className="mb-5 text-xl font-medium">
+              {messages.shop.similar}
+            </h2>
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
               {similar.map((item) => (
                 <ProductCard key={item.id} product={item} />
@@ -559,13 +600,17 @@ export function ProductDetail({
                   {product.compareAt.toLocaleString("fa-IR")}
                 </p>
               ) : null}
-              <p className="text-2xl font-medium">{formatToman(product.price)}</p>
+              <p className="text-2xl font-medium">
+                {formatToman(product.price)}
+              </p>
               <p
                 className={`mt-2 text-xs ${
                   product.inStock ? "text-shop" : "text-muted"
                 }`}
               >
-                {product.inStock ? messages.shop.inStock : messages.shop.outOfStock}
+                {product.inStock
+                  ? messages.shop.inStock
+                  : messages.shop.outOfStock}
               </p>
             </div>
 

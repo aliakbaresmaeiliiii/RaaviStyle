@@ -9,9 +9,9 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="h-full overflow-hidden rounded-xl bg-surface shadow-card motion-safe:transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg">
       <Link href={product.href} className="flex h-full flex-col">
-        <div className="relative aspect-[4/5] overflow-hidden bg-soft">
+        <div className="relative aspect-4/5 overflow-hidden bg-soft">
           <Image
-            src={product.image}
+            src={product.image[0]}
             alt={product.title}
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 20vw"

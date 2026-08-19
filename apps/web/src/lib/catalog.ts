@@ -4,7 +4,7 @@ export type Product = {
   id: string;
   title: string;
   href: string;
-  image: string;
+  image: string[];
   price: number;
   compareAt?: number;
   tone: string;
@@ -32,16 +32,56 @@ const C = {
 };
 
 export const categories = [
-  { id: "bag", label: "بگ", icon: "fa-bag-shopping", href: "/products?cat=bag" },
-  { id: "half-bag", label: "نیم‌بگ", icon: "fa-shirt", href: "/products?cat=half-bag" },
-  { id: "mom", label: "مام‌استایل", icon: "fa-child", href: "/products?cat=mom" },
-  { id: "straight", label: "راسته", icon: "fa-grip-lines", href: "/products?cat=straight" },
-  { id: "wide", label: "وایدلگ", icon: "fa-arrows-left-right", href: "/products?cat=wide" },
+  {
+    id: "bag",
+    label: "بگ",
+    icon: "fa-bag-shopping",
+    href: "/products?cat=bag",
+  },
+  {
+    id: "half-bag",
+    label: "نیم‌بگ",
+    icon: "fa-shirt",
+    href: "/products?cat=half-bag",
+  },
+  {
+    id: "mom",
+    label: "مام‌استایل",
+    icon: "fa-child",
+    href: "/products?cat=mom",
+  },
+  {
+    id: "straight",
+    label: "راسته",
+    icon: "fa-grip-lines",
+    href: "/products?cat=straight",
+  },
+  {
+    id: "wide",
+    label: "وایدلگ",
+    icon: "fa-arrows-left-right",
+    href: "/products?cat=wide",
+  },
   { id: "cargo", label: "کارگو", icon: "fa-box", href: "/products?cat=cargo" },
-  { id: "skinny", label: "اسکینی", icon: "fa-person", href: "/products?cat=skinny" },
-  { id: "bootcut", label: "بوت‌کات", icon: "fa-shoe-prints", href: "/products?cat=bootcut" },
+  {
+    id: "skinny",
+    label: "اسکینی",
+    icon: "fa-person",
+    href: "/products?cat=skinny",
+  },
+  {
+    id: "bootcut",
+    label: "بوت‌کات",
+    icon: "fa-shoe-prints",
+    href: "/products?cat=bootcut",
+  },
   { id: "linen", label: "لینن", icon: "fa-leaf", href: "/products?cat=linen" },
-  { id: "formal", label: "رسمی", icon: "fa-user-tie", href: "/products?cat=formal" },
+  {
+    id: "formal",
+    label: "رسمی",
+    icon: "fa-user-tie",
+    href: "/products?cat=formal",
+  },
 ];
 
 export const colorFilters = [
@@ -59,49 +99,41 @@ export const colorFilters = [
   { id: "khaki", label: "خاکی", value: C.khaki },
 ];
 
-export const sizeFilters = ["۳۶", "۳۸", "۴۰", "۴۲", "۴۴", "۴۶", "۴۸", "۲۹", "۳۰", "۳۱", "۳۲", "۳۳", "۳۴"];
+export const sizeFilters = [
+  "۳۶",
+  "۳۸",
+  "۴۰",
+  "۴۲",
+  "۴۴",
+  "۴۶",
+  "۴۸",
+  "۲۹",
+  "۳۰",
+  "۳۱",
+  "۳۲",
+  "۳۳",
+  "۳۴",
+];
 
 const women = ["۳۶", "۳۸", "۴۰", "۴۲", "۴۴"];
 const jeans = ["۲۹", "۳۰", "۳۱", "۳۲", "۳۳", "۳۴"];
 
-const WIKI_CDN = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Laughing_woman_in_jean_jacket_%28Unsplash%29.jpg/960px-Laughing_woman_in_jean_jacket_%28Unsplash%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Close-Up_of_Denim_Jeans.jpg/960px-Close-Up_of_Denim_Jeans.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Skinny_Jeans_%28Unsplash%29.jpg/960px-Skinny_Jeans_%28Unsplash%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Young_woman_wearing_cargo_pants_and_crop_top_in_Madison%2C_Wisconsin_2021.jpg/960px-Young_woman_wearing_cargo_pants_and_crop_top_in_Madison%2C_Wisconsin_2021.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/a/ad/Young_woman_in_tank_top_and_high-rise_trousers%2C_Portugal_2010.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/2/2a/Young_woman_in_T-shirt_and_low-rise_cargo_pants%2C_tying_hair_back%2C_Italy_2010.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Flared_trousers%2C_fashion_Fortepan_78123.jpg/960px-Flared_trousers%2C_fashion_Fortepan_78123.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Blauwe_jeans%2C_skinny_jeans_model%2C_merk_Revers_Jeans%2C_maat_S36%2C_objectnr_86974-3%281%29.JPG/960px-Blauwe_jeans%2C_skinny_jeans_model%2C_merk_Revers_Jeans%2C_maat_S36%2C_objectnr_86974-3%281%29.JPG",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Blauwe_jeans%2C_skinny_jeans_model%2C_merk_Revers_Jeans%2C_maat_S36%2C_objectnr_86974-3%282%29.JPG/960px-Blauwe_jeans%2C_skinny_jeans_model%2C_merk_Revers_Jeans%2C_maat_S36%2C_objectnr_86974-3%282%29.JPG",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Fashion_Time%2C_Modeling_Photography_in_Tbilisi_-_Iranian_Model_-_Jorj_Barber_27.jpg/960px-Fashion_Time%2C_Modeling_Photography_in_Tbilisi_-_Iranian_Model_-_Jorj_Barber_27.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Fashion_Time%2C_Modeling_Photography_in_Tbilisi_-_Iranian_Model_-_Jorj_Barber_20.jpg/960px-Fashion_Time%2C_Modeling_Photography_in_Tbilisi_-_Iranian_Model_-_Jorj_Barber_20.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Mahsa_Ghazanfari%2C_Iranian_model_and_fashion_designer_%285%29.jpg/960px-Mahsa_Ghazanfari%2C_Iranian_model_and_fashion_designer_%285%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/6/67/Man_in_distressed_jeans%2C_grey_jacket_and_T-shirt_with_skull_design.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/e/e9/Man_wearing_green_shirt-jacket%2C_blue_jeans_and_desert_boots_01.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/7/7a/Suit.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Young_Male_in_Suit_holding_a_Camera.jpg/960px-Young_Male_in_Suit_holding_a_Camera.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Harajuku_Fashion_Street_Snap_%282017-09-16_15.12.57_by_Dick_Thomas_Johnson%29.jpg/960px-Harajuku_Fashion_Street_Snap_%282017-09-16_15.12.57_by_Dick_Thomas_Johnson%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Harajuku_Fashion_Street_Snap_%282018-01-08_19.59.25_by_Dick_Thomas_Johnson%29.jpg/960px-Harajuku_Fashion_Street_Snap_%282018-01-08_19.59.25_by_Dick_Thomas_Johnson%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Model_at_the_Spring_Fling_Fashion_Show_%28IMG_4785a%29_%285647149531%29.jpg/960px-Model_at_the_Spring_Fling_Fashion_Show_%28IMG_4785a%29_%285647149531%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Woman_with_bicycle.jpg/960px-Woman_with_bicycle.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/8/8b/Blond_woman_in_rail_tracks_03.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/e/e9/Young_woman_outdoors_in_marini%C3%A8re_and_leather_jacket.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Denim_Jeans_Pant_Display.JPG/960px-Denim_Jeans_Pant_Display.JPG",
-  "https://upload.wikimedia.org/wikipedia/commons/6/65/Jung_Eun-ji_at_the_High1_Balcony_Concert%2C_22_August_2020_03_%28cropped%3B_blue_skinny_jeans%29.jpg",
-]
+const PANTS_IMAGES = [
+  "/Pants/pant1.jpg",
+];
 
 function img(index: number) {
-  return WIKI_CDN[index]
+  debugger;
+  return PANTS_IMAGES[index];
 }
 
 export const products: Product[] = [
   {
     id: "1",
-    title: "شلوار بگ نخی",
-    href: "/products/bag-nakhi",
-    image: img(0),
-    price: 899000,
+    title: "شلوا",
+    href: "../../public/products/logo-dark.png",
+    image: [img(0)],
+    price: 200000,
     compareAt: 1190000,
     tone: C.cream,
     colors: [C.cream, C.white, C.black, C.olive],
@@ -112,8 +144,8 @@ export const products: Product[] = [
   {
     id: "2",
     title: "شلوار جین کاغذی کمری",
-    href: "/products/jean-kaghaz",
-    image: img(1),
+    href: "./public/products/logo-dark.png",
+    image: [img(1)],
     price: 1698000,
     compareAt: 1990000,
     tone: C.lightDenim,
@@ -125,8 +157,8 @@ export const products: Product[] = [
   {
     id: "3",
     title: "شلوار جین نیم‌بگ",
-    href: "/products/jean-nim-bag",
-    image: img(2),
+    href: "./public/products/logo-dark.png",
+    image: [img(2)],
     price: 2190000,
     compareAt: 2999000,
     tone: C.denim,
@@ -138,8 +170,8 @@ export const products: Product[] = [
   {
     id: "4",
     title: "شلوار راسته پایین‌کات کتان",
-    href: "/products/raste-payin-cut",
-    image: img(3),
+    href: "./public/products/logo-dark.png",
+    image: [img(3)],
     price: 1398000,
     tone: C.khaki,
     colors: [C.khaki, C.black, C.navy, C.beige],
@@ -150,8 +182,9 @@ export const products: Product[] = [
   {
     id: "5",
     title: "شلوار جین راسته جذب",
-    href: "/products/jean-raste-jazb",
-    image: img(4),
+    href: "./public/products/logo-dark.png",
+
+    image: [img(4)],
     price: 2898000,
     compareAt: 3290000,
     tone: C.charcoal,
@@ -163,8 +196,9 @@ export const products: Product[] = [
   {
     id: "6",
     title: "شلوار مام کتان",
-    href: "/products/mom-katan",
-    image: img(5),
+    href: "./public/products/logo-dark.png",
+
+    image: [img(5)],
     price: 799000,
     compareAt: 990000,
     tone: C.beige,
@@ -177,7 +211,7 @@ export const products: Product[] = [
     id: "7",
     title: "شلوار لینن پنبه",
     href: "/products/linen-panbe",
-    image: img(6),
+    image: [img(6)],
     price: 1100000,
     tone: C.white,
     colors: [C.white, C.cream, C.olive, C.black],
@@ -189,7 +223,7 @@ export const products: Product[] = [
     id: "8",
     title: "شلوار کرپ بگ ریزشی",
     href: "/products/crepe-bag",
-    image: img(7),
+    image: [img(7)],
     price: 1900000,
     compareAt: 2250000,
     tone: C.black,
@@ -202,7 +236,7 @@ export const products: Product[] = [
     id: "9",
     title: "شلوار کتان فول‌بگ",
     href: "/products/katan-full-bag",
-    image: img(8),
+    image: [img(8)],
     price: 1690000,
     tone: C.olive,
     colors: [C.olive, C.khaki, C.black, C.beige],
@@ -214,7 +248,7 @@ export const products: Product[] = [
     id: "10",
     title: "شلوار جین وایدلگ",
     href: "/products/jean-wide-leg",
-    image: img(9),
+    image: [img(9)],
     price: 1498000,
     compareAt: 1790000,
     tone: C.denim,
@@ -227,7 +261,7 @@ export const products: Product[] = [
     id: "11",
     title: "شلوار کارگو کتان",
     href: "/products/cargo-katan",
-    image: img(10),
+    image: [img(10)],
     price: 2750000,
     compareAt: 3582000,
     tone: C.khaki,
@@ -240,7 +274,7 @@ export const products: Product[] = [
     id: "12",
     title: "شلوار جین مام‌استایل",
     href: "/products/jean-mom-style",
-    image: img(11),
+    image: [img(11)],
     price: 1485000,
     compareAt: 1980000,
     tone: C.lightDenim,
@@ -253,7 +287,7 @@ export const products: Product[] = [
     id: "13",
     title: "شلوار اسکینی جین",
     href: "/products/skinny-jean",
-    image: img(12),
+    image: [img(12)],
     price: 1290000,
     tone: C.black,
     colors: [C.black, C.denim, C.charcoal],
@@ -265,7 +299,7 @@ export const products: Product[] = [
     id: "14",
     title: "شلوار بوت‌کات جین",
     href: "/products/bootcut-jean",
-    image: img(13),
+    image: [img(13)],
     price: 1590000,
     tone: C.denim,
     colors: [C.denim, C.black, C.navy],
@@ -277,7 +311,7 @@ export const products: Product[] = [
     id: "15",
     title: "شلوار گاباردین رسمی رگولار",
     href: "/products/gabardine-regular",
-    image: img(14),
+    image: [img(14)],
     price: 3780000,
     tone: C.charcoal,
     colors: [C.charcoal, C.navy, C.black, C.gray],
@@ -289,7 +323,7 @@ export const products: Product[] = [
     id: "16",
     title: "شلوار پنبه گلکسی",
     href: "/products/panbe-galaxy",
-    image: img(15),
+    image: [img(15)],
     price: 1498000,
     tone: C.mocha,
     colors: [C.mocha, C.cream, C.black, C.olive],
@@ -301,7 +335,7 @@ export const products: Product[] = [
     id: "17",
     title: "شلوار سیلک راسته",
     href: "/products/silk-raste",
-    image: img(16),
+    image: [img(16)],
     price: 1690000,
     tone: C.navy,
     colors: [C.navy, C.black, C.cream, C.brown],
@@ -313,7 +347,7 @@ export const products: Product[] = [
     id: "18",
     title: "شلوار سیلک کمردار",
     href: "/products/silk-kamar",
-    image: img(17),
+    image: [img(17)],
     price: 1798000,
     tone: C.black,
     colors: [C.black, C.navy, C.brown],
@@ -325,7 +359,7 @@ export const products: Product[] = [
     id: "19",
     title: "شلوار شافل مازراتی",
     href: "/products/shuffle-mazarati",
-    image: img(18),
+    image: [img(18)],
     price: 1198000,
     tone: C.gray,
     colors: [C.gray, C.black, C.navy, C.olive],
@@ -337,7 +371,7 @@ export const products: Product[] = [
     id: "20",
     title: "شلوار جین مام کارگو",
     href: "/products/mom-cargo-jean",
-    image: img(19),
+    image: [img(19)],
     price: 2750000,
     compareAt: 5500000,
     tone: C.denim,
@@ -350,7 +384,7 @@ export const products: Product[] = [
     id: "21",
     title: "شلوار لینن بغل‌کش",
     href: "/products/linen-baghal-kesh",
-    image: img(20),
+    image: [img(20)],
     price: 1250000,
     tone: C.beige,
     colors: [C.beige, C.white, C.olive, C.black],
@@ -362,7 +396,7 @@ export const products: Product[] = [
     id: "22",
     title: "شلوار مام‌فیت کتان",
     href: "/products/mom-fit-katan",
-    image: img(21),
+    image: [img(21)],
     price: 998000,
     compareAt: 1599000,
     tone: C.stone,
@@ -375,7 +409,7 @@ export const products: Product[] = [
     id: "23",
     title: "شلوار نیم‌بگ اوریب",
     href: "/products/nim-bag-orib",
-    image: img(22),
+    image: [img(22)],
     price: 1598000,
     tone: C.cream,
     colors: [C.cream, C.black, C.navy, C.brown],
@@ -387,7 +421,7 @@ export const products: Product[] = [
     id: "24",
     title: "شلوار پارچه‌ای راسته",
     href: "/products/parche-raste",
-    image: img(23),
+    image: [img(23)],
     price: 1290000,
     tone: C.black,
     colors: [C.black, C.navy, C.gray, C.cream],
@@ -400,45 +434,48 @@ export const products: Product[] = [
 export const PRICE_MAX = 6000000;
 export type CategoryLabelKey = keyof typeof messages.categories;
 export type CatalogCategory = {
-  id: string
+  id: string;
   labelKey: CategoryLabelKey;
-  icon: string
-  href: string
-}
+  icon: string;
+  href: string;
+};
 
 export type CatalogColorFilter = {
-  id: string
-  label: string
-  value: string
-}
+  id: string;
+  label: string;
+  value: string;
+};
 
 export type CatalogFilters = {
-  categories: CatalogCategory[]
-  colors: CatalogColorFilter[]
-  sizes: string[]
-  priceMax: number
-}
+  categories: CatalogCategory[];
+  colors: CatalogColorFilter[];
+  sizes: string[];
+  priceMax: number;
+};
 
 export const defaultFilters: CatalogFilters = {
-  categories: categories.map((category) => ({
-    ...category,
-    labelKey: category.label as CategoryLabelKey,
-  }) as CatalogCategory),
+  categories: categories.map(
+    (category) =>
+      ({
+        ...category,
+        labelKey: category.label as CategoryLabelKey,
+      }) as CatalogCategory,
+  ),
   colors: colorFilters,
   sizes: sizeFilters,
   priceMax: PRICE_MAX,
-}
+};
 
 const CATEGORY_ALIASES: Record<string, string> = {
   bag: "bag",
   shirts: "bag",
   بگ: "bag",
   "half-bag": "half-bag",
-  "نیم‌بگ": "half-bag",
+  نیم‌بگ: "half-bag",
   "نیم-بگ": "half-bag",
   mom: "mom",
   sweatshirts: "mom",
-  "مام‌استایل": "mom",
+  مام‌استایل: "mom",
   "مام-استایل": "mom",
   straight: "straight",
   merch: "straight",
@@ -451,12 +488,12 @@ const CATEGORY_ALIASES: Record<string, string> = {
   skinny: "skinny",
   اسکینی: "skinny",
   bootcut: "bootcut",
-  "بوت‌کات": "bootcut",
+  بوت‌کات: "bootcut",
   linen: "linen",
   لینن: "linen",
   formal: "formal",
   رسمی: "formal",
-}
+};
 
 const CATEGORY_ICONS: Record<string, string> = {
   bag: "fa-bag-shopping",
@@ -469,27 +506,29 @@ const CATEGORY_ICONS: Record<string, string> = {
   bootcut: "fa-shoe-prints",
   linen: "fa-leaf",
   formal: "fa-user-tie",
-}
+};
 
 export function categoryKey(value: string) {
-  return CATEGORY_ALIASES[value] || CATEGORY_ALIASES[value.toLowerCase()] || value
+  return (
+    CATEGORY_ALIASES[value] || CATEGORY_ALIASES[value.toLowerCase()] || value
+  );
 }
 
 export function categoryIcon(id: string, label = "") {
-  const key = categoryKey(id)
+  const key = categoryKey(id);
   return (
     CATEGORY_ICONS[key] ||
     CATEGORY_ICONS[id] ||
     CATEGORY_ICONS[label] ||
     "fa-shirt"
-  )
+  );
 }
 
 export function categoriesMatch(left: string, right: string) {
   if (!left || !right) {
-    return false
+    return false;
   }
-  return left === right || categoryKey(left) === categoryKey(right)
+  return left === right || categoryKey(left) === categoryKey(right);
 }
 
 export function formatToman(value: number): string {
@@ -508,21 +547,27 @@ export function colorLabel(value: string): string {
   return colorFilters.find((item) => item.value === value)?.label ?? value;
 }
 
-export function categoryLabel(id: string, list: CatalogCategory[] = categories.map((category) => ({
-  ...category,
-  labelKey: category.label as CategoryLabelKey,
-}) as CatalogCategory)): string {
+export function categoryLabel(
+  id: string,
+  list: CatalogCategory[] = categories.map(
+    (category) =>
+      ({
+        ...category,
+        labelKey: category.label as CategoryLabelKey,
+      }) as CatalogCategory,
+  ),
+): string {
   return (
-    list.find((item) => item.id === id || categoriesMatch(item.id, id))?.labelKey ??
-    id
-  )
+    list.find((item) => item.id === id || categoriesMatch(item.id, id))
+      ?.labelKey ?? id
+  );
 }
 
 export function colorLabelFrom(
   value: string,
   list: CatalogColorFilter[] = colorFilters,
 ): string {
-  return list.find((item) => item.value === value)?.label ?? colorLabel(value)
+  return list.find((item) => item.value === value)?.label ?? colorLabel(value);
 }
 
 export function similarProducts(
@@ -582,12 +627,12 @@ export function productSku(product: Product): string {
 
 export function productImages(product: Product): string[] {
   const index = Number(product.id) - 1;
-  const count = WIKI_CDN.length;
+  const count = PANTS_IMAGES.length;
 
   return [
-    WIKI_CDN[index % count],
-    WIKI_CDN[(index + 8) % count],
-    WIKI_CDN[(index + 16) % count],
+    PANTS_IMAGES[index % count],
+    PANTS_IMAGES[(index + 8) % count],
+    PANTS_IMAGES[(index + 16) % count],
   ];
 }
 
