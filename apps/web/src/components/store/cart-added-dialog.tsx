@@ -84,7 +84,7 @@ export function CartAddedDialog({
               className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-soft"
             >
               <Image
-                src={product.image}
+                src={product.image[0]}
                 alt={product.title}
                 fill
                 sizes="80px"

@@ -394,7 +394,7 @@ export function CheckoutView({
                 <li key={`${item.productId}-${item.color}-${item.size}`} className="flex gap-3">
                   <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-soft">
                     <Image
-                      src={item.product.image}
+                      src={item.product.image[0]}
                       alt={item.product.title}
                       fill
                       sizes="56px"

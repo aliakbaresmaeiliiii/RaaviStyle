@@ -123,15 +123,14 @@ const PANTS_IMAGES = [
 ];
 
 function img(index: number) {
-  debugger;
-  return PANTS_IMAGES[index];
+  return PANTS_IMAGES[index % PANTS_IMAGES.length];
 }
 
 export const products: Product[] = [
   {
     id: "1",
     title: "شلوا",
-    href: "../../public/products/logo-dark.png",
+    href: "/products/shalva",
     image: [img(0)],
     price: 200000,
     compareAt: 1190000,
@@ -144,7 +143,7 @@ export const products: Product[] = [
   {
     id: "2",
     title: "شلوار جین کاغذی کمری",
-    href: "./public/products/logo-dark.png",
+    href: "/products/jean-paper-waist",
     image: [img(1)],
     price: 1698000,
     compareAt: 1990000,
@@ -157,7 +156,7 @@ export const products: Product[] = [
   {
     id: "3",
     title: "شلوار جین نیم‌بگ",
-    href: "./public/products/logo-dark.png",
+    href: "/products/jean-half-bag",
     image: [img(2)],
     price: 2190000,
     compareAt: 2999000,
@@ -170,7 +169,7 @@ export const products: Product[] = [
   {
     id: "4",
     title: "شلوار راسته پایین‌کات کتان",
-    href: "./public/products/logo-dark.png",
+    href: "/products/raste-down-cut-katan",
     image: [img(3)],
     price: 1398000,
     tone: C.khaki,
@@ -182,8 +181,7 @@ export const products: Product[] = [
   {
     id: "5",
     title: "شلوار جین راسته جذب",
-    href: "./public/products/logo-dark.png",
-
+    href: "/products/jean-raste-jazb",
     image: [img(4)],
     price: 2898000,
     compareAt: 3290000,
@@ -196,8 +194,7 @@ export const products: Product[] = [
   {
     id: "6",
     title: "شلوار مام کتان",
-    href: "./public/products/logo-dark.png",
-
+    href: "/products/mom-katan",
     image: [img(5)],
     price: 799000,
     compareAt: 990000,

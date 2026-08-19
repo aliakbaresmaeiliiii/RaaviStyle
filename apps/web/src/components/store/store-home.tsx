@@ -78,7 +78,7 @@ export function StoreHome({
 }: {
   products: Product[];
   cms?: SitePage | null;
-  href: string;
+  href?: string;
 }) {
   function findByCategory(id: string) {
     return productForCategory(products, id);
@@ -88,7 +88,6 @@ export function StoreHome({
     .map((id) => {
       const category = categories.find((item) => item.id === id);
       const product = findByCategory(id);
-      debugger;
       if (!category || !product) {
         return null;
       }
@@ -121,12 +120,13 @@ export function StoreHome({
   );
 
   const heroImages = uniqueImages([
-    cms?.image_url,
+    ...(cms?.images ?? []),
+    ...(cms?.image_url ? [cms.image_url] : []),
     findByCategory("bag")?.image?.[0],
-    findByCategory("cargo")?.image[0],
-    products[0]?.image[0],
-    products[1]?.image[0],
-  ]).slice(0, 2);
+    findByCategory("cargo")?.image?.[0],
+    products[0]?.image?.[0],
+    products[1]?.image?.[0],
+  ]).slice(0, 5);
 
   const linenImage = findByCategory("linen")?.image[0] ?? products[2]?.image[0];
 
@@ -136,6 +136,8 @@ export function StoreHome({
   const popular = products.filter((product) => product.inStock).slice(0, 8);
   const newest = products.slice(0, 8);
   const title = cms?.title || messages.home.title;
+  const body =
+    cms?.body || "بهترین محصولات با تخفیف‌های ویژه";
 
   return (
     <main>
@@ -143,7 +145,7 @@ export function StoreHome({
         <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[6fr_920px] lg:gap-12 lg:px-8">
           {/* LEFT: Slider */}
           <div className="order-2 min-w-0 lg:order-2">
-            <HeroSlider products={products} title="پیشنهاد ویژه" />
+            <HeroSlider images={heroImages} alt={title} />
           </div>
 
           {/* RIGHT: Text */}
@@ -157,7 +159,7 @@ export function StoreHome({
             </h2>
 
             <p className="mx-auto mt-3 max-w-[220px] text-sm leading-7 text-[#737873] lg:mx-0">
-              بهترین محصولات با تخفیف‌های ویژه
+              {body}
             </p>
 
             <Link

@@ -5,6 +5,7 @@ export type SitePage = {
   title: string;
   body: string;
   image_url: string | null;
+  images?: string[] | null;
 };
 
 function backendUrl() {
@@ -66,9 +67,16 @@ async function fetchSitePage(handle: string): Promise<SitePage | null> {
         continue;
       }
 
+      const sources = page.images
+        ? page.images
+        : page.image_url
+          ? [page.image_url]
+          : [];
+
       return {
         ...page,
         image_url: absolutize(page.image_url),
+        images: sources.map((source) => absolutize(source)).filter((source): source is string => Boolean(source)),
       };
     } catch {
       continue;

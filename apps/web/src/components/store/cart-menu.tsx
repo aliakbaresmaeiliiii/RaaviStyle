@@ -49,7 +49,7 @@ export function CartMenu() {
                           className="relative block size-16 overflow-hidden rounded-lg bg-soft"
                         >
                           <Image
-                            src={item.product.image}
+                            src={item.product.image[0]}
                             alt={item.product.title}
                             fill
                             sizes="64px"

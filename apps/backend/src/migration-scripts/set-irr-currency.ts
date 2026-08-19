@@ -49,7 +49,17 @@ export default async function set_irr_currency({
 
   const [irr] = await currencyModule.listCurrencies({ code: [IRR] })
   if (!irr) {
-    await currencyModule.createCurrencies([
+    await (
+      currencyModule as unknown as {
+        createCurrencies: (data: Array<{
+          code: string
+          symbol: string
+          symbol_native: string
+          name: string
+          decimal_digits: number
+        }>) => Promise<unknown>
+      }
+    ).createCurrencies([
       {
         code: IRR,
         symbol: "﷼",
@@ -103,10 +113,15 @@ export default async function set_irr_currency({
 
   const variantUpdates = (variants ?? [])
     .map((variant) => {
-      const prices = (variant.prices ?? []) as Array<{
-        amount?: number | null
-        currency_code?: string | null
-      }>
+      const prices =
+        (
+          variant as unknown as {
+            prices?: Array<{
+              amount?: number | null
+              currency_code?: string | null
+            }>
+          }
+        ).prices ?? []
       if (prices.some((price) => price.currency_code?.toLowerCase() === IRR)) {
         return null
       }

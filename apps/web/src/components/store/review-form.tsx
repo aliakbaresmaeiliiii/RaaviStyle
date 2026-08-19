@@ -64,17 +64,17 @@ export function ReviewFormDialog({
     rating?: string
     text?: string
   }>({})
+  const [wasOpen, setWasOpen] = useState(false)
 
-  useEffect(() => {
-    if (!open) {
-      return
-    }
-
+  if (open && !wasOpen) {
+    setWasOpen(true)
     setName(existing?.name || defaultName)
     setRating(existing?.rating ?? 0)
     setText(existing?.text ?? "")
     setErrors({})
-  }, [open, product.id, defaultName, existing?.name, existing?.rating, existing?.text])
+  } else if (!open && wasOpen) {
+    setWasOpen(false)
+  }
 
   useEffect(() => {
     if (!open) {
@@ -94,7 +94,6 @@ export function ReviewFormDialog({
   function onSubmit(event: FormEvent) {
     event.preventDefault()
     const next: typeof errors = {}
-   debugger
     if (name.trim().length < 2) {
       next.name = messages.pay.required
     }

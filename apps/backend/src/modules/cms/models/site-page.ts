@@ -6,6 +6,7 @@ const SitePage = model.define("site_page", {
   title: model.text(),
   body: model.text().default(""),
   image_url: model.text().nullable(),
+  images: model.array().nullable(),
 })
 
 export default SitePage

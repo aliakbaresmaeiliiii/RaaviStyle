@@ -102,13 +102,13 @@ export function AboutView({
         }));
 
   const storyImage =
-    cms?.image_url || featuredModels[0]?.product.image || products[0]?.image;
+    cms?.image_url || featuredModels[0]?.product.image[0] || products[0]?.image[0];
   const stackImages = [
     cms?.image_url,
-    productForCategory(products, "wide")?.image,
-    productForCategory(products, "skinny")?.image,
-    products[0]?.image,
-    products[1]?.image,
+    productForCategory(products, "wide")?.image?.[0],
+    productForCategory(products, "skinny")?.image?.[0],
+    products[0]?.image?.[0],
+    products[1]?.image?.[0],
   ].filter((src, index, list): src is string =>
     Boolean(src) && list.indexOf(src) === index,
   ).slice(0, 2);
@@ -272,7 +272,7 @@ export function AboutView({
                 }`}
               >
                 <Image
-                  src={item.product.image}
+                  src={item.product.image[0]}
                   alt={item.category.label}
                   fill
                   sizes={

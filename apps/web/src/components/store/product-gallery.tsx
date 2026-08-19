@@ -27,11 +27,17 @@ export function ProductGallery({
   colorName,
 }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
-  const [wishlist, setWishlist] = useState(false);
+  const [wishlist, setWishlist] = useState(() => isWishlisted(productId));
+  const [prevProductId, setPrevProductId] = useState(productId);
   const [compare, setCompare] = useState(false);
   const [copied, setCopied] = useState(false);
   const [zoom, setZoom] = useState(false);
   const current = images[index] ?? images[0];
+
+  if (prevProductId !== productId) {
+    setPrevProductId(productId);
+    setWishlist(isWishlisted(productId));
+  }
 
   const go = useCallback(
     (step: number) => {
@@ -55,10 +61,6 @@ export function ProductGallery({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [go]);
-
-  useEffect(() => {
-    setWishlist(isWishlisted(productId));
-  }, [productId]);
 
   async function onAction(id: (typeof actions)[number]["id"]) {
     if (id === "wishlist") {

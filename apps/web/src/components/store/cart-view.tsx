@@ -89,7 +89,7 @@ export function CartView() {
                       className="relative size-28 shrink-0 overflow-hidden rounded-xl bg-soft sm:h-36 sm:w-28"
                     >
                       <Image
-                        src={item.product.image}
+                        src={item.product.image[0]}
                         alt={item.product.title}
                         fill
                         sizes="112px"

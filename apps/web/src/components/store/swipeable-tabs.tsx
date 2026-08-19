@@ -95,6 +95,9 @@ export function SwipeableTabs({
       if (programmaticRef.current) {
         return
       }
+      if (!scroller) {
+        return
+      }
 
       const next = nearestPanelIndex(scroller, panelRefs.current)
       if (next === index) {

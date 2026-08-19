@@ -539,7 +539,7 @@ export function ProductDetail({
                           id: product.id,
                           title: product.title,
                           href: product.href,
-                          image: product.image,
+                          image: product.image[0],
                         },
                         {
                           name: reviewerName || "کاربر",
@@ -717,7 +717,7 @@ export function ProductDetail({
           id: product.id,
           title: product.title,
           href: product.href,
-          image: product.image,
+          image: product.image[0],
         }}
         defaultName={reviewerName}
         open={reviewOpen}

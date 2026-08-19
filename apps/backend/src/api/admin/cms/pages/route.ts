@@ -10,6 +10,7 @@ type UpsertPageBody = {
   title?: string
   body?: string
   image_url?: string | null
+  images?: string[] | null
 }
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -38,6 +39,7 @@ export async function POST(
       title,
       body: body.body ?? "",
       image_url: body.image_url ?? null,
+      images: Array.isArray(body.images) ? body.images : undefined,
     },
   })
 

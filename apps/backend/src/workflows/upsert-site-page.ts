@@ -30,6 +30,7 @@ type PageInput = {
   title: string
   body: string
   image_url?: string | null
+  images?: string[] | null
 }
 
 const listPagesStep = createStep(
@@ -57,6 +58,12 @@ const upsertPageStep = createStep(
     )
     const current = existing.find((page) => page.handle === input.handle)
     const imageUrl = input.image_url || null
+    const images =
+      input.images !== undefined
+        ? input.images
+        : input.image_url
+          ? [input.image_url]
+          : undefined
 
     if (current) {
       await cms.updateSitePages({
@@ -64,6 +71,7 @@ const upsertPageStep = createStep(
         title: input.title,
         body: input.body,
         image_url: imageUrl,
+        ...(images !== undefined ? { images } : {}),
       })
       const fresh = await cms.retrieveSitePage(current.id)
       return new StepResponse(fresh)
@@ -74,6 +82,7 @@ const upsertPageStep = createStep(
       title: input.title,
       body: input.body,
       image_url: imageUrl,
+      ...(images !== undefined ? { images } : {}),
     })
     return new StepResponse(created)
   }

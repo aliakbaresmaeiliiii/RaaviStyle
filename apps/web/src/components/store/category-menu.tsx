@@ -76,7 +76,7 @@ export function CategoryMenu() {
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-soft"
             >
               <FaIcon icon={category.icon} className="w-4 text-muted" />
-              {category.label}
+              {messages.categories[category.labelKey]}
             </Link>
           ))}
         </div>

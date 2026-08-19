@@ -95,7 +95,7 @@ export function snapshotItems(items: CartItem[]): StoredOrderItem[] {
     productId: item.productId,
     title: item.product.title,
     href: item.product.href,
-    image: item.product.image,
+    image: item.product.image[0],
     color: item.color,
     colorName: colorLabel(item.color),
     size: item.size,

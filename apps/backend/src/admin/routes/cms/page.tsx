@@ -1,7 +1,7 @@
-import { ForcePersian } from "../../components/force-persian";
-import { AdminGrid } from "../../components/admin-grid";
-import { defineRouteConfig } from "@medusajs/admin-sdk";
-import { PencilSquare } from "@medusajs/icons";
+import { ForcePersian } from "../../components/force-persian"
+import { AdminGrid } from "../../components/admin-grid"
+import { defineRouteConfig } from "@medusajs/admin-sdk"
+import { PencilSquare } from "@medusajs/icons"
 import {
   Button,
   Container,
@@ -11,42 +11,44 @@ import {
   Text,
   Textarea,
   toast,
-} from "@medusajs/ui";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import type { ColDef } from "ag-grid-community";
+} from "@medusajs/ui"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import type { ColDef } from "ag-grid-community"
 
 type SitePage = {
-  id: string;
-  handle: string;
-  title: string;
-  body: string;
-  image_url: string | null;
-};
+  id: string
+  handle: string
+  title: string
+  body: string
+  image_url: string | null
+  images?: string[] | null
+}
 
 const CmsPage = () => {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [handle, setHandle] = useState<string>("home");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const [handle, setHandle] = useState<string>("home")
+  const [title, setTitle] = useState("")
+  const [body, setBody] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
+  const [images, setImages] = useState<string[]>([])
 
   const { data, isLoading } = useQuery({
     queryKey: ["cms-pages"],
     queryFn: async () => {
       const response = await fetch("/admin/cms/pages", {
         credentials: "include",
-      });
+      })
       if (!response.ok) {
-        throw new Error("Failed to load pages");
+        throw new Error("Failed to load pages")
       }
-      return (await response.json()) as { pages: SitePage[] };
+      return (await response.json()) as { pages: SitePage[] }
     },
-  });
+  })
 
-  const page = data?.pages.find((item) => item.handle === handle);
+  const page = data?.pages.find((item) => item.handle === handle)
 
   const pageColumns = useMemo<ColDef<SitePage>[]>(
     () => [
@@ -55,24 +57,31 @@ const CmsPage = () => {
         headerName: t("cms.handle"),
         valueFormatter: (params) => t(`cms.${params.value}`),
       },
-      { field: "title", headerName: t("aliakbarEsmaeili") },
+      { field: "title", headerName: t("cms.pageTitle") },
       {
         field: "image_url",
         headerName: t("cms.image"),
         valueFormatter: (params) => (params.value ? "دارد" : "ندارد"),
       },
     ],
-    [t],
-  );
+    [t]
+  )
 
   useEffect(() => {
     if (!page) {
-      return;
+      return
     }
-    setTitle(page.title);
-    setBody(page.body);
-    setImageUrl(page.image_url ?? "");
-  }, [page]);
+    setTitle(page.title)
+    setBody(page.body)
+    setImageUrl(page.image_url ?? "")
+    setImages(
+      page.images?.length
+        ? page.images
+        : page.image_url
+          ? [page.image_url]
+          : [],
+    )
+  }, [page])
 
   const save = useMutation({
     mutationFn: async () => {
@@ -84,42 +93,44 @@ const CmsPage = () => {
           handle,
           title,
           body,
-          image_url: imageUrl || null,
+          image_url: images.length ? imageUrl || null : null,
+          images,
         }),
-      });
+      })
       if (!response.ok) {
-        throw new Error("Failed to save");
+        throw new Error("Failed to save")
       }
-      return response.json();
+      return response.json()
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["cms-pages"] });
-      toast.success(t("cms.saved"));
+      await queryClient.invalidateQueries({ queryKey: ["cms-pages"] })
+      toast.success(t("cms.saved"))
     },
     onError: () => {
-      toast.error(t("cms.save"));
+      toast.error(t("cms.save"))
     },
-  });
+  })
 
   async function onUpload(file: File) {
-    const payload = new FormData();
-    payload.append("files", file);
+    const payload = new FormData()
+    payload.append("files", file)
     const response = await fetch("/admin/uploads", {
       method: "POST",
       credentials: "include",
       body: payload,
-    });
+    })
     if (!response.ok) {
-      toast.error(t("cms.upload"));
-      return;
+      toast.error(t("cms.upload"))
+      return
     }
     const json = (await response.json()) as {
-      files?: Array<{ url: string }>;
-      uploads?: Array<{ url: string }>;
-    };
-    const url = json.files?.[0]?.url ?? json.uploads?.[0]?.url;
+      files?: Array<{ url: string }>
+      uploads?: Array<{ url: string }>
+    }
+    const url = json.files?.[0]?.url ?? json.uploads?.[0]?.url
     if (url) {
-      setImageUrl(url);
+      setImageUrl(url)
+      setImages((current) => [...current, url])
     }
   }
 
@@ -139,7 +150,7 @@ const CmsPage = () => {
           height={220}
           onRowClicked={(event) => {
             if (event.data?.handle) {
-              setHandle(event.data.handle);
+              setHandle(event.data.handle)
             }
           }}
         />
@@ -148,10 +159,7 @@ const CmsPage = () => {
         </Text>
         <div>
           <Label>{t("cms.pageTitle")}</Label>
-          <Input
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
+          <Input value={title} onChange={(event) => setTitle(event.target.value)} />
         </div>
         <div>
           <Label>{t("cms.body")}</Label>
@@ -167,24 +175,58 @@ const CmsPage = () => {
             value={imageUrl}
             onChange={(event) => setImageUrl(event.target.value)}
           />
-          <input
-            className="mt-2"
-            type="file"
-            accept="image/*"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) {
-                void onUpload(file);
-              }
-            }}
-          />
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt=""
-              className="mt-3 max-h-40 rounded-md object-cover"
+          <div className="mt-2 flex items-center gap-2">
+            <input
+              className="flex-1 text-sm"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+                if (file) {
+                  void onUpload(file)
+                }
+              }}
             />
-          ) : null}
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => setImages([])}
+            >
+              {t("cms.clearImages")}
+            </Button>
+          </div>
+          {images.length ? (
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              {images.map((url, index) => (
+                <div
+                  key={`${url}-${index}`}
+                  className="group relative overflow-hidden rounded-md border border-ui-border-base"
+                >
+                  <img
+                    src={url}
+                    alt=""
+                    className="h-28 w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-ui-bg-base text-sm shadow-elevation-card-rest transition hover:bg-ui-bg-base-hover"
+                    onClick={() =>
+                      setImages((current) =>
+                        current.filter((item) => item !== url),
+                      )
+                    }
+                    title={t("cms.removeImage")}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Text size="small" className="mt-2 text-ui-fg-muted">
+              {t("cms.imagesEmpty")}
+            </Text>
+          )}
         </div>
       </div>
       <div className="px-6 py-4 flex justify-end border-t border-ui-border-base">
@@ -196,12 +238,12 @@ const CmsPage = () => {
         </Button>
       </div>
     </Container>
-  );
-};
+  )
+}
 
 export const config = defineRouteConfig({
   label: "محتوای سایت",
   icon: PencilSquare,
-});
+})
 
-export default CmsPage;
+export default CmsPage

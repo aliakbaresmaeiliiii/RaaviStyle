@@ -130,14 +130,20 @@ export function mapMedusaProduct(product: MedusaProduct): Product | null {
   const original = variant?.calculated_price?.original_amount
   const colors = optionValues(product, COLOR_TITLES).map(toHex)
   const sizes = optionValues(product, SIZE_TITLES)
-  const image =
-    product.thumbnail || product.images?.[0]?.url || "/logo-mark.svg"
+  const images = Array.from(
+    new Set(
+      [
+        product.thumbnail,
+        ...(product.images ?? []).map((item) => item.url),
+      ].filter((url): url is string => Boolean(url)),
+    ),
+  )
 
   return {
     id: product.id,
     title: product.title || product.handle,
     href: `/products/${product.handle}`,
-    image,
+    image: images.length ? images : ["/logo-mark.svg"],
     price,
     compareAt:
       typeof original === "number" && original > price
@@ -173,7 +179,7 @@ function mapApiFilters(filters?: CatalogApiFilters): CatalogFilters | null {
       }
       return {
         id,
-        label,
+        labelKey: label as CatalogFilters["categories"][number]["labelKey"],
         icon: categoryIcon(id, label),
         href: `/products?cat=${encodeURIComponent(id)}`,
       }
