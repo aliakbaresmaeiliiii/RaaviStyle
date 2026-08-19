@@ -1,7 +1,7 @@
-import { ForcePersian } from "../../components/force-persian"
-import { AdminGrid } from "../../components/admin-grid"
-import { defineRouteConfig } from "@medusajs/admin-sdk"
-import { PencilSquare } from "@medusajs/icons"
+import { ForcePersian } from "../../components/force-persian";
+import { AdminGrid } from "../../components/admin-grid";
+import { defineRouteConfig } from "@medusajs/admin-sdk";
+import { PencilSquare } from "@medusajs/icons";
 import {
   Button,
   Container,
@@ -11,42 +11,42 @@ import {
   Text,
   Textarea,
   toast,
-} from "@medusajs/ui"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useMemo, useState } from "react"
-import { useTranslation } from "react-i18next"
-import type { ColDef } from "ag-grid-community"
+} from "@medusajs/ui";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import type { ColDef } from "ag-grid-community";
 
 type SitePage = {
-  id: string
-  handle: string
-  title: string
-  body: string
-  image_url: string | null
-}
+  id: string;
+  handle: string;
+  title: string;
+  body: string;
+  image_url: string | null;
+};
 
 const CmsPage = () => {
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
-  const [handle, setHandle] = useState<string>("home")
-  const [title, setTitle] = useState("")
-  const [body, setBody] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [handle, setHandle] = useState<string>("home");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["cms-pages"],
     queryFn: async () => {
       const response = await fetch("/admin/cms/pages", {
         credentials: "include",
-      })
+      });
       if (!response.ok) {
-        throw new Error("Failed to load pages")
+        throw new Error("Failed to load pages");
       }
-      return (await response.json()) as { pages: SitePage[] }
+      return (await response.json()) as { pages: SitePage[] };
     },
-  })
+  });
 
-  const page = data?.pages.find((item) => item.handle === handle)
+  const page = data?.pages.find((item) => item.handle === handle);
 
   const pageColumns = useMemo<ColDef<SitePage>[]>(
     () => [
@@ -62,17 +62,17 @@ const CmsPage = () => {
         valueFormatter: (params) => (params.value ? "دارد" : "ندارد"),
       },
     ],
-    [t]
-  )
+    [t],
+  );
 
   useEffect(() => {
     if (!page) {
-      return
+      return;
     }
-    setTitle(page.title)
-    setBody(page.body)
-    setImageUrl(page.image_url ?? "")
-  }, [page])
+    setTitle(page.title);
+    setBody(page.body);
+    setImageUrl(page.image_url ?? "");
+  }, [page]);
 
   const save = useMutation({
     mutationFn: async () => {
@@ -86,40 +86,40 @@ const CmsPage = () => {
           body,
           image_url: imageUrl || null,
         }),
-      })
+      });
       if (!response.ok) {
-        throw new Error("Failed to save")
+        throw new Error("Failed to save");
       }
-      return response.json()
+      return response.json();
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["cms-pages"] })
-      toast.success(t("cms.saved"))
+      await queryClient.invalidateQueries({ queryKey: ["cms-pages"] });
+      toast.success(t("cms.saved"));
     },
     onError: () => {
-      toast.error(t("cms.save"))
+      toast.error(t("cms.save"));
     },
-  })
+  });
 
   async function onUpload(file: File) {
-    const payload = new FormData()
-    payload.append("files", file)
+    const payload = new FormData();
+    payload.append("files", file);
     const response = await fetch("/admin/uploads", {
       method: "POST",
       credentials: "include",
       body: payload,
-    })
+    });
     if (!response.ok) {
-      toast.error(t("cms.upload"))
-      return
+      toast.error(t("cms.upload"));
+      return;
     }
     const json = (await response.json()) as {
-      files?: Array<{ url: string }>
-      uploads?: Array<{ url: string }>
-    }
-    const url = json.files?.[0]?.url ?? json.uploads?.[0]?.url
+      files?: Array<{ url: string }>;
+      uploads?: Array<{ url: string }>;
+    };
+    const url = json.files?.[0]?.url ?? json.uploads?.[0]?.url;
     if (url) {
-      setImageUrl(url)
+      setImageUrl(url);
     }
   }
 
@@ -139,7 +139,7 @@ const CmsPage = () => {
           height={220}
           onRowClicked={(event) => {
             if (event.data?.handle) {
-              setHandle(event.data.handle)
+              setHandle(event.data.handle);
             }
           }}
         />
@@ -148,7 +148,10 @@ const CmsPage = () => {
         </Text>
         <div>
           <Label>{t("cms.pageTitle")}</Label>
-          <Input value={title} onChange={(event) => setTitle(event.target.value)} />
+          <Input
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
         </div>
         <div>
           <Label>{t("cms.body")}</Label>
@@ -169,9 +172,9 @@ const CmsPage = () => {
             type="file"
             accept="image/*"
             onChange={(event) => {
-              const file = event.target.files?.[0]
+              const file = event.target.files?.[0];
               if (file) {
-                void onUpload(file)
+                void onUpload(file);
               }
             }}
           />
@@ -193,12 +196,12 @@ const CmsPage = () => {
         </Button>
       </div>
     </Container>
-  )
-}
+  );
+};
 
 export const config = defineRouteConfig({
   label: "محتوای سایت",
   icon: PencilSquare,
-})
+});
 
-export default CmsPage
+export default CmsPage;
